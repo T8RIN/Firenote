@@ -4,4 +4,6 @@
     <string name="createNote">Note creation</string>
     <string name="calendar">Calendar</string>
     <string name="note">Note</string>
+    <string name="exitApp">App closing</string>
+    <string name="exitAppMessage">The app wil be closed, but it still needs to be in background to send you alarms</string>
 </resources>
