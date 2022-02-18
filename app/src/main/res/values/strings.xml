@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Firenote</string>
+    <string name="notes">Notes</string>
+    <string name="createNote">Note creation</string>
+    <string name="calendar">Calendar</string>
+    <string name="note">Note</string>
+</resources>
