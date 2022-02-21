@@ -2,15 +2,23 @@ package ru.tech.firenote
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FilterAlt
-import androidx.compose.material.icons.filled.ViewCompact
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.res.stringResource
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import ru.tech.firenote.PreferenceKeys.getIcon
+import ru.tech.firenote.PreferenceKeys.setViewComposition
 
 @Composable
-fun NoteActions(showViewMenu: MutableState<Boolean>, showFilter: MutableState<Boolean>) {
+fun NoteActions(
+    viewIcon: MutableState<Int>,
+    showViewMenu: MutableState<Boolean>,
+    showFilter: MutableState<Boolean>,
+    dataStore: DataStore<Preferences>
+) {
     IconButton(onClick = { showFilter.value = true }) {
         Icon(
             imageVector = Icons.Filled.FilterAlt,
@@ -19,7 +27,7 @@ fun NoteActions(showViewMenu: MutableState<Boolean>, showFilter: MutableState<Bo
     }
     IconButton(onClick = { showViewMenu.value = true }) {
         Icon(
-            imageVector = Icons.Filled.ViewCompact,
+            imageVector = viewIcon.value.getIcon(),
             contentDescription = null
         )
     }
@@ -28,19 +36,31 @@ fun NoteActions(showViewMenu: MutableState<Boolean>, showFilter: MutableState<Bo
         onDismissRequest = { showViewMenu.value = false }
     ) {
         DropdownMenuItem(
-            onClick = { showViewMenu.value = false /*TODO*/ },
+            onClick = {
+                viewIcon.value = 0
+                dataStore.setViewComposition(0)
+                showViewMenu.value = false /*TODO*/
+            },
             text = { Text(stringResource(R.string.viewList)) },
             leadingIcon = {
                 Icon(Icons.Outlined.ViewList, null)
             })
         DropdownMenuItem(
-            onClick = { showViewMenu.value = false /*TODO*/ },
+            onClick = {
+                viewIcon.value = 1
+                dataStore.setViewComposition(1)
+                showViewMenu.value = false /*TODO*/
+            },
             text = { Text(stringResource(R.string.viewCompact)) },
             leadingIcon = {
                 Icon(Icons.Outlined.ViewCompact, null)
             })
         DropdownMenuItem(
-            onClick = { showViewMenu.value = false /*TODO*/ },
+            onClick = {
+                viewIcon.value = 2
+                dataStore.setViewComposition(2)
+                showViewMenu.value = false /*TODO*/
+            },
             text = { Text(stringResource(R.string.viewGrid)) },
             leadingIcon = {
                 Icon(Icons.Outlined.GridView, null)
@@ -56,9 +76,11 @@ fun NoteActions(showViewMenu: MutableState<Boolean>, showFilter: MutableState<Bo
             leadingIcon = {
                 Icon(Icons.Outlined.Palette, null)
             })
-        DropdownMenuItem(onClick = { showFilter.value = false /*TODO*/ }, text = { Text(
-            stringResource(R.string.date)
-        ) }, leadingIcon = {
+        DropdownMenuItem(onClick = { showFilter.value = false /*TODO*/ }, text = {
+            Text(
+                stringResource(R.string.date)
+            )
+        }, leadingIcon = {
             Icon(Icons.Outlined.CalendarToday, null)
         })
     }
@@ -82,10 +104,22 @@ fun AlarmActions(showFilter: MutableState<Boolean>) {
             leadingIcon = {
                 Icon(Icons.Outlined.NotificationImportant, null)
             })
-        DropdownMenuItem(onClick = { showFilter.value = false /*TODO*/ }, text = { Text(
-            stringResource(R.string.date)
-        ) }, leadingIcon = {
+        DropdownMenuItem(onClick = { showFilter.value = false /*TODO*/ }, text = {
+            Text(
+                stringResource(R.string.date)
+            )
+        }, leadingIcon = {
             Icon(Icons.Outlined.CalendarToday, null)
         })
+    }
+}
+
+@Composable
+fun NoteCreationActions() {
+    IconButton(onClick = {  }) {
+        Icon(
+            imageVector = Icons.Filled.FilterAlt,
+            contentDescription = null
+        )
     }
 }
