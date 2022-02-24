@@ -1,0 +1,41 @@
+package ru.tech.firenote
+
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import com.google.accompanist.insets.statusBarsPadding
+
+@Composable
+fun EditableAppBar(
+    modifier: Modifier = Modifier,
+    hint: String,
+    color: Color,
+    errorColor: MutableState<Color> = mutableStateOf(MaterialTheme.colorScheme.error),
+    scrollBehavior: TopAppBarScrollBehavior? = null,
+    navigationIcon: @Composable () -> Unit = {},
+    actions: @Composable RowScope.() -> Unit = {},
+    onValueChange: (String) -> Unit = {}
+) {
+    val backgroundColors = TopAppBarDefaults.smallTopAppBarColors()
+    val backgroundColor = backgroundColors.containerColor(
+        scrollFraction = scrollBehavior?.scrollFraction ?: 0f
+    ).value
+    val foregroundColors = TopAppBarDefaults.smallTopAppBarColors(
+        containerColor = Color.Transparent,
+        scrolledContainerColor = Color.Transparent
+    )
+    Surface(color = backgroundColor) {
+        SmallTopAppBar(
+            title = { MaterialTextField(hintText = hint, onValueChange = onValueChange, errorColor = errorColor, color = color) },
+            navigationIcon = navigationIcon,
+            scrollBehavior = scrollBehavior,
+            colors = foregroundColors,
+            modifier = modifier.statusBarsPadding(),
+            actions = actions
+        )
+    }
+}

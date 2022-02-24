@@ -15,4 +15,10 @@
     <string name="color">Color</string>
     <string name="date">Date</string>
     <string name="importance">Importance</string>
+    <string name="enterNoteLabel">Enter note label</string>
+    <string name="stay">Stay</string>
+    <string name="close">Close</string>
+    <string name="save">Save</string>
+    <string name="noteText">Enter note description</string>
+    <string name="fillAll">Fill all fields first!</string>
 </resources>

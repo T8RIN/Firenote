@@ -1,8 +1,10 @@
 package ru.tech.firenote
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Edit
@@ -28,11 +30,13 @@ class MainViewModel @Inject constructor(
     dataStore: DataStore<Preferences>
 ) : ViewModel() {
 
-    val showExitDialog = mutableStateOf(false)
     val title = mutableStateOf(Screen.NoteListScreen.resourceId)
 
     val selectedItem = mutableStateOf(0)
-    val showCreationComposable = mutableStateOf(false)
+    val showCreationComposable = MutableTransitionState(false).apply {
+        targetState = false
+    }
+
 
     @OptIn(ExperimentalMaterial3Api::class)
     val scrollBehavior = mutableStateOf(TopAppBarDefaults.pinnedScrollBehavior())
@@ -49,11 +53,8 @@ class MainViewModel @Inject constructor(
 
     val fabIcon: @Composable () -> Unit = {
         when (selectedItem.value) {
-            0 -> Icon(Icons.Outlined.Edit, contentDescription = null)
-            1 -> Icon(
-                Icons.Outlined.NotificationAdd,
-                contentDescription = null
-            )
+            0 -> Icon(Icons.Outlined.Edit, null)
+            1 -> Icon(Icons.Outlined.NotificationAdd, null)
         }
     }
 
@@ -77,17 +78,15 @@ class MainViewModel @Inject constructor(
     }
 
     val creationComposable: @Composable () -> Unit = {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
+        AnimatedVisibility(
+            visibleState = showCreationComposable,
+            enter = fadeIn(),
+            exit = fadeOut()
         ) {
+            BackHandler { showCreationComposable.targetState = false }
             when (selectedItem.value) {
                 0 -> NoteCreationScreen(state = showCreationComposable)
                 1 -> AlarmCreationScreen()
-            }
-            BackHandler(true) {
-                showCreationComposable.value = false
             }
         }
     }
@@ -98,8 +97,9 @@ class MainViewModel @Inject constructor(
                 message = "Test" /* TODO: message */,
                 actionLabel = "Undo" /* TODO: actionText */
             )
-            if (snackbarResult == SnackbarResult.ActionPerformed)
-                showExitDialog.value = true // TODO: Action
+            if (snackbarResult == SnackbarResult.ActionPerformed) {
+                // TODO: Action
+            }
         }
     }
 

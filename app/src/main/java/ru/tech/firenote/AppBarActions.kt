@@ -113,13 +113,3 @@ fun AlarmActions(showFilter: MutableState<Boolean>) {
         })
     }
 }
-
-@Composable
-fun NoteCreationActions() {
-    IconButton(onClick = {  }) {
-        Icon(
-            imageVector = Icons.Filled.FilterAlt,
-            contentDescription = null
-        )
-    }
-}
