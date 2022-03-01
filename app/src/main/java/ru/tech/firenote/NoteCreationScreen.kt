@@ -1,6 +1,8 @@
 package ru.tech.firenote
 
+import android.content.Context
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.tween
@@ -56,14 +58,20 @@ fun NoteCreationScreen(
     val gradientColor = rememberSaveable { mutableStateOf(noteBackgroundAnimatable.value.toArgb()) }
 
     if (noteColor != -1) viewModel.setColors()
+    val needToShowCancelDialog = remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
             EditableAppBar(
                 modifier = Modifier.background(appBarAnimatable.value),
+                text = viewModel.noteLabel,
                 navigationIcon = {
                     IconButton(onClick = {
-                        state.targetState = false
+                        if (viewModel.noteDescription.value.isNotEmpty()) {
+                            needToShowCancelDialog.value = true
+                        } else {
+                            state.targetState = false
+                        }
                     }) {
                         Icon(Icons.Rounded.ArrowBack, null, tint = Color.Black)
                     }
@@ -72,7 +80,7 @@ fun NoteCreationScreen(
                 errorColor = viewModel.errorColor,
                 color = Color.Black
             ) {
-                viewModel.noteLabel = it
+                viewModel.noteLabel.value = it
             }
         },
         floatingActionButton = {
@@ -80,12 +88,7 @@ fun NoteCreationScreen(
                 modifier = Modifier.navigationBarsPadding(),
                 text = { Text(stringResource(R.string.save)) },
                 icon = { Icon(Icons.Outlined.Save, null) },
-                onClick = {
-                    if (viewModel.noteDescription.isNotBlank() && viewModel.noteLabel.isNotEmpty()) {
-                        viewModel.saveNote()
-                        state.targetState = false
-                    } else Toast.makeText(context, R.string.fillAll, Toast.LENGTH_SHORT).show()
-                })
+                onClick = { saveNote(viewModel, context, state) })
         }
     ) { contentPadding ->
         Column(
@@ -146,6 +149,7 @@ fun NoteCreationScreen(
             }
             Box(modifier = Modifier.wrapContentHeight()) {
                 MaterialTextField(
+                    textFieldState = viewModel.noteDescription,
                     topPadding = 20.dp,
                     endPaddingIcon = 20.dp,
                     hintText = stringResource(R.string.noteText),
@@ -160,7 +164,10 @@ fun NoteCreationScreen(
                         ),
                     color = Color.Black
                 ) {
-                    viewModel.noteDescription = it
+                    viewModel.noteDescription.value = it
+                    if (viewModel.noteLabel.value.isEmpty() && viewModel.noteDescription.value.length > 20) {
+                        viewModel.noteLabel.value = it.substring(0..20)
+                    }
                 }
                 Gradient(
                     Modifier
@@ -180,6 +187,36 @@ fun NoteCreationScreen(
             }
         }
     }
+
+    MaterialDialog(
+        showDialog = needToShowCancelDialog,
+        icon = Icons.Outlined.Save,
+        title = R.string.saveNote,
+        message = R.string.noteSavingDialogMessage,
+        confirmText = R.string.save,
+        dismissText = R.string.discardChanges,
+        confirmAction = { /*TODO: SAVING*/ saveNote(viewModel, context, state) },
+        dismissAction = {
+            state.targetState = false
+            needToShowCancelDialog.value = false
+        },
+        backHandler = {
+            BackHandler {
+                if (viewModel.noteDescription.value.isNotEmpty()) {
+                    needToShowCancelDialog.value = true
+                } else {
+                    state.targetState = false
+                }
+            }
+        }
+    )
+}
+
+fun saveNote(viewModel: NoteCreationViewModel, context: Context, state: MutableTransitionState<Boolean>){
+    if (viewModel.noteDescription.value.isNotBlank() && viewModel.noteLabel.value.isNotEmpty()) {
+        viewModel.saveNote()
+        state.targetState = false
+    } else Toast.makeText(context, R.string.fillAll, Toast.LENGTH_SHORT).show()
 }
 
 fun NoteCreationViewModel.setColors() {

@@ -14,7 +14,7 @@ val NoteBlueDark = Color(0xFF59A5AF)
 val NoteVioletDark = Color(0xFFAD77B8)
 val NoteGreenDark = Color(0xFF709E5D)
 
-val VioletError = Color(0xFF4FCA0D)
+val VioletError = Color(0xFF47961C)
 val YellowError = Color(0xFFE44F20)
 val BlueError = Color(0xFFD81B60)
 val PinkError = Color(0xFFC4BC23)

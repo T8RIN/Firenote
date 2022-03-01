@@ -14,6 +14,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.*
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -127,7 +128,8 @@ class MainActivity : ComponentActivity() {
                         Navigation(navController, dataStore, mainViewModel.viewIcon, contentPadding)
                     }
 
-                    ExitDialog(
+                    MaterialDialog(
+                        showDialog = mutableStateOf(false),
                         icon = Icons.Filled.ExitToApp,
                         title = R.string.exitApp,
                         message = R.string.exitAppMessage,

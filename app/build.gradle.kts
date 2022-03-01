@@ -56,7 +56,7 @@ dependencies {
 
     implementation("androidx.core:core-ktx:1.7.0")
     implementation("androidx.appcompat:appcompat:1.4.1")
-    implementation("com.google.android.material:material:1.6.0-alpha02")
+    implementation("com.google.android.material:material:1.6.0-alpha03")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
 
     // Retrofit
@@ -97,11 +97,11 @@ dependencies {
     implementation("androidx.compose.ui:ui:1.2.0-alpha04")
     implementation("androidx.compose.ui:ui-tooling-preview:1.2.0-alpha04")
     implementation("androidx.compose.material3:material3:1.0.0-alpha06")
-    implementation("androidx.compose.material:material:1.2.0-alpha03")
-    implementation("androidx.compose.material:material-icons-core:1.1.0")
-    implementation("androidx.compose.material:material-icons-extended:1.1.0")
+    implementation("androidx.compose.material:material:1.2.0-alpha04")
+    implementation("androidx.compose.material:material-icons-core:1.1.1")
+    implementation("androidx.compose.material:material-icons-extended:1.1.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0-alpha02")
-    implementation("androidx.navigation:navigation-compose:2.5.0-alpha02")
+    implementation("androidx.navigation:navigation-compose:2.5.0-alpha03")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.0")
 
     //Tests

@@ -16,8 +16,8 @@ class NoteCreationViewModel @Inject constructor(dataStore: DataStore<Preferences
     val appBarColor = mutableStateOf(NoteYellowDark.toArgb())
     val errorColor = mutableStateOf(YellowError)
 
-    var noteLabel: String = ""
-    var noteDescription: String = ""
+    var noteLabel = mutableStateOf("")
+    var noteDescription = mutableStateOf("")
 
     val colors = listOf(NoteYellow, NoteGreen, NoteBlue, NoteViolet, NotePink)
     val darkColors =

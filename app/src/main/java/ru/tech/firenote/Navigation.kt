@@ -12,12 +12,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import ru.tech.firenote.ui.theme.NoteYellow
 
 @Composable
 fun Navigation(
@@ -29,7 +31,7 @@ fun Navigation(
     NavHost(
         navController = navController,
         startDestination = Screen.NoteListScreen.route,
-        Modifier.padding(contentPadding)
+        Modifier.padding(horizontal = 10.dp)
     ) {
         composable(Screen.NoteListScreen.route) {
             NoteListScreen(navController, dataStore, viewIcon)
@@ -54,18 +56,8 @@ fun NoteListScreen(
                 contentPadding = PaddingValues(bottom = 80.dp)
             ) {
                 items(100) { index ->
-                    Row {
-                        Text(
-                            "I'm item $index", modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp)
-                                .weight(1f)
-                        )
-                        Icon(
-                            Icons.Filled.SettingsApplications,
-                            null,
-                            modifier = Modifier.weight(0.2f)
-                        )
+                    NoteItem(note = Note("TEST", "contentcontentcontent", 30L, NoteYellow.toArgb())) {
+                        
                     }
                 }
             }

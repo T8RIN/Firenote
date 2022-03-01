@@ -21,4 +21,7 @@
     <string name="save">Save</string>
     <string name="noteText">Enter note description</string>
     <string name="fillAll">Fill all fields first!</string>
+    <string name="saveNote">Note saving</string>
+    <string name="noteSavingDialogMessage">You started creating/editing note, do you want to save it or exit without saving?</string>
+    <string name="discardChanges">Discard changes</string>
 </resources>

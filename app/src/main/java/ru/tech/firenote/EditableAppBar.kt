@@ -14,6 +14,7 @@ fun EditableAppBar(
     modifier: Modifier = Modifier,
     hint: String,
     color: Color,
+    text: MutableState<String> = mutableStateOf(""),
     errorColor: MutableState<Color> = mutableStateOf(MaterialTheme.colorScheme.error),
     scrollBehavior: TopAppBarScrollBehavior? = null,
     navigationIcon: @Composable () -> Unit = {},
@@ -30,7 +31,7 @@ fun EditableAppBar(
     )
     Surface(color = backgroundColor) {
         SmallTopAppBar(
-            title = { MaterialTextField(hintText = hint, onValueChange = onValueChange, errorColor = errorColor, color = color) },
+            title = { MaterialTextField(hintText = hint, onValueChange = onValueChange, errorColor = errorColor, color = color, textFieldState = text) },
             navigationIcon = navigationIcon,
             scrollBehavior = scrollBehavior,
             colors = foregroundColors,

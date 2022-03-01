@@ -7,13 +7,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 
 @Composable
-fun ExitDialog(
+fun MaterialDialog(
+    showDialog: MutableState<Boolean> = mutableStateOf(false),
     icon: ImageVector,
     title: String,
     message: String,
@@ -21,11 +23,10 @@ fun ExitDialog(
     confirmAction: () -> Unit = {},
     dismissText: String,
     dismissAction: () -> Unit = {},
-    onDismiss: () -> Unit = {}
+    onDismiss: () -> Unit = {},
+    backHandler: @Composable () -> Unit = { BackHandler { showDialog.value = true } }
 ) {
-    val showExitDialog = remember { mutableStateOf(false) }
-
-    if (showExitDialog.value) {
+    if (showDialog.value) {
         AlertDialog(
             icon = { Icon(icon, contentDescription = null) },
             title = { Text(title) },
@@ -33,7 +34,7 @@ fun ExitDialog(
             confirmButton = {
                 TextButton(onClick = {
                     confirmAction()
-                    showExitDialog.value = false
+                    showDialog.value = false
                 }) {
                     Text(confirmText)
                 }
@@ -41,24 +42,24 @@ fun ExitDialog(
             dismissButton = {
                 TextButton(onClick = {
                     dismissAction()
-                    showExitDialog.value = false
+                    showDialog.value = false
                 }) {
                     Text(dismissText)
                 }
             },
-            onDismissRequest = { showExitDialog.value = false }
+            onDismissRequest = { showDialog.value = false }
         )
     } else {
-        onDismiss()
+        SideEffect { onDismiss() }
     }
 
-    BackHandler { showExitDialog.value = true }
+    backHandler()
 
 }
 
-
 @Composable
-fun ExitDialog(
+fun MaterialDialog(
+    showDialog: MutableState<Boolean> = mutableStateOf(false),
     icon: ImageVector,
     @StringRes title: Int,
     @StringRes message: Int,
@@ -66,11 +67,11 @@ fun ExitDialog(
     confirmAction: () -> Unit = {},
     @StringRes dismissText: Int,
     dismissAction: () -> Unit = {},
-    onDismiss: () -> Unit = {}
+    onDismiss: () -> Unit = {},
+    backHandler: @Composable () -> Unit = { BackHandler { showDialog.value = true } }
 ) {
-    val showExitDialog = remember { mutableStateOf(false) }
 
-    if (showExitDialog.value) {
+    if (showDialog.value) {
         AlertDialog(
             icon = { Icon(icon, contentDescription = null) },
             title = { Text(stringResource(title)) },
@@ -78,7 +79,7 @@ fun ExitDialog(
             confirmButton = {
                 TextButton(onClick = {
                     confirmAction()
-                    showExitDialog.value = false
+                    showDialog.value = false
                 }) {
                     Text(stringResource(confirmText))
                 }
@@ -86,17 +87,16 @@ fun ExitDialog(
             dismissButton = {
                 TextButton(onClick = {
                     dismissAction()
-                    showExitDialog.value = false
+                    showDialog.value = false
                 }) {
                     Text(stringResource(dismissText))
                 }
             },
-            onDismissRequest = { showExitDialog.value = false }
+            onDismissRequest = { showDialog.value = false }
         )
     } else {
-        onDismiss()
+        SideEffect { onDismiss() }
     }
 
-    BackHandler { showExitDialog.value = true }
-
+    backHandler()
 }

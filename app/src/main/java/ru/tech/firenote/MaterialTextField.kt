@@ -11,8 +11,9 @@ import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,6 +30,7 @@ import androidx.compose.ui.unit.sp
 fun MaterialTextField(
     modifier: Modifier = Modifier,
     hintText: String = "",
+    textFieldState: MutableState<String> = mutableStateOf(""),
     endPaddingIcon: Dp = 10.dp,
     cursorColor: Color = Color.Black,
     singleLine: Boolean = true,
@@ -39,17 +41,14 @@ fun MaterialTextField(
     onValueChange: (String) -> Unit = {}
 ) {
     val localFocusManager = LocalFocusManager.current
-    var textFieldState by rememberSaveable {
-        mutableStateOf("")
-    }
 
     Box(Modifier.padding(top = topPadding)) {
         BasicTextField(
             modifier = modifier.fillMaxWidth(),
-            value = textFieldState,
+            value = textFieldState.value,
             onValueChange = {
                 onValueChange(it)
-                textFieldState = it
+                textFieldState.value = it
             },
             cursorBrush = SolidColor(cursorColor),
             textStyle = TextStyle(
@@ -66,7 +65,7 @@ fun MaterialTextField(
             singleLine = singleLine
         )
 
-        if (textFieldState.isEmpty()) {
+        if (textFieldState.value.isEmpty()) {
             val color =
                 if (errorEnabled) errorColor.value
                 else MaterialTheme.colorScheme.onSurfaceVariant
