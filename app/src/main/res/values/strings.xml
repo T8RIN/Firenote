@@ -24,4 +24,20 @@
     <string name="saveNote">Note saving</string>
     <string name="noteSavingDialogMessage">You started creating/editing note, do you want to save it or exit without saving?</string>
     <string name="discardChanges">Discard changes</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="signUp">Sign Up</string>
+    <string name="logIn">Log In</string>
+    <string name="forgotPassword">Forgot Password?</string>
+    <string name="welcomeBack">Welcome Back!</string>
+    <string name="passwordTooShort">Password too short</string>
+    <string name="emailIsNotValid">Email is not valid</string>
+    <string name="passwordConfirm">Confirm password</string>
+    <string name="passwordsDifferent">Passwords are different</string>
+    <string name="auth">Auth</string>
+    <string name="registration">Registration</string>
+    <string name="resetPassword">Reset password</string>
+    <string name="sendEmail">Send email</string>
+    <string name="checkYourEmail">Check your email and follow instructions in order to reset your password</string>
+    <string name="niceToSeeYou">Nice to see you!</string>
 </resources>

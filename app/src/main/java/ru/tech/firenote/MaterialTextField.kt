@@ -1,93 +1,83 @@
 package ru.tech.firenote
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ErrorOutline
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.Alignment
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.material3.MaterialTheme as M3
 
 @Composable
 fun MaterialTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    hintText: String = "",
-    textFieldState: MutableState<String> = mutableStateOf(""),
-    endPaddingIcon: Dp = 10.dp,
-    cursorColor: Color = Color.Black,
-    singleLine: Boolean = true,
-    color: Color = MaterialTheme.colorScheme.onBackground,
-    errorEnabled: Boolean = true,
-    topPadding: Dp = 0.dp,
-    errorColor: MutableState<Color> = mutableStateOf(MaterialTheme.colorScheme.error),
-    onValueChange: (String) -> Unit = {}
+    enabled: Boolean = true,
+    readOnly: Boolean = false,
+    textStyle: TextStyle = LocalTextStyle.current,
+    label: @Composable (() -> Unit)? = null,
+    placeholder: @Composable (() -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    isError: Boolean = false,
+    errorText: String = "",
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    singleLine: Boolean = false,
+    maxLines: Int = Int.MAX_VALUE,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    shape: Shape = MaterialTheme.shapes.medium,
 ) {
-    val localFocusManager = LocalFocusManager.current
+    var textFieldValueState by remember { mutableStateOf(TextFieldValue(text = value)) }
+    val textFieldValue = textFieldValueState.copy(text = value)
 
-    Box(Modifier.padding(top = topPadding)) {
-        BasicTextField(
-            modifier = modifier.fillMaxWidth(),
-            value = textFieldState.value,
+    val colors: TextFieldColors = TextFieldDefaults.textFieldColors(
+        textColor = M3.colorScheme.onBackground,
+        backgroundColor = Color.Transparent,
+        unfocusedIndicatorColor = if(isError) M3.colorScheme.error else M3.colorScheme.outline,
+        focusedIndicatorColor = if(isError) M3.colorScheme.error else M3.colorScheme.primary,
+        cursorColor = if(isError) M3.colorScheme.error else M3.colorScheme.primary
+    )
+
+    Column {
+        OutlinedTextField(
+            enabled = enabled,
+            readOnly = readOnly,
+            value = textFieldValue,
             onValueChange = {
-                onValueChange(it)
-                textFieldState.value = it
+                textFieldValueState = it
+                if (value != it.text) {
+                    onValueChange(it.text)
+                }
             },
-            cursorBrush = SolidColor(cursorColor),
-            textStyle = TextStyle(
-                fontSize = 22.sp,
-                color = color,
-                textAlign = TextAlign.Start,
-            ),
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text
-            ),
-            keyboardActions = KeyboardActions(
-                onDone = { localFocusManager.clearFocus() }
-            ),
-            singleLine = singleLine
+            modifier = modifier,
+            singleLine = singleLine,
+            textStyle = textStyle,
+            label = label,
+            placeholder = placeholder,
+            leadingIcon = leadingIcon,
+            trailingIcon = trailingIcon,
+            visualTransformation = visualTransformation,
+            keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions,
+            maxLines = maxLines,
+            interactionSource = interactionSource,
+            shape = shape,
+            colors = colors
         )
-
-        if (textFieldState.value.isEmpty()) {
-            val color =
-                if (errorEnabled) errorColor.value
-                else MaterialTheme.colorScheme.onSurfaceVariant
-            Text(
-                hintText,
-                Modifier
-                    .padding(start = 40.dp)
-                    .align(
-                        Alignment.TopStart
-                    ),
-                fontSize = 22.sp,
-                color = color
-            )
-            if (errorEnabled) {
-                Icon(
-                    Icons.Filled.ErrorOutline, null, tint = color, modifier = Modifier
-                        .align(
-                            Alignment.TopEnd
-                        )
-                        .padding(end = endPaddingIcon)
-                )
-            }
-        }
+        if(isError) Text(errorText, color = M3.colorScheme.error, modifier = Modifier.padding(8.dp))
     }
+
 }

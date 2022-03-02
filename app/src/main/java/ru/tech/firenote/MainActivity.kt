@@ -11,12 +11,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.*
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -31,7 +32,6 @@ import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import ru.tech.firenote.ui.theme.FirenoteTheme
@@ -64,18 +64,20 @@ class MainActivity : ComponentActivity() {
         Toast.makeText(this, currentUser.toString(), Toast.LENGTH_SHORT).show()
 
         if (currentUser == null) {
-            auth.createUserWithEmailAndPassword("oolbp@bk.com", "password")
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        Log.d("ddd", "createUserWithEmail:success")
-                        currentUser = auth.currentUser
-                        Toast.makeText(this, currentUser.toString(), Toast.LENGTH_SHORT).show()
-                    } else {
-                        Log.w("ddd", "createUserWithEmail:failure", task.exception)
-                        Toast.makeText(baseContext, "Authentication failed.",
-                            Toast.LENGTH_SHORT).show()
-                    }
-                }
+//            auth.createUserWithEmailAndPassword("oolbp@bk.com", "password")
+//                .addOnCompleteListener(this) { task ->
+//                    if (task.isSuccessful) {
+//                        Log.d("ddd", "createUserWithEmail:success")
+//                        currentUser = auth.currentUser
+//                        Toast.makeText(this, currentUser.toString(), Toast.LENGTH_SHORT).show()
+//                    } else {
+//                        Log.w("ddd", "createUserWithEmail:failure", task.exception)
+//                        Toast.makeText(
+//                            baseContext, "Authentication failed.",
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+//                    }
+//                }
         }
 
 //        val uid = FirebaseAuth.getInstance().currentUser?.uid
@@ -89,43 +91,55 @@ class MainActivity : ComponentActivity() {
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
+            val isScaffoldVisible by derivedStateOf {
+                !mainViewModel.showCreationComposable.currentState || !mainViewModel.showCreationComposable.targetState
+            }
+
+            val calcOrientation by derivedStateOf {
+                if (mainViewModel.showCreationComposable.targetState) ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                else ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+            }
+
             val navController = rememberNavController()
+
             FirenoteTheme {
                 ProvideWindowInsets(windowInsetsAnimationsEnabled = true) {
                     val snackbarHostState = remember { SnackbarHostState() }
                     val scope = rememberCoroutineScope()
 
-                    Scaffold(
-                        topBar = {
-                            AppBarWithInsets(
-                                scrollBehavior = mainViewModel.scrollBehavior.value,
-                                title = stringResource(mainViewModel.title.value),
-                                actions = {
-                                    mainViewModel.mainAppBarActions()
-                                }
-                            )
-                        },
-                        floatingActionButton = {
-                            ExtendedFloatingActionButton(onClick = {
-                                mainViewModel.showCreationComposable.targetState = true
-                            }, icon = {
-                                mainViewModel.fabIcon()
-                            }, text = {
-                                mainViewModel.fabText()
-                            })
-                        },
-                        bottomBar = {
-                            BottomNavigationBar(
-                                title = mainViewModel.title,
-                                selectedItem = mainViewModel.selectedItem,
-                                navController = navController,
-                                items = listOf(Screen.NoteListScreen, Screen.AlarmListScreen)
-                            )
-                        },
-                        snackbarHost = { SnackbarHost(snackbarHostState) },
-                        modifier = Modifier.nestedScroll(mainViewModel.scrollBehavior.value.nestedScrollConnection)
-                    ) { contentPadding ->
-                        Navigation(navController, dataStore, mainViewModel.viewIcon, contentPadding)
+                    if (isScaffoldVisible){
+                        Scaffold(
+                            topBar = {
+                                AppBarWithInsets(
+                                    scrollBehavior = mainViewModel.scrollBehavior.value,
+                                    title = stringResource(mainViewModel.title.value),
+                                    actions = {
+                                        mainViewModel.mainAppBarActions()
+                                    }
+                                )
+                            },
+                            floatingActionButton = {
+                                ExtendedFloatingActionButton(onClick = {
+                                    mainViewModel.showCreationComposable.targetState = true
+                                }, icon = {
+                                    mainViewModel.fabIcon()
+                                }, text = {
+                                    mainViewModel.fabText()
+                                })
+                            },
+                            bottomBar = {
+                                BottomNavigationBar(
+                                    title = mainViewModel.title,
+                                    selectedItem = mainViewModel.selectedItem,
+                                    navController = navController,
+                                    items = listOf(Screen.NoteListScreen, Screen.AlarmListScreen)
+                                )
+                            },
+                            snackbarHost = { SnackbarHost(snackbarHostState) },
+                            modifier = Modifier.nestedScroll(mainViewModel.scrollBehavior.value.nestedScrollConnection)
+                        ) {
+                            Navigation(navController, dataStore, mainViewModel.viewType)
+                        }
                     }
 
                     MaterialDialog(
@@ -139,9 +153,9 @@ class MainActivity : ComponentActivity() {
                     )
 
                     mainViewModel.creationComposable()
-                    requestedOrientation =
-                        if (mainViewModel.showCreationComposable.targetState) ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-                        else ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                    requestedOrientation = calcOrientation
+
+                    AuthScreen()
                 }
             }
         }

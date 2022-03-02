@@ -99,7 +99,7 @@ fun NoteCreationScreen(
                 .padding(contentPadding)
         ) {
             Row(
-                horizontalArrangement = Arrangement.Center,
+                horizontalArrangement = Arrangement.SpaceEvenly,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(30.dp)
@@ -109,7 +109,6 @@ fun NoteCreationScreen(
                     Box(
                         modifier = Modifier
                             .size(50.dp)
-                            .padding(horizontal = 10.dp)
                             .shadow(15.dp, CircleShape)
                             .clip(CircleShape)
                             .background(color)
@@ -148,7 +147,7 @@ fun NoteCreationScreen(
                 }
             }
             Box(modifier = Modifier.wrapContentHeight()) {
-                MaterialTextField(
+                EditText(
                     textFieldState = viewModel.noteDescription,
                     topPadding = 20.dp,
                     endPaddingIcon = 20.dp,

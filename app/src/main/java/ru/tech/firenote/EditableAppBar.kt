@@ -31,7 +31,7 @@ fun EditableAppBar(
     )
     Surface(color = backgroundColor) {
         SmallTopAppBar(
-            title = { MaterialTextField(hintText = hint, onValueChange = onValueChange, errorColor = errorColor, color = color, textFieldState = text) },
+            title = { EditText(hintText = hint, onValueChange = onValueChange, errorColor = errorColor, color = color, textFieldState = text) },
             navigationIcon = navigationIcon,
             scrollBehavior = scrollBehavior,
             colors = foregroundColors,

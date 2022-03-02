@@ -5,9 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.SettingsApplications
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -25,8 +22,7 @@ import ru.tech.firenote.ui.theme.NoteYellow
 fun Navigation(
     navController: NavHostController,
     dataStore: DataStore<Preferences>,
-    viewIcon: MutableState<Int>,
-    contentPadding: PaddingValues
+    viewType: MutableState<Int>
 ) {
     NavHost(
         navController = navController,
@@ -34,7 +30,7 @@ fun Navigation(
         Modifier.padding(horizontal = 10.dp)
     ) {
         composable(Screen.NoteListScreen.route) {
-            NoteListScreen(navController, dataStore, viewIcon)
+            NoteListScreen(navController, dataStore, viewType)
         }
         composable(Screen.AlarmListScreen.route) {
             AlarmListScreen()
@@ -56,8 +52,15 @@ fun NoteListScreen(
                 contentPadding = PaddingValues(bottom = 80.dp)
             ) {
                 items(100) { index ->
-                    NoteItem(note = Note("TEST", "contentcontentcontent", 30L, NoteYellow.toArgb())) {
-                        
+                    NoteItem(
+                        note = Note(
+                            "TEST",
+                            "contentcontentcontent",
+                            30L,
+                            NoteYellow.toArgb()
+                        )
+                    ) {
+
                     }
                 }
             }
@@ -68,11 +71,12 @@ fun NoteListScreen(
                 contentPadding = PaddingValues(bottom = 80.dp)
             ) {
                 items(100) { index ->
-                    Text(
-                        "I'm item $index", modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp)
-                    )
+                    NoteItem(
+                        note = Note("TEST", "contentcontentcontent", 30L, NoteYellow.toArgb()),
+                        modifier = Modifier.height(50.dp)
+                    ) {
+
+                    }
                 }
             }
         }
@@ -83,12 +87,14 @@ fun NoteListScreen(
                 cells = GridCells.Fixed(2)
             ) {
                 items(100) { index ->
-                    Text(
-                        "I'm item $index", modifier = Modifier
+                    NoteItem(
+                        note = Note("TEST", "contentcontentcontent", 30L, NoteYellow.toArgb()),
+                        modifier = Modifier
                             .fillMaxWidth()
-                            .wrapContentHeight()
-                            .padding(16.dp)
-                    )
+                            .padding(5.dp)
+                    ) {
+
+                    }
                 }
             }
         }
