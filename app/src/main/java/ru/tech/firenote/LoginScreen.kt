@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -14,11 +15,13 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
+import androidx.compose.material3.CardDefaults.cardElevation
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -51,20 +54,7 @@ fun LoginScreen(viewModel: AuthViewModel) {
     }
 
     val context = LocalContext.current
-
-    when (val state = viewModel.uiState.collectAsState().value) {
-        is UIState.Loading ->
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                CircularProgressIndicator()
-            }
-        is UIState.Error -> SideEffect {Toast.makeText(context, state.message, Toast.LENGTH_SHORT).show()}
-        is UIState.Success<*> -> SideEffect {Toast.makeText(context, R.string.niceToSeeYou, Toast.LENGTH_SHORT).show()}
-        else -> {}
-    }
+    val focusManager = LocalFocusManager.current
 
     Scaffold(
         modifier = Modifier
@@ -88,7 +78,9 @@ fun LoginScreen(viewModel: AuthViewModel) {
                 Modifier
                     .weight(2f)
                     .padding(8.dp),
-                shape = RoundedCornerShape(24.dp)
+                shape = RoundedCornerShape(24.dp),
+                containerColor = MaterialTheme.colorScheme.onPrimary,
+                elevation = cardElevation(defaultElevation = 8.dp)
             ) {
                 Column(
                     Modifier
@@ -102,56 +94,77 @@ fun LoginScreen(viewModel: AuthViewModel) {
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth()
                     )
-                    Column(
-                        Modifier
-                            .fillMaxSize()
-                            .weight(1f)
-                            .verticalScroll(rememberScrollState()),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        MaterialTextField(
-                            modifier = Modifier.fillMaxWidth(),
-                            value = email,
-                            onValueChange = { email = it },
-                            label = { Text(text = stringResource(R.string.email)) },
-                            singleLine = true,
-                            isError = emailError,
-                            errorText = stringResource(R.string.emailIsNotValid),
-                            keyboardOptions = KeyboardOptions(
-                                keyboardType = KeyboardType.Email,
-                                imeAction = ImeAction.Next
-                            ),
-                            trailingIcon = {
-                                if (email.isNotBlank())
-                                    IconButton(onClick = { email = "" }) {
-                                        Icon(Icons.Filled.Clear, null)
-                                    }
+                    when (val state = viewModel.logUiState.collectAsState().value) {
+                        is UIState.Loading ->
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .weight(1f),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                CircularProgressIndicator()
                             }
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        MaterialTextField(
-                            modifier = Modifier.fillMaxWidth(),
-                            value = password,
-                            onValueChange = { password = it },
-                            label = { Text(text = stringResource(R.string.password)) },
-                            singleLine = true,
-                            keyboardOptions = KeyboardOptions(
-                                keyboardType = KeyboardType.Password,
-                                imeAction = ImeAction.Next
-                            ),
-                            visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                            trailingIcon = {
-                                IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
-                                    Icon(
-                                        if (isPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
-                                        null
-                                    )
-                                }
+                        is UIState.Success<*> -> SideEffect { Toast.makeText(context, R.string.niceToSeeYou, Toast.LENGTH_SHORT).show() }
+                        is UIState.Empty -> {
+                            if(state.message == "verification") {
+                                SideEffect { Toast.makeText(context, R.string.notVerified, Toast.LENGTH_SHORT).show() }
+                            } else {
+                                state.message?.let{ SideEffect { Toast.makeText(context, it, Toast.LENGTH_SHORT).show() } }
                             }
-                        )
-                    }
 
+                            Column(
+                                Modifier
+                                    .fillMaxSize()
+                                    .weight(1f)
+                                    .verticalScroll(rememberScrollState()),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                MaterialTextField(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    value = email,
+                                    onValueChange = { email = it },
+                                    label = { Text(text = stringResource(R.string.email)) },
+                                    singleLine = true,
+                                    isError = emailError,
+                                    errorText = stringResource(R.string.emailIsNotValid),
+                                    keyboardOptions = KeyboardOptions(
+                                        keyboardType = KeyboardType.Email,
+                                        imeAction = ImeAction.Next
+                                    ),
+                                    trailingIcon = {
+                                        if (email.isNotBlank())
+                                            IconButton(onClick = { email = "" }) {
+                                                Icon(Icons.Filled.Clear, null)
+                                            }
+                                    }
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                                MaterialTextField(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    value = password,
+                                    onValueChange = { password = it },
+                                    label = { Text(text = stringResource(R.string.password)) },
+                                    singleLine = true,
+                                    keyboardOptions = KeyboardOptions(
+                                        keyboardType = KeyboardType.Password,
+                                        imeAction = ImeAction.Done
+                                    ),
+                                    keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                                    visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                                    trailingIcon = {
+                                        IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
+                                            Icon(
+                                                if (isPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                                                null
+                                            )
+                                        }
+                                    }
+                                )
+                            }
+                        }
+                    }
                     Button(
                         onClick = { viewModel.logInWith(email, password) },
                         enabled = isFormValid,
@@ -183,6 +196,7 @@ fun LoginScreen(viewModel: AuthViewModel) {
             }
         }
     }
+
 }
 
 fun String.isValid(): Boolean {

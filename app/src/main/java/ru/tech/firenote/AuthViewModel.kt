@@ -1,8 +1,6 @@
 package ru.tech.firenote
 
-import android.content.Context
-import android.widget.Toast
-import androidx.compose.runtime.MutableState
+import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.runtime.mutableStateOf
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -10,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
@@ -21,28 +18,58 @@ class AuthViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val auth = Firebase.auth
+    private val currentUser get() = auth.currentUser
+    val visibleState = MutableTransitionState(currentUser == null)
 
-    private val _uiState = MutableStateFlow<UIState>(UIState.Empty)
-    val uiState: StateFlow<UIState> = _uiState
+    private val _logUiState = MutableStateFlow<UIState>(UIState.Empty())
+    val logUiState: StateFlow<UIState> = _logUiState
+
+    private val _signUiState = MutableStateFlow<UIState>(UIState.Empty())
+    val signUiState: StateFlow<UIState> = _signUiState
 
     val currentScreen = mutableStateOf(Screen.LoginScreen.route)
 
     fun logInWith(email: String, password: String) {
-        _uiState.value = UIState.Loading
+        _logUiState.value = UIState.Loading
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    _uiState.value = UIState.Success(auth.currentUser)
-                    currentScreen.value = Screen.NoteListScreen.route
+                    if (currentUser?.isEmailVerified == false) {
+                        currentUser?.sendEmailVerification()
+                        auth.signOut()
+                        _logUiState.value = UIState.Empty("verification")
+                    } else {
+                        _logUiState.value = UIState.Success(currentUser)
+                        visibleState.targetState = false
+                    }
                 } else {
-//                    Toast.makeText(
-//                        context, "Authentication failed.",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
+                    _logUiState.value = UIState.Empty(task.exception.toString().split(":")[1])
                 }
             }
-
     }
 
+    fun signInWith(email: String, password: String) {
+        if (currentUser == null) {
+            _signUiState.value = UIState.Loading
+            auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener() { task ->
+                    if (task.isSuccessful) {
+                        currentUser?.sendEmailVerification()
+                        _signUiState.value = UIState.Success(currentUser)
+                        auth.signOut()
+                    } else {
+                        _signUiState.value = UIState.Empty(task.exception.toString().split(":")[1])
+                    }
+                }
+        }
+    }
+
+    fun sendResetPasswordLink(email: String) {
+        auth.sendPasswordResetEmail(email)
+    }
+
+    fun resetState() {
+        _signUiState.value = UIState.Empty()
+    }
 
 }

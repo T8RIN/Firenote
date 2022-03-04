@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -15,6 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -36,6 +38,7 @@ fun ForgotPasswordScreen(viewModel: AuthViewModel) {
     }
 
     val context = LocalContext.current
+    val focusManager = LocalFocusManager.current
 
     Scaffold(
         modifier = Modifier
@@ -59,7 +62,9 @@ fun ForgotPasswordScreen(viewModel: AuthViewModel) {
                 Modifier
                     .weight(2f)
                     .padding(8.dp),
-                shape = RoundedCornerShape(24.dp)
+                shape = RoundedCornerShape(24.dp),
+                containerColor = MaterialTheme.colorScheme.onPrimary,
+                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
             ) {
                 Column(
                     Modifier
@@ -91,8 +96,9 @@ fun ForgotPasswordScreen(viewModel: AuthViewModel) {
                             errorText = stringResource(R.string.emailIsNotValid),
                             keyboardOptions = KeyboardOptions(
                                 keyboardType = KeyboardType.Email,
-                                imeAction = ImeAction.Next
+                                imeAction = ImeAction.Done
                             ),
+                            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                             trailingIcon = {
                                 if (email.isNotBlank())
                                     IconButton(onClick = { email = "" }) {
@@ -105,9 +111,10 @@ fun ForgotPasswordScreen(viewModel: AuthViewModel) {
                     Button(
                         onClick = { /*TODO*/
                             viewModel.currentScreen.value = Screen.LoginScreen.route
+                            viewModel.sendResetPasswordLink(email)
                             Toast.makeText(
                                 context,
-                                context.getString(R.string.checkYourEmail),
+                                R.string.checkYourEmail,
                                 Toast.LENGTH_LONG
                             ).show()
                         },

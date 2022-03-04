@@ -40,4 +40,6 @@
     <string name="sendEmail">Send email</string>
     <string name="checkYourEmail">Check your email and follow instructions in order to reset your password</string>
     <string name="niceToSeeYou">Nice to see you!</string>
+    <string name="notVerified">Email not verified, check email to complete this step</string>
+    <string name="emailToVerify">We send a verification link to your email</string>
 </resources>

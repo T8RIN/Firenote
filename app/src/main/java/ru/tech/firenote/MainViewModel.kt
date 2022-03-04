@@ -35,8 +35,6 @@ class MainViewModel @Inject constructor(
         targetState = false
     }
 
-    val currentScreen = mutableStateOf(Screen.LoginScreen)
-
 
     @OptIn(ExperimentalMaterial3Api::class)
     val scrollBehavior = mutableStateOf(TopAppBarDefaults.pinnedScrollBehavior())

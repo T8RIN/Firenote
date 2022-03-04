@@ -46,7 +46,7 @@ fun MaterialTextField(
     val colors: TextFieldColors = TextFieldDefaults.textFieldColors(
         textColor = M3.colorScheme.onBackground,
         backgroundColor = Color.Transparent,
-        unfocusedIndicatorColor = if(isError) M3.colorScheme.error else M3.colorScheme.outline,
+        unfocusedIndicatorColor = if(isError) M3.colorScheme.error else M3.colorScheme.onPrimaryContainer,
         focusedIndicatorColor = if(isError) M3.colorScheme.error else M3.colorScheme.primary,
         cursorColor = if(isError) M3.colorScheme.error else M3.colorScheme.primary
     )
