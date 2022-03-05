@@ -1,4 +1,4 @@
-package ru.tech.firenote
+package ru.tech.firenote.viewModel
 
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.runtime.mutableStateOf
@@ -10,6 +10,8 @@ import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import ru.tech.firenote.model.Screen
+import ru.tech.firenote.model.UIState
 import javax.inject.Inject
 
 @HiltViewModel
@@ -73,7 +75,7 @@ class AuthViewModel @Inject constructor(
         _logUiState.value = UIState.Empty()
     }
 
-    fun goTo(screen: Screen){
+    fun goTo(screen: Screen) {
         currentScreen.value = screen.route
     }
 

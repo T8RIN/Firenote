@@ -1,4 +1,4 @@
-package ru.tech.firenote
+package ru.tech.firenote.ui.composable.single
 
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material3.*
@@ -7,6 +7,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
+import ru.tech.firenote.model.Screen
 
 @Composable
 fun BottomNavigationBar(

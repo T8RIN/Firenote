@@ -1,4 +1,4 @@
-package ru.tech.firenote
+package ru.tech.firenote.ui.composable.single
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
@@ -21,6 +21,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
+import ru.tech.firenote.model.Note
 
 @Composable
 fun NoteItem(

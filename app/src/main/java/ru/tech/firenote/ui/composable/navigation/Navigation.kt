@@ -1,4 +1,4 @@
-package ru.tech.firenote
+package ru.tech.firenote.ui.composable.navigation
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
@@ -16,6 +16,9 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import ru.tech.firenote.model.Note
+import ru.tech.firenote.model.Screen
+import ru.tech.firenote.ui.composable.single.NoteItem
 import ru.tech.firenote.ui.theme.NoteYellow
 
 @Composable

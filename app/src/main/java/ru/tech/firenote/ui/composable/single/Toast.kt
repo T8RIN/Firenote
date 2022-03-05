@@ -1,8 +1,9 @@
-package ru.tech.firenote
+package ru.tech.firenote.ui.composable.single
 
 import android.widget.Toast
 import androidx.annotation.StringRes
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 
 @Composable

@@ -1,4 +1,4 @@
-package ru.tech.firenote
+package ru.tech.firenote.ui.composable.single
 
 
 import androidx.compose.foundation.layout.RowScope
@@ -11,7 +11,7 @@ import com.google.accompanist.insets.statusBarsPadding
 
 @Composable
 fun AppBarWithInsets(
-    modifier: Modifier? = null,
+    modifier: Modifier = Modifier,
     title: String,
     scrollBehavior: TopAppBarScrollBehavior? = null,
     navigationIcon: @Composable () -> Unit = {},
@@ -38,7 +38,7 @@ fun AppBarWithInsets(
             actions = actions,
             scrollBehavior = scrollBehavior,
             colors = foregroundColors,
-            modifier = (modifier ?: Modifier).statusBarsPadding()
+            modifier = modifier.statusBarsPadding()
         )
     }
 }

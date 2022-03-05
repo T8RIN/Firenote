@@ -1,4 +1,4 @@
-package ru.tech.firenote
+package ru.tech.firenote.ui.composable.single
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FilterAlt
@@ -9,8 +9,9 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.res.stringResource
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import ru.tech.firenote.PreferenceKeys.getIcon
-import ru.tech.firenote.PreferenceKeys.setViewComposition
+import ru.tech.firenote.R
+import ru.tech.firenote.model.PreferenceKeys.getIcon
+import ru.tech.firenote.model.PreferenceKeys.setViewComposition
 
 @Composable
 fun NoteActions(

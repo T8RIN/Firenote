@@ -1,4 +1,4 @@
-package ru.tech.firenote
+package ru.tech.firenote.ui.composable.single
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.*
@@ -31,7 +31,15 @@ fun EditableAppBar(
     )
     Surface(color = backgroundColor) {
         SmallTopAppBar(
-            title = { EditText(hintText = hint, onValueChange = onValueChange, errorColor = errorColor, color = color, textFieldState = text) },
+            title = {
+                EditText(
+                    hintText = hint,
+                    onValueChange = onValueChange,
+                    errorColor = errorColor,
+                    color = color,
+                    textFieldState = text
+                )
+            },
             navigationIcon = navigationIcon,
             scrollBehavior = scrollBehavior,
             colors = foregroundColors,

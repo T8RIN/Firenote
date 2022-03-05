@@ -1,10 +1,8 @@
-package ru.tech.firenote
+package ru.tech.firenote.ui.composable.single
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -46,9 +44,9 @@ fun MaterialTextField(
     val colors: TextFieldColors = TextFieldDefaults.textFieldColors(
         textColor = M3.colorScheme.onBackground,
         backgroundColor = Color.Transparent,
-        unfocusedIndicatorColor = if(isError) M3.colorScheme.error else M3.colorScheme.onPrimaryContainer,
-        focusedIndicatorColor = if(isError) M3.colorScheme.error else M3.colorScheme.primary,
-        cursorColor = if(isError) M3.colorScheme.error else M3.colorScheme.primary
+        unfocusedIndicatorColor = if (isError) M3.colorScheme.error else M3.colorScheme.onPrimaryContainer,
+        focusedIndicatorColor = if (isError) M3.colorScheme.error else M3.colorScheme.primary,
+        cursorColor = if (isError) M3.colorScheme.error else M3.colorScheme.primary
     )
 
     Column {
@@ -77,7 +75,11 @@ fun MaterialTextField(
             shape = shape,
             colors = colors
         )
-        if(isError) Text(errorText, color = M3.colorScheme.error, modifier = Modifier.padding(8.dp))
+        if (isError) Text(
+            errorText,
+            color = M3.colorScheme.error,
+            modifier = Modifier.padding(8.dp)
+        )
     }
 
 }

@@ -1,4 +1,4 @@
-package ru.tech.firenote
+package ru.tech.firenote.viewModel
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
@@ -21,6 +21,13 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import ru.tech.firenote.R
+import ru.tech.firenote.model.PreferenceKeys
+import ru.tech.firenote.model.Screen
+import ru.tech.firenote.ui.composable.screen.AlarmCreationScreen
+import ru.tech.firenote.ui.composable.screen.NoteCreationScreen
+import ru.tech.firenote.ui.composable.single.AlarmActions
+import ru.tech.firenote.ui.composable.single.NoteActions
 import javax.inject.Inject
 
 @HiltViewModel

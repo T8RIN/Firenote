@@ -1,4 +1,4 @@
-package ru.tech.firenote
+package ru.tech.firenote.ui.composable.screen
 
 import android.content.Context
 import android.widget.Toast
@@ -32,7 +32,13 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.insets.navigationBarsPadding
 import kotlinx.coroutines.launch
+import ru.tech.firenote.R
+import ru.tech.firenote.ui.composable.single.EditText
+import ru.tech.firenote.ui.composable.single.EditableAppBar
+import ru.tech.firenote.ui.composable.single.Gradient
+import ru.tech.firenote.ui.composable.single.MaterialDialog
 import ru.tech.firenote.ui.theme.*
+import ru.tech.firenote.viewModel.NoteCreationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -211,7 +217,11 @@ fun NoteCreationScreen(
     )
 }
 
-fun saveNote(viewModel: NoteCreationViewModel, context: Context, state: MutableTransitionState<Boolean>){
+fun saveNote(
+    viewModel: NoteCreationViewModel,
+    context: Context,
+    state: MutableTransitionState<Boolean>
+) {
     if (viewModel.noteDescription.value.isNotBlank() && viewModel.noteLabel.value.isNotEmpty()) {
         viewModel.saveNote()
         state.targetState = false

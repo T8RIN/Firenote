@@ -1,4 +1,4 @@
-package ru.tech.firenote
+package ru.tech.firenote.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

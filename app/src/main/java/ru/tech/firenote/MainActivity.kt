@@ -1,6 +1,5 @@
 package ru.tech.firenote
 
-import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -13,7 +12,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
-import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -22,7 +20,14 @@ import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
+import ru.tech.firenote.model.Screen
+import ru.tech.firenote.ui.composable.navigation.Navigation
+import ru.tech.firenote.ui.composable.screen.auth.AuthScreen
+import ru.tech.firenote.ui.composable.single.AppBarWithInsets
+import ru.tech.firenote.ui.composable.single.BottomNavigationBar
+import ru.tech.firenote.ui.composable.single.MaterialDialog
 import ru.tech.firenote.ui.theme.FirenoteTheme
+import ru.tech.firenote.viewModel.MainViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -45,7 +50,6 @@ class MainActivity : ComponentActivity() {
 //
 //        childUpdates[path + "/" + key] = note.toMap()
 //        FirebaseDatabase.getInstance().reference.updateChildren(childUpdates)
-
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
@@ -98,7 +102,10 @@ class MainActivity : ComponentActivity() {
                                         title = mainViewModel.title,
                                         selectedItem = mainViewModel.selectedItem,
                                         navController = navController,
-                                        items = listOf(Screen.NoteListScreen, Screen.AlarmListScreen)
+                                        items = listOf(
+                                            Screen.NoteListScreen,
+                                            Screen.AlarmListScreen
+                                        )
                                     )
                                 },
                                 snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -129,11 +136,11 @@ class MainActivity : ComponentActivity() {
     }
 
 
-    private fun startService(func: (() -> Unit)? = null) {
-        ForegroundService.func = func
-        val serviceIntent = Intent(this, ForegroundService::class.java)
-        serviceIntent.putExtra("inputExtra", "Foreground Service Example in Android")
-        ContextCompat.startForegroundService(this, serviceIntent)
-    }
+//    private fun startService(func: (() -> Unit)? = null) {
+//        ForegroundService.func = func
+//        val serviceIntent = Intent(this, ForegroundService::class.java)
+//        serviceIntent.putExtra("inputExtra", "Foreground Service Example in Android")
+//        ContextCompat.startForegroundService(this, serviceIntent)
+//    }
 
 }

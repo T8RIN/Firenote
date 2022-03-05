@@ -1,15 +1,14 @@
-package ru.tech.firenote
+package ru.tech.firenote.model
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.filled.PhoneAndroid
 import androidx.compose.material.icons.filled.StickyNote2
-import androidx.compose.material.icons.filled.VerifiedUser
 import androidx.compose.material.icons.outlined.NotificationsActive
 import androidx.compose.material.icons.outlined.StickyNote2
-import androidx.compose.material.icons.outlined.VerifiedUser
 import androidx.compose.ui.graphics.vector.ImageVector
+import ru.tech.firenote.R
 
 sealed class Screen(
     val route: String,
@@ -19,6 +18,7 @@ sealed class Screen(
 ) {
     object NoteListScreen :
         Screen("notes", R.string.notes, Icons.Outlined.StickyNote2, Icons.Filled.StickyNote2)
+
     object AlarmListScreen : Screen(
         "alarms",
         R.string.alarms,
@@ -27,9 +27,9 @@ sealed class Screen(
     )
 
 
-    object LoginScreen: Screen("login")
-    object RegistrationScreen: Screen("register")
-    object ForgotPasswordScreen: Screen("forgot")
+    object LoginScreen : Screen("login")
+    object RegistrationScreen : Screen("register")
+    object ForgotPasswordScreen : Screen("forgot")
 
 
 //    object NoteCreationScreen : Screen("creation", R.string.createNote, Icons.Filled.EditNote)

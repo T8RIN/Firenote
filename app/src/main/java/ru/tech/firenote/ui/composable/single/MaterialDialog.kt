@@ -1,4 +1,4 @@
-package ru.tech.firenote
+package ru.tech.firenote.ui.composable.single
 
 import androidx.activity.compose.BackHandler
 import androidx.annotation.StringRes

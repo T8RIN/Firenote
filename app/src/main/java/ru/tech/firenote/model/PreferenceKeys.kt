@@ -1,4 +1,4 @@
-package ru.tech.firenote
+package ru.tech.firenote.model
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ViewCompact
