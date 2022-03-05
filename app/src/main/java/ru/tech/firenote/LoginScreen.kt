@@ -1,7 +1,6 @@
 package ru.tech.firenote
 
 import android.util.Patterns
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -20,7 +19,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -53,7 +51,6 @@ fun LoginScreen(viewModel: AuthViewModel) {
         !email.isValid() && email.isNotEmpty()
     }
 
-    val context = LocalContext.current
     val focusManager = LocalFocusManager.current
 
     Scaffold(
@@ -79,7 +76,7 @@ fun LoginScreen(viewModel: AuthViewModel) {
                     .weight(2f)
                     .padding(8.dp),
                 shape = RoundedCornerShape(24.dp),
-                containerColor = MaterialTheme.colorScheme.onPrimary,
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
                 elevation = cardElevation(defaultElevation = 8.dp)
             ) {
                 Column(
@@ -94,6 +91,7 @@ fun LoginScreen(viewModel: AuthViewModel) {
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth()
                     )
+
                     when (val state = viewModel.logUiState.collectAsState().value) {
                         is UIState.Loading ->
                             Column(
@@ -105,12 +103,27 @@ fun LoginScreen(viewModel: AuthViewModel) {
                             ) {
                                 CircularProgressIndicator()
                             }
-                        is UIState.Success<*> -> SideEffect { Toast.makeText(context, R.string.niceToSeeYou, Toast.LENGTH_SHORT).show() }
+                        is UIState.Success<*> -> {
+                            Toast(R.string.niceToSeeYou)
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .weight(1f),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                CircularProgressIndicator()
+                            }
+                        }
                         is UIState.Empty -> {
-                            if(state.message == "verification") {
-                                SideEffect { Toast.makeText(context, R.string.notVerified, Toast.LENGTH_SHORT).show() }
+                            if (state.message == "verification") {
+                                Toast(R.string.notVerified)
+                                viewModel.resetState()
                             } else {
-                                state.message?.let{ SideEffect { Toast.makeText(context, it, Toast.LENGTH_SHORT).show() } }
+                                state.message?.let {
+                                    Toast(it)
+                                    viewModel.resetState()
+                                }
                             }
 
                             Column(
@@ -151,10 +164,15 @@ fun LoginScreen(viewModel: AuthViewModel) {
                                         keyboardType = KeyboardType.Password,
                                         imeAction = ImeAction.Done
                                     ),
-                                    keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                                    keyboardActions = KeyboardActions(onDone = {
+                                        focusManager.clearFocus()
+                                        if (isFormValid) viewModel.logInWith(email, password)
+                                    }),
                                     visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                                     trailingIcon = {
-                                        IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
+                                        IconButton(onClick = {
+                                            isPasswordVisible = !isPasswordVisible
+                                        }) {
                                             Icon(
                                                 if (isPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
                                                 null
@@ -179,12 +197,12 @@ fun LoginScreen(viewModel: AuthViewModel) {
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         TextButton(onClick = {
-                            viewModel.currentScreen.value = Screen.RegistrationScreen.route
+                            viewModel.goTo(Screen.RegistrationScreen)
                         }) {
                             Text(text = stringResource(R.string.signUp))
                         }
                         TextButton(onClick = {
-                            viewModel.currentScreen.value = Screen.ForgotPasswordScreen.route
+                            viewModel.goTo(Screen.ForgotPasswordScreen)
                         }) {
                             Text(
                                 text = stringResource(R.string.forgotPassword),

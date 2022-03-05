@@ -70,6 +70,11 @@ class AuthViewModel @Inject constructor(
 
     fun resetState() {
         _signUiState.value = UIState.Empty()
+        _logUiState.value = UIState.Empty()
+    }
+
+    fun goTo(screen: Screen){
+        currentScreen.value = screen.route
     }
 
 }

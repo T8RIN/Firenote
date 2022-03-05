@@ -53,8 +53,12 @@ class MainActivity : ComponentActivity() {
                 !mainViewModel.showCreationComposable.currentState || !mainViewModel.showCreationComposable.targetState
             }
 
+            val isAuth = remember {
+                mutableStateOf(Firebase.auth.currentUser == null)
+            }
+
             val calcOrientation by derivedStateOf {
-                if (mainViewModel.showCreationComposable.targetState || Firebase.auth.currentUser == null) ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                if (mainViewModel.showCreationComposable.targetState || isAuth.value) ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                 else ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
             }
 
@@ -65,54 +69,57 @@ class MainActivity : ComponentActivity() {
                     val snackbarHostState = remember { SnackbarHostState() }
                     val scope = rememberCoroutineScope()
 
-                    if (isScaffoldVisible) {
-                        Scaffold(
-                            topBar = {
-                                AppBarWithInsets(
-                                    scrollBehavior = mainViewModel.scrollBehavior.value,
-                                    title = stringResource(mainViewModel.title.value),
-                                    actions = {
-                                        mainViewModel.mainAppBarActions()
-                                    }
-                                )
-                            },
-                            floatingActionButton = {
-                                ExtendedFloatingActionButton(onClick = {
-                                    mainViewModel.showCreationComposable.targetState = true
-                                }, icon = {
-                                    mainViewModel.fabIcon()
-                                }, text = {
-                                    mainViewModel.fabText()
-                                })
-                            },
-                            bottomBar = {
-                                BottomNavigationBar(
-                                    title = mainViewModel.title,
-                                    selectedItem = mainViewModel.selectedItem,
-                                    navController = navController,
-                                    items = listOf(Screen.NoteListScreen, Screen.AlarmListScreen)
-                                )
-                            },
-                            snackbarHost = { SnackbarHost(snackbarHostState) },
-                            modifier = Modifier.nestedScroll(mainViewModel.scrollBehavior.value.nestedScrollConnection)
-                        ) {
-                            Navigation(navController, dataStore, mainViewModel.viewType)
-                        }
-                    }
-
-                    mainViewModel.creationComposable()
                     requestedOrientation = calcOrientation
 
-                    if (Firebase.auth.currentUser == null) AuthScreen()
-                    else MaterialDialog(
-                        showDialog = mutableStateOf(false),
-                        icon = Icons.Filled.ExitToApp,
-                        title = R.string.exitApp,
-                        message = R.string.exitAppMessage,
-                        confirmText = R.string.stay,
-                        dismissText = R.string.close,
-                        dismissAction = { finishAffinity() }
-                    )
+                    if (isAuth.value) AuthScreen(isAuth)
+                    else {
+                        if (isScaffoldVisible) {
+                            Scaffold(
+                                topBar = {
+                                    AppBarWithInsets(
+                                        scrollBehavior = mainViewModel.scrollBehavior.value,
+                                        title = stringResource(mainViewModel.title.value),
+                                        actions = {
+                                            mainViewModel.mainAppBarActions()
+                                        }
+                                    )
+                                },
+                                floatingActionButton = {
+                                    ExtendedFloatingActionButton(onClick = {
+                                        mainViewModel.showCreationComposable.targetState = true
+                                    }, icon = {
+                                        mainViewModel.fabIcon()
+                                    }, text = {
+                                        mainViewModel.fabText()
+                                    })
+                                },
+                                bottomBar = {
+                                    BottomNavigationBar(
+                                        title = mainViewModel.title,
+                                        selectedItem = mainViewModel.selectedItem,
+                                        navController = navController,
+                                        items = listOf(Screen.NoteListScreen, Screen.AlarmListScreen)
+                                    )
+                                },
+                                snackbarHost = { SnackbarHost(snackbarHostState) },
+                                modifier = Modifier.nestedScroll(mainViewModel.scrollBehavior.value.nestedScrollConnection)
+                            ) {
+                                Navigation(navController, dataStore, mainViewModel.viewType)
+                            }
+                        }
+
+                        mainViewModel.creationComposable()
+
+                        MaterialDialog(
+                            showDialog = mutableStateOf(false),
+                            icon = Icons.Filled.ExitToApp,
+                            title = R.string.exitApp,
+                            message = R.string.exitAppMessage,
+                            confirmText = R.string.stay,
+                            dismissText = R.string.close,
+                            dismissAction = { finishAffinity() }
+                        )
+                    }
                 }
             }
         }

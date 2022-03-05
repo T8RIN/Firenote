@@ -84,7 +84,7 @@ fun RegistrationScreen(viewModel: AuthViewModel) {
                     .weight(2f)
                     .padding(8.dp),
                 shape = RoundedCornerShape(24.dp),
-                containerColor = MaterialTheme.colorScheme.onPrimary,
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
                 elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
             ) {
                 Column(
@@ -112,12 +112,15 @@ fun RegistrationScreen(viewModel: AuthViewModel) {
                                 CircularProgressIndicator()
                             }
                         is UIState.Success<*> -> {
-                            viewModel.currentScreen.value = Screen.LoginScreen.route
+                            viewModel.goTo(Screen.LoginScreen)
                             Toast(R.string.emailToVerify)
-                            SideEffect { viewModel.resetState() }
+                            viewModel.resetState()
                         }
                         is UIState.Empty -> {
-                            state.message?.let { Toast(it) }
+                            state.message?.let {
+                                Toast(it)
+                                viewModel.resetState()
+                            }
                             Column(
                                 Modifier
                                     .fillMaxSize()
@@ -183,7 +186,10 @@ fun RegistrationScreen(viewModel: AuthViewModel) {
                                         keyboardType = KeyboardType.Password,
                                         imeAction = ImeAction.Done
                                     ),
-                                    keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                                    keyboardActions = KeyboardActions(onDone = {
+                                        focusManager.clearFocus()
+                                        if (isFormValid) viewModel.signInWith(email, password)
+                                    }),
                                     visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                                     trailingIcon = {
                                         IconButton(onClick = {
@@ -214,7 +220,7 @@ fun RegistrationScreen(viewModel: AuthViewModel) {
                         horizontalArrangement = Arrangement.Start
                     ) {
                         TextButton(onClick = {
-                            viewModel.currentScreen.value = Screen.LoginScreen.route
+                            viewModel.goTo(Screen.LoginScreen)
                         }) {
                             Text(text = stringResource(R.string.logIn))
                         }

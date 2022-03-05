@@ -63,7 +63,7 @@ fun ForgotPasswordScreen(viewModel: AuthViewModel) {
                     .weight(2f)
                     .padding(8.dp),
                 shape = RoundedCornerShape(24.dp),
-                containerColor = MaterialTheme.colorScheme.onPrimary,
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
                 elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
             ) {
                 Column(
@@ -98,7 +98,10 @@ fun ForgotPasswordScreen(viewModel: AuthViewModel) {
                                 keyboardType = KeyboardType.Email,
                                 imeAction = ImeAction.Done
                             ),
-                            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                            keyboardActions = KeyboardActions(onDone = {
+                                focusManager.clearFocus()
+                                if(isFormValid) viewModel.sendResetPasswordLink(email)
+                            }),
                             trailingIcon = {
                                 if (email.isNotBlank())
                                     IconButton(onClick = { email = "" }) {
@@ -109,8 +112,8 @@ fun ForgotPasswordScreen(viewModel: AuthViewModel) {
                     }
 
                     Button(
-                        onClick = { /*TODO*/
-                            viewModel.currentScreen.value = Screen.LoginScreen.route
+                        onClick = {
+                            viewModel.goTo(Screen.LoginScreen)
                             viewModel.sendResetPasswordLink(email)
                             Toast.makeText(
                                 context,
@@ -130,7 +133,7 @@ fun ForgotPasswordScreen(viewModel: AuthViewModel) {
                         horizontalArrangement = Arrangement.Start
                     ) {
                         TextButton(onClick = {
-                            viewModel.currentScreen.value = Screen.LoginScreen.route
+                            viewModel.goTo(Screen.LoginScreen)
                         }) {
                             Text(text = stringResource(R.string.logIn))
                         }
