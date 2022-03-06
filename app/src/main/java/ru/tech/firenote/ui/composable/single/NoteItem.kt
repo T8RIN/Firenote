@@ -4,10 +4,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,13 +42,13 @@ fun NoteItem(
 
             clipPath(clipPath) {
                 drawRoundRect(
-                    color = Color(note.color),
+                    color = Color(note.color ?: 0),
                     size = size,
                     cornerRadius = CornerRadius(cornerRadius.toPx())
                 )
                 drawRoundRect(
                     color = Color(
-                        ColorUtils.blendARGB(note.color, 0x000000, 0.2f)
+                        ColorUtils.blendARGB(note.color ?: 0, 0x000000, 0.2f)
                     ),
                     topLeft = Offset(size.width - cutCornerSize.toPx(), -100f),
                     size = Size(cutCornerSize.toPx() + 100f, cutCornerSize.toPx() + 100f),
@@ -66,7 +63,7 @@ fun NoteItem(
                 .padding(end = 32.dp)
         ) {
             Text(
-                text = note.title,
+                text = note.title ?: "",
                 style = MaterialTheme.typography.bodyLarge,
                 color = Color.Black,
                 maxLines = 1,
@@ -74,7 +71,7 @@ fun NoteItem(
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = note.content,
+                text = note.content ?: "",
                 style = MaterialTheme.typography.bodySmall,
                 color = Color.Black,
                 maxLines = 10,
@@ -88,7 +85,7 @@ fun NoteItem(
             Icon(
                 imageVector = Icons.Default.Delete,
                 contentDescription = "Delete note",
-                tint = Color.Black
+                tint = darkColorScheme().onTertiary
             )
         }
     }

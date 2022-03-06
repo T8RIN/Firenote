@@ -1,13 +1,12 @@
 package ru.tech.firenote.model
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import com.google.firebase.database.IgnoreExtraProperties
 
-@Entity
+@IgnoreExtraProperties
 data class Note(
-    val title: String,
-    val content: String,
-    val timestamp: Long,
-    val color: Int,
-    @PrimaryKey val id: Int? = null
+    val title: String? = null,
+    val content: String? = null,
+    val timestamp: Long? = null,
+    val color: Int? = null,
+    var id: String? = null
 )

@@ -77,6 +77,7 @@ fun NoteCreationScreen(
                             needToShowCancelDialog.value = true
                         } else {
                             state.targetState = false
+                            viewModel.resetValues()
                         }
                     }) {
                         Icon(Icons.Rounded.ArrowBack, null, tint = Color.Black)
@@ -200,10 +201,10 @@ fun NoteCreationScreen(
         message = R.string.noteSavingDialogMessage,
         confirmText = R.string.save,
         dismissText = R.string.discardChanges,
-        confirmAction = { /*TODO: SAVING*/ saveNote(viewModel, context, state) },
+        confirmAction = { saveNote(viewModel, context, state) },
         dismissAction = {
             state.targetState = false
-            needToShowCancelDialog.value = false
+            viewModel.resetValues()
         },
         backHandler = {
             BackHandler {
@@ -211,6 +212,7 @@ fun NoteCreationScreen(
                     needToShowCancelDialog.value = true
                 } else {
                     state.targetState = false
+                    viewModel.resetValues()
                 }
             }
         }

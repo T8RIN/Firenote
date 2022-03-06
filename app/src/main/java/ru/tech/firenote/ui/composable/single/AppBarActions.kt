@@ -2,88 +2,49 @@ package ru.tech.firenote.ui.composable.single
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FilterAlt
-import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.outlined.CalendarToday
+import androidx.compose.material.icons.outlined.NotificationImportant
+import androidx.compose.material.icons.outlined.Palette
+import androidx.compose.material.icons.outlined.TextSnippet
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.res.stringResource
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import ru.tech.firenote.R
-import ru.tech.firenote.model.PreferenceKeys.getIcon
-import ru.tech.firenote.model.PreferenceKeys.setViewComposition
+import ru.tech.firenote.viewModel.MainViewModel
 
 @Composable
 fun NoteActions(
-    viewIcon: MutableState<Int>,
-    showViewMenu: MutableState<Boolean>,
-    showFilter: MutableState<Boolean>,
-    dataStore: DataStore<Preferences>
+    viewModel: MainViewModel
 ) {
-    IconButton(onClick = { showFilter.value = true }) {
+    IconButton(onClick = { viewModel.setFilter(true) }) {
         Icon(
             imageVector = Icons.Filled.FilterAlt,
             contentDescription = null
         )
     }
-    IconButton(onClick = { showViewMenu.value = true }) {
-        Icon(
-            imageVector = viewIcon.value.getIcon(),
-            contentDescription = null
-        )
-    }
     DropdownMenu(
-        expanded = showViewMenu.value,
-        onDismissRequest = { showViewMenu.value = false }
+        expanded = viewModel.showFilter.value,
+        onDismissRequest = { viewModel.setFilter(false) }
     ) {
         DropdownMenuItem(
-            onClick = {
-                viewIcon.value = 0
-                dataStore.setViewComposition(0)
-                showViewMenu.value = false /*TODO*/
-            },
-            text = { Text(stringResource(R.string.viewList)) },
+            onClick = { viewModel.setFilter(false) /*TODO*/ },
+            text = { Text(stringResource(R.string.title)) },
             leadingIcon = {
-                Icon(Icons.Outlined.ViewList, null)
+                Icon(Icons.Outlined.TextSnippet, null)
             })
         DropdownMenuItem(
-            onClick = {
-                viewIcon.value = 1
-                dataStore.setViewComposition(1)
-                showViewMenu.value = false /*TODO*/
-            },
-            text = { Text(stringResource(R.string.viewCompact)) },
-            leadingIcon = {
-                Icon(Icons.Outlined.ViewCompact, null)
-            })
-        DropdownMenuItem(
-            onClick = {
-                viewIcon.value = 2
-                dataStore.setViewComposition(2)
-                showViewMenu.value = false /*TODO*/
-            },
-            text = { Text(stringResource(R.string.viewGrid)) },
-            leadingIcon = {
-                Icon(Icons.Outlined.GridView, null)
-            })
-    }
-    DropdownMenu(
-        expanded = showFilter.value,
-        onDismissRequest = { showFilter.value = false }
-    ) {
-        DropdownMenuItem(
-            onClick = { showFilter.value = false /*TODO*/ },
+            onClick = { viewModel.setFilter(false) /*TODO*/ },
             text = { Text(stringResource(R.string.color)) },
             leadingIcon = {
                 Icon(Icons.Outlined.Palette, null)
             })
-        DropdownMenuItem(onClick = { showFilter.value = false /*TODO*/ }, text = {
-            Text(
-                stringResource(R.string.date)
-            )
-        }, leadingIcon = {
-            Icon(Icons.Outlined.CalendarToday, null)
-        })
+        DropdownMenuItem(
+            onClick = { viewModel.setFilter(false) /*TODO*/ },
+            text = { Text(stringResource(R.string.date)) },
+            leadingIcon = {
+                Icon(Icons.Outlined.CalendarToday, null)
+            })
     }
 }
 

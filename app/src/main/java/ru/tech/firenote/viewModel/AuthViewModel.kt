@@ -54,7 +54,7 @@ class AuthViewModel @Inject constructor(
         if (currentUser == null) {
             _signUiState.value = UIState.Loading
             auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener() { task ->
+                .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         currentUser?.sendEmailVerification()
                         _signUiState.value = UIState.Success(currentUser)

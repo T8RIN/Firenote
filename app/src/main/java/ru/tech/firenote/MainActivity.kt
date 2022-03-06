@@ -13,8 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.core.view.WindowCompat
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.firebase.auth.ktx.auth
@@ -28,13 +26,9 @@ import ru.tech.firenote.ui.composable.single.BottomNavigationBar
 import ru.tech.firenote.ui.composable.single.MaterialDialog
 import ru.tech.firenote.ui.theme.FirenoteTheme
 import ru.tech.firenote.viewModel.MainViewModel
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
-    @Inject
-    lateinit var dataStore: DataStore<Preferences>
 
     private val mainViewModel: MainViewModel by viewModels()
 
@@ -110,15 +104,15 @@ class MainActivity : ComponentActivity() {
                                 },
                                 snackbarHost = { SnackbarHost(snackbarHostState) },
                                 modifier = Modifier.nestedScroll(mainViewModel.scrollBehavior.value.nestedScrollConnection)
-                            ) {
-                                Navigation(navController, dataStore, mainViewModel.viewType)
+                            ) { contentPadding ->
+                                Navigation(navController, contentPadding)
                             }
                         }
 
                         mainViewModel.creationComposable()
 
                         MaterialDialog(
-                            showDialog = mutableStateOf(false),
+                            showDialog = remember { mutableStateOf(false) },
                             icon = Icons.Filled.ExitToApp,
                             title = R.string.exitApp,
                             message = R.string.exitAppMessage,

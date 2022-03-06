@@ -42,4 +42,9 @@
     <string name="niceToSeeYou">Nice to see you!</string>
     <string name="notVerified">Email not verified, check email to complete this step</string>
     <string name="emailToVerify">We send a verification link to your email</string>
+    <string name="noNotes">You have no notes</string>
+    <string name="deleteNote">Delete note</string>
+    <string name="deleteNoteMessage">Are you really want to delete this note? This action cannot be undone!</string>
+    <string name="delete">Delete</string>
+    <string name="title">Title</string>
 </resources>

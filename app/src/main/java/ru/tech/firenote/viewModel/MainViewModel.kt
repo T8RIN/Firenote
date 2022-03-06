@@ -8,7 +8,10 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.NotificationAdd
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.res.stringResource
@@ -16,13 +19,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import ru.tech.firenote.R
-import ru.tech.firenote.model.PreferenceKeys
 import ru.tech.firenote.model.Screen
 import ru.tech.firenote.ui.composable.screen.AlarmCreationScreen
 import ru.tech.firenote.ui.composable.screen.NoteCreationScreen
@@ -32,7 +29,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    dataStore: DataStore<Preferences>
+    val dataStore: DataStore<Preferences>
 ) : ViewModel() {
 
     val title = mutableStateOf(Screen.NoteListScreen.resourceId)
@@ -46,15 +43,9 @@ class MainViewModel @Inject constructor(
     @OptIn(ExperimentalMaterial3Api::class)
     val scrollBehavior = mutableStateOf(TopAppBarDefaults.pinnedScrollBehavior())
 
-    private val showViewMenu = mutableStateOf(false)
-    private val showFilter = mutableStateOf(false)
-    val viewType = mutableStateOf(
-        runBlocking {
-            dataStore.data.map {
-                it[PreferenceKeys.VIEW_COMPOSITION] ?: 0
-            }.first()
-        }
-    )
+    val showViewMenu = mutableStateOf(false)
+    val showFilter = mutableStateOf(false)
+
 
     val fabIcon: @Composable () -> Unit = {
         when (selectedItem.value) {
@@ -72,12 +63,7 @@ class MainViewModel @Inject constructor(
 
     val mainAppBarActions: @Composable () -> Unit = {
         when (selectedItem.value) {
-            0 -> NoteActions(
-                viewType,
-                showViewMenu,
-                showFilter,
-                dataStore
-            )
+            0 -> NoteActions(this)
             1 -> AlarmActions(showFilter = showFilter)
         }
     }
@@ -96,16 +82,24 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun showSnackBar(scope: CoroutineScope, snackbarHostState: SnackbarHostState) {
-        scope.launch {
-            val snackbarResult = snackbarHostState.showSnackbar(
-                message = "Test" /* TODO: message */,
-                actionLabel = "Undo" /* TODO: actionText */
-            )
-            if (snackbarResult == SnackbarResult.ActionPerformed) {
-                // TODO: Action
-            }
-        }
+    fun setFilter(value: Boolean) {
+        showFilter.value = value
     }
+
+    fun setViewMenu(value: Boolean) {
+        showViewMenu.value = value
+    }
+
+//    fun showSnackBar(scope: CoroutineScope, snackbarHostState: SnackbarHostState) {
+//        scope.launch {
+//            val snackbarResult = snackbarHostState.showSnackbar(
+//                message = "Test" /* TODO: message */,
+//                actionLabel = "Undo" /* TODO: actionText */
+//            )
+//            if (snackbarResult == SnackbarResult.ActionPerformed) {
+//                // TODO: Action
+//            }
+//        }
+//    }
 
 }
