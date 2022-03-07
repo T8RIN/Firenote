@@ -47,4 +47,5 @@
     <string name="deleteNoteMessage">Are you really want to delete this note? This action cannot be undone!</string>
     <string name="delete">Delete</string>
     <string name="title">Title</string>
+    <string name="profile">Profile</string>
 </resources>

@@ -7,8 +7,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -50,7 +50,7 @@ fun MaterialDialog(
             onDismissRequest = { showDialog.value = false }
         )
     } else {
-        SideEffect { onDismiss() }
+        LaunchedEffect(Unit) { onDismiss() }
     }
 
     backHandler()
@@ -95,7 +95,7 @@ fun MaterialDialog(
             onDismissRequest = { showDialog.value = false }
         )
     } else {
-        SideEffect { onDismiss() }
+        LaunchedEffect(Unit) { onDismiss() }
     }
 
     backHandler()

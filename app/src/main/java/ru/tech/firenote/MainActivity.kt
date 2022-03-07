@@ -37,14 +37,6 @@ class MainActivity : ComponentActivity() {
         setTheme(R.style.Theme_Firenote)
         super.onCreate(savedInstanceState)
 
-//        val uid = FirebaseAuth.getInstance().currentUser?.uid
-//        val path = "users/" + uid + "/notes"
-//        val key = if (note.id.equals("")) mDb.child(path).push().key else note.id
-//        val childUpdates: MutableMap<String, Any> = HashMap()
-//
-//        childUpdates[path + "/" + key] = note.toMap()
-//        FirebaseDatabase.getInstance().reference.updateChildren(childUpdates)
-
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             val isScaffoldVisible by derivedStateOf {
@@ -98,14 +90,16 @@ class MainActivity : ComponentActivity() {
                                         navController = navController,
                                         items = listOf(
                                             Screen.NoteListScreen,
-                                            Screen.AlarmListScreen
-                                        )
+                                            Screen.AlarmListScreen,
+                                            Screen.ProfileScreen
+                                        ),
+                                        alwaysShowLabel = false
                                     )
                                 },
                                 snackbarHost = { SnackbarHost(snackbarHostState) },
                                 modifier = Modifier.nestedScroll(mainViewModel.scrollBehavior.value.nestedScrollConnection)
                             ) { contentPadding ->
-                                Navigation(navController, contentPadding)
+                                Navigation(navController, contentPadding, mainViewModel)
                             }
                         }
 

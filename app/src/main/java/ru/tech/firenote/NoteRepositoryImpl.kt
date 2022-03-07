@@ -19,7 +19,10 @@ class NoteRepositoryImpl @Inject constructor(
     private val database: DatabaseReference
 ) : NoteRepository {
 
+    override val auth = Firebase.auth
+
     private val path get() = Firebase.auth.uid.toString() + "/"
+    private val notesChild = "notes/"
 
     override suspend fun getNotes(): Flow<Result<List<Note>>> {
         return callbackFlow {
@@ -35,22 +38,26 @@ class NoteRepositoryImpl @Inject constructor(
                     this@callbackFlow.trySendBlocking(Result.success(items.filterNotNull()))
                 }
             }
-            database.child(path).addValueEventListener(postListener)
+            database.child(path).child(notesChild).addValueEventListener(postListener)
 
             awaitClose {
-                database.child(path).removeEventListener(postListener)
+                database.child(path).child(notesChild).removeEventListener(postListener)
             }
         }
     }
 
     override suspend fun insertNote(note: Note) {
-        val id = database.child(path).push().key
+        val id = database.child(path).child(notesChild).push().key
         note.id = id
-        database.child(path + id).setValue(note)
+        database.child(path).child(notesChild + id).setValue(note)
+    }
+
+    override suspend fun updateNote(note: Note) {
+        database.child(path).child(notesChild + note.id).setValue(note)
     }
 
     override suspend fun deleteNote(note: Note) {
-        note.id?.let { database.child(path + it).removeValue() }
+        note.id?.let { database.child(path).child(notesChild + it).removeValue() }
     }
 
 }

@@ -1,6 +1,9 @@
-package ru.tech.firenote.ui.composable.screen
+package ru.tech.firenote.ui.composable.screen.base
 
+import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -29,6 +32,8 @@ import ru.tech.firenote.viewModel.NoteListViewModel
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NoteListScreen(
+    showCreationComposable: MutableTransitionState<Boolean>,
+    globalNote: MutableState<Note?> = mutableStateOf(null),
     viewModel: NoteListViewModel = hiltViewModel()
 ) {
     val notePaddingValues = PaddingValues(top = 10.dp, start = 10.dp, end = 10.dp, bottom = 80.dp)
@@ -54,12 +59,19 @@ fun NoteListScreen(
                 contentPadding = notePaddingValues
             ) {
                 items(data.size) { index ->
+                    val locNote = data[index] as Note
                     NoteItem(
-                        note = data[index] as Note,
+                        note = locNote,
                         onDeleteClick = {
-                            note = data[index] as Note
+                            note = locNote
                             needToShowDeleteDialog.value = true
-                        })
+                        },
+                        modifier = Modifier
+                            .clickable(remember { MutableInteractionSource() }, null) {
+                                globalNote.value = locNote
+                                showCreationComposable.targetState = true
+                            }
+                    )
                 }
             }
 

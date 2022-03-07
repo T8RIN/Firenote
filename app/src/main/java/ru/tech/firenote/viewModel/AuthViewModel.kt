@@ -2,24 +2,21 @@ package ru.tech.firenote.viewModel
 
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.runtime.mutableStateOf
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.ViewModel
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import ru.tech.firenote.NoteRepository
 import ru.tech.firenote.model.Screen
 import ru.tech.firenote.model.UIState
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    dataStore: DataStore<Preferences>
+    repository: NoteRepository
 ) : ViewModel() {
 
-    private val auth = Firebase.auth
+    private val auth = repository.auth
     private val currentUser get() = auth.currentUser
     val visibleState = MutableTransitionState(currentUser == null)
 

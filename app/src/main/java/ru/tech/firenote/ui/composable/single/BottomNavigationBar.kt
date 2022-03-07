@@ -14,7 +14,8 @@ fun BottomNavigationBar(
     navController: NavHostController,
     items: List<Screen>,
     title: MutableState<Int>,
-    selectedItem: MutableState<Int>
+    selectedItem: MutableState<Int>,
+    alwaysShowLabel: Boolean = true
 ) {
     Surface(color = TopAppBarDefaults.smallTopAppBarColors().containerColor(100f).value) {
         NavigationBar(modifier = Modifier.navigationBarsPadding()) {
@@ -27,6 +28,7 @@ fun BottomNavigationBar(
                         )
                         else Icon(screen.icon, contentDescription = null)
                     },
+                    alwaysShowLabel = alwaysShowLabel,
                     label = { Text(stringResource(screen.resourceId)) },
                     selected = selectedItem.value == index,
                     onClick = {

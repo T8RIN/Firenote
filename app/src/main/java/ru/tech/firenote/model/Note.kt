@@ -8,5 +8,6 @@ data class Note(
     val content: String? = null,
     val timestamp: Long? = null,
     val color: Int? = null,
+    val appBarColor: Int? = null,
     var id: String? = null
 )

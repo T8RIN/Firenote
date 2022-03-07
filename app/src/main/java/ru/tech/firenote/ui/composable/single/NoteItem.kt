@@ -29,7 +29,7 @@ fun NoteItem(
     onDeleteClick: () -> Unit
 ) {
     Box(
-        modifier = modifier
+        modifier = modifier,
     ) {
         Canvas(modifier = Modifier.matchParentSize()) {
             val clipPath = Path().apply {

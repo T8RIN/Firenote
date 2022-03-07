@@ -1,6 +1,7 @@
 package ru.tech.firenote.viewModel
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -34,11 +35,36 @@ class NoteCreationViewModel @Inject constructor(
                     noteLabel.value,
                     noteDescription.value,
                     System.currentTimeMillis(),
-                    noteColor.value
+                    noteColor.value,
+                    appBarColor.value
                 )
             )
             resetValues()
         }
+    }
+
+    fun updateNote(note: Note) {
+        viewModelScope.launch {
+            repository.updateNote(
+                Note(
+                    noteLabel.value,
+                    noteDescription.value,
+                    System.currentTimeMillis(),
+                    noteColor.value,
+                    appBarColor.value,
+                    note.id
+                )
+            )
+            resetValues()
+        }
+    }
+
+    fun parseNoteData(note: Note?) {
+        noteLabel.value = note?.title ?: ""
+        noteDescription.value = note?.content ?: ""
+        noteColor.value = note?.color ?: NoteYellow.toArgb()
+        appBarColor.value = note?.appBarColor ?: NoteYellowDark.toArgb()
+        setColors()
     }
 
     fun resetValues() {
@@ -48,6 +74,17 @@ class NoteCreationViewModel @Inject constructor(
 
         noteLabel.value = ""
         noteDescription.value = ""
+    }
+
+    fun setColors() {
+        errorColor.value = when (noteColor.value) {
+            NoteYellow.toArgb() -> YellowError
+            NoteGreen.toArgb() -> GreenError
+            NoteBlue.toArgb() -> BlueError
+            NoteViolet.toArgb() -> VioletError
+            NotePink.toArgb() -> PinkError
+            else -> Color(0)
+        }
     }
 
 }

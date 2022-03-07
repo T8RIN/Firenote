@@ -15,10 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Save
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,37 +30,36 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.insets.navigationBarsPadding
 import kotlinx.coroutines.launch
 import ru.tech.firenote.R
+import ru.tech.firenote.model.Note
 import ru.tech.firenote.ui.composable.single.EditText
 import ru.tech.firenote.ui.composable.single.EditableAppBar
 import ru.tech.firenote.ui.composable.single.Gradient
 import ru.tech.firenote.ui.composable.single.MaterialDialog
-import ru.tech.firenote.ui.theme.*
 import ru.tech.firenote.viewModel.NoteCreationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteCreationScreen(
     state: MutableTransitionState<Boolean>,
-    noteColor: Int = -1,
-    appBarColor: Int = -1,
+    globalNote: MutableState<Note?> = mutableStateOf(null),
     viewModel: NoteCreationViewModel = viewModel()
 ) {
+
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val noteBackgroundAnimatable = remember {
         Animatable(
-            Color(if (noteColor != -1) noteColor else viewModel.noteColor.value)
+            Color(globalNote.value?.color ?: viewModel.noteColor.value)
         )
     }
     val appBarAnimatable = remember {
         Animatable(
-            Color(if (appBarColor != -1) appBarColor else viewModel.appBarColor.value)
+            Color(globalNote.value?.appBarColor ?: viewModel.appBarColor.value)
         )
     }
 
     val gradientColor = rememberSaveable { mutableStateOf(noteBackgroundAnimatable.value.toArgb()) }
 
-    if (noteColor != -1) viewModel.setColors()
     val needToShowCancelDialog = remember { mutableStateOf(false) }
 
     Scaffold(
@@ -95,7 +91,7 @@ fun NoteCreationScreen(
                 modifier = Modifier.navigationBarsPadding(),
                 text = { Text(stringResource(R.string.save)) },
                 icon = { Icon(Icons.Outlined.Save, null) },
-                onClick = { saveNote(viewModel, context, state) })
+                onClick = { saveNote(viewModel, context, state, globalNote.value) })
         }
     ) { contentPadding ->
         Column(
@@ -201,42 +197,38 @@ fun NoteCreationScreen(
         message = R.string.noteSavingDialogMessage,
         confirmText = R.string.save,
         dismissText = R.string.discardChanges,
-        confirmAction = { saveNote(viewModel, context, state) },
+        confirmAction = { saveNote(viewModel, context, state, globalNote.value) },
         dismissAction = {
-            state.targetState = false
             viewModel.resetValues()
+            state.targetState = false
         },
         backHandler = {
             BackHandler {
                 if (viewModel.noteDescription.value.isNotEmpty()) {
                     needToShowCancelDialog.value = true
                 } else {
-                    state.targetState = false
                     viewModel.resetValues()
+                    state.targetState = false
                 }
             }
         }
     )
+
+    LaunchedEffect(Unit) { viewModel.parseNoteData(globalNote.value) }
 }
 
 fun saveNote(
     viewModel: NoteCreationViewModel,
     context: Context,
-    state: MutableTransitionState<Boolean>
+    state: MutableTransitionState<Boolean>,
+    note: Note?
 ) {
     if (viewModel.noteDescription.value.isNotBlank() && viewModel.noteLabel.value.isNotEmpty()) {
-        viewModel.saveNote()
+        if (note != null) {
+            viewModel.updateNote(note)
+        } else {
+            viewModel.saveNote()
+        }
         state.targetState = false
     } else Toast.makeText(context, R.string.fillAll, Toast.LENGTH_SHORT).show()
-}
-
-fun NoteCreationViewModel.setColors() {
-    errorColor.value = when (noteColor.value) {
-        NoteYellow.toArgb() -> YellowError
-        NoteGreen.toArgb() -> GreenError
-        NoteBlue.toArgb() -> BlueError
-        NoteViolet.toArgb() -> VioletError
-        NotePink.toArgb() -> PinkError
-        else -> Color(0)
-    }
 }
