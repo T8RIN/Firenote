@@ -7,6 +7,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import com.google.accompanist.insets.statusBarsPadding
 
 @Composable
@@ -15,7 +16,7 @@ fun EditableAppBar(
     hint: String,
     color: Color,
     text: MutableState<String> = mutableStateOf(""),
-    errorColor: MutableState<Color> = mutableStateOf(MaterialTheme.colorScheme.error),
+    errorColor: Int = MaterialTheme.colorScheme.error.toArgb(),
     scrollBehavior: TopAppBarScrollBehavior? = null,
     navigationIcon: @Composable () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},

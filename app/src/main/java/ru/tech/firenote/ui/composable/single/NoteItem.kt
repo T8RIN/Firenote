@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.core.graphics.ColorUtils
+import ru.tech.firenote.Utils.blend
 import ru.tech.firenote.model.Note
 
 @Composable
@@ -48,7 +48,7 @@ fun NoteItem(
                 )
                 drawRoundRect(
                     color = Color(
-                        ColorUtils.blendARGB(note.color ?: 0, 0x000000, 0.2f)
+                        (note.color ?: 0).blend()
                     ),
                     topLeft = Offset(size.width - cutCornerSize.toPx(), -100f),
                     size = Size(cutCornerSize.toPx() + 100f, cutCornerSize.toPx() + 100f),

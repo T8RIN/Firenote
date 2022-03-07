@@ -1,13 +1,14 @@
 package ru.tech.firenote.viewModel
 
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.tech.firenote.NoteRepository
+import ru.tech.firenote.Utils.blend
 import ru.tech.firenote.model.Note
 import ru.tech.firenote.ui.theme.*
 import javax.inject.Inject
@@ -18,22 +19,20 @@ class NoteCreationViewModel @Inject constructor(
 ) : ViewModel() {
 
     val noteColor = mutableStateOf(NoteYellow.toArgb())
-    val appBarColor = mutableStateOf(NoteYellowDark.toArgb())
-    val errorColor = mutableStateOf(YellowError)
+    val appBarColor = mutableStateOf(noteColor.value.blend())
 
     val noteLabel = mutableStateOf("")
-    val noteDescription = mutableStateOf("")
+    val noteContent = mutableStateOf("")
 
-    val colors = listOf(NoteYellow, NoteGreen, NoteBlue, NoteViolet, NotePink)
-    val darkColors =
-        listOf(NoteYellowDark, NoteGreenDark, NoteBlueDark, NoteVioletDark, NotePinkDark)
+    val colors =
+        listOf(NoteYellow, NoteGreen, NoteMint, NoteBlue, NoteViolet, NoteOrange, NoteRed, NotePink)
 
     fun saveNote() {
         viewModelScope.launch {
             repository.insertNote(
                 Note(
                     noteLabel.value,
-                    noteDescription.value,
+                    noteContent.value,
                     System.currentTimeMillis(),
                     noteColor.value,
                     appBarColor.value
@@ -48,7 +47,7 @@ class NoteCreationViewModel @Inject constructor(
             repository.updateNote(
                 Note(
                     noteLabel.value,
-                    noteDescription.value,
+                    noteContent.value,
                     System.currentTimeMillis(),
                     noteColor.value,
                     appBarColor.value,
@@ -61,29 +60,19 @@ class NoteCreationViewModel @Inject constructor(
 
     fun parseNoteData(note: Note?) {
         noteLabel.value = note?.title ?: ""
-        noteDescription.value = note?.content ?: ""
+        noteContent.value = note?.content ?: ""
         noteColor.value = note?.color ?: NoteYellow.toArgb()
-        appBarColor.value = note?.appBarColor ?: NoteYellowDark.toArgb()
-        setColors()
+        appBarColor.value = note?.appBarColor ?: noteColor.value.blend()
     }
 
     fun resetValues() {
-        noteColor.value = NoteYellow.toArgb()
-        appBarColor.value = NoteYellowDark.toArgb()
-        errorColor.value = YellowError
+        viewModelScope.launch {
+            delay(500)
+            noteColor.value = NoteYellow.toArgb()
+            appBarColor.value = noteColor.value.blend()
 
-        noteLabel.value = ""
-        noteDescription.value = ""
-    }
-
-    fun setColors() {
-        errorColor.value = when (noteColor.value) {
-            NoteYellow.toArgb() -> YellowError
-            NoteGreen.toArgb() -> GreenError
-            NoteBlue.toArgb() -> BlueError
-            NoteViolet.toArgb() -> VioletError
-            NotePink.toArgb() -> PinkError
-            else -> Color(0)
+            noteLabel.value = ""
+            noteContent.value = ""
         }
     }
 

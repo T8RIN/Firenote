@@ -8,10 +8,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.NotificationAdd
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -46,21 +43,24 @@ class MainViewModel @Inject constructor(
     @OptIn(ExperimentalMaterial3Api::class)
     val scrollBehavior = mutableStateOf(TopAppBarDefaults.pinnedScrollBehavior())
 
-    val showViewMenu = mutableStateOf(false)
     val showFilter = mutableStateOf(false)
 
 
-    val fabIcon: @Composable () -> Unit = {
-        when (selectedItem.value) {
-            0 -> Icon(Icons.Outlined.Edit, null)
-            1 -> Icon(Icons.Outlined.NotificationAdd, null)
-        }
-    }
-
-    val fabText: @Composable () -> Unit = {
-        when (selectedItem.value) {
-            0 -> Text(stringResource(R.string.addNote))
-            1 -> Text(stringResource(R.string.setAlarm))
+    val fab: @Composable () -> Unit = {
+        if (selectedItem.value != 2) {
+            ExtendedFloatingActionButton(onClick = {
+                showCreationComposable.targetState = true
+            }, icon = {
+                when (selectedItem.value) {
+                    0 -> Icon(Icons.Outlined.Edit, null)
+                    1 -> Icon(Icons.Outlined.NotificationAdd, null)
+                }
+            }, text = {
+                when (selectedItem.value) {
+                    0 -> Text(stringResource(R.string.addNote))
+                    1 -> Text(stringResource(R.string.setAlarm))
+                }
+            })
         }
     }
 
@@ -72,7 +72,7 @@ class MainViewModel @Inject constructor(
     }
 
     val creationComposable: @Composable () -> Unit = {
-        if (!showCreationComposable.targetState) {
+        if (!showCreationComposable.currentState) {
             globalNote.value = null
         }
         AnimatedVisibility(

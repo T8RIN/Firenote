@@ -9,6 +9,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,8 +17,11 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
@@ -36,8 +40,9 @@ fun EditText(
     singleLine: Boolean = true,
     color: Color = MaterialTheme.colorScheme.onBackground,
     errorEnabled: Boolean = true,
+    shadowColor: Color = Color.Black,
     topPadding: Dp = 0.dp,
-    errorColor: MutableState<Color> = mutableStateOf(MaterialTheme.colorScheme.error),
+    errorColor: Int = MaterialTheme.colorScheme.error.toArgb(),
     onValueChange: (String) -> Unit = {}
 ) {
     val localFocusManager = LocalFocusManager.current
@@ -67,7 +72,7 @@ fun EditText(
 
         if (textFieldState.value.isEmpty()) {
             val color =
-                if (errorEnabled) errorColor.value
+                if (errorEnabled) Color(errorColor)
                 else MaterialTheme.colorScheme.onSurfaceVariant
             Text(
                 hintText,
@@ -77,7 +82,14 @@ fun EditText(
                         Alignment.TopStart
                     ),
                 fontSize = 22.sp,
-                color = color
+                color = color,
+                style = LocalTextStyle.current.copy(
+                    shadow = Shadow(
+                        color = shadowColor,
+                        offset = Offset(4f, 4f),
+                        blurRadius = 8f
+                    )
+                )
             )
             if (errorEnabled) {
                 Icon(

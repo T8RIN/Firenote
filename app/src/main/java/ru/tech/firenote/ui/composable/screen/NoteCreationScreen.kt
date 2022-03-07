@@ -10,6 +10,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Save
@@ -30,6 +31,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.insets.navigationBarsPadding
 import kotlinx.coroutines.launch
 import ru.tech.firenote.R
+import ru.tech.firenote.Utils.blend
 import ru.tech.firenote.model.Note
 import ru.tech.firenote.ui.composable.single.EditText
 import ru.tech.firenote.ui.composable.single.EditableAppBar
@@ -44,6 +46,13 @@ fun NoteCreationScreen(
     globalNote: MutableState<Note?> = mutableStateOf(null),
     viewModel: NoteCreationViewModel = viewModel()
 ) {
+    val tempLabel = rememberSaveable { mutableStateOf("") }
+    val tempContent = rememberSaveable { mutableStateOf("") }
+    val tempColor = rememberSaveable { mutableStateOf(0) }
+
+    val hasChanges by derivedStateOf {
+        tempLabel.value != viewModel.noteLabel.value || tempContent.value != viewModel.noteContent.value || tempColor.value != viewModel.noteColor.value
+    }
 
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -60,7 +69,7 @@ fun NoteCreationScreen(
 
     val gradientColor = rememberSaveable { mutableStateOf(noteBackgroundAnimatable.value.toArgb()) }
 
-    val needToShowCancelDialog = remember { mutableStateOf(false) }
+    val needToShowCancelDialog = rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -69,18 +78,18 @@ fun NoteCreationScreen(
                 text = viewModel.noteLabel,
                 navigationIcon = {
                     IconButton(onClick = {
-                        if (viewModel.noteDescription.value.isNotEmpty()) {
+                        if (hasChanges) {
                             needToShowCancelDialog.value = true
                         } else {
-                            state.targetState = false
                             viewModel.resetValues()
+                            state.targetState = false
                         }
                     }) {
                         Icon(Icons.Rounded.ArrowBack, null, tint = Color.Black)
                     }
                 },
                 hint = stringResource(R.string.enterNoteLabel),
-                errorColor = viewModel.errorColor,
+                errorColor = viewModel.noteColor.value,
                 color = Color.Black
             ) {
                 viewModel.noteLabel.value = it
@@ -88,7 +97,6 @@ fun NoteCreationScreen(
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                modifier = Modifier.navigationBarsPadding(),
                 text = { Text(stringResource(R.string.save)) },
                 icon = { Icon(Icons.Outlined.Save, null) },
                 onClick = { saveNote(viewModel, context, state, globalNote.value) })
@@ -101,17 +109,24 @@ fun NoteCreationScreen(
                 .navigationBarsPadding()
                 .padding(contentPadding)
         ) {
-            Row(
+            LazyRow(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(30.dp)
+                    .fillMaxWidth(),
+                contentPadding = PaddingValues(
+                    top = 30.dp,
+                    bottom = 30.dp,
+                    start = 15.dp,
+                    end = 15.dp
+                )
             ) {
-                viewModel.colors.forEachIndexed { index, color ->
+                items(viewModel.colors.size) { index ->
+                    val color = viewModel.colors[index]
                     val colorInt = color.toArgb()
                     Box(
                         modifier = Modifier
-                            .size(50.dp)
+                            .size(60.dp)
+                            .padding(5.dp)
                             .shadow(15.dp, CircleShape)
                             .clip(CircleShape)
                             .background(color)
@@ -124,6 +139,9 @@ fun NoteCreationScreen(
                             )
                             .clickable {
                                 gradientColor.value = Color.Transparent.toArgb()
+                                viewModel.noteColor.value = colorInt
+                                viewModel.appBarColor.value = colorInt.blend()
+
                                 scope.launch {
                                     noteBackgroundAnimatable.animateTo(
                                         targetValue = Color(colorInt),
@@ -135,27 +153,23 @@ fun NoteCreationScreen(
                                 }
                                 scope.launch {
                                     appBarAnimatable.animateTo(
-                                        targetValue = viewModel.darkColors[index],
+                                        targetValue = Color(viewModel.appBarColor.value),
                                         animationSpec = tween(
                                             durationMillis = 500
                                         )
                                     )
                                 }
-                                viewModel.noteColor.value = colorInt
-                                viewModel.appBarColor.value =
-                                    viewModel.darkColors[index].toArgb()
-                                viewModel.setColors()
                             }
                     )
                 }
             }
             Box(modifier = Modifier.wrapContentHeight()) {
                 EditText(
-                    textFieldState = viewModel.noteDescription,
+                    textFieldState = viewModel.noteContent,
                     topPadding = 20.dp,
                     endPaddingIcon = 20.dp,
                     hintText = stringResource(R.string.noteText),
-                    errorColor = viewModel.errorColor,
+                    errorColor = viewModel.noteColor.value.blend(0.7f),
                     singleLine = false,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -164,10 +178,11 @@ fun NoteCreationScreen(
                             start = 30.dp,
                             end = 30.dp,
                         ),
-                    color = Color.Black
+                    color = Color.Black,
+                    shadowColor = Color.DarkGray
                 ) {
-                    viewModel.noteDescription.value = it
-                    if (viewModel.noteLabel.value.isEmpty() && viewModel.noteDescription.value.length > 20) {
+                    viewModel.noteContent.value = it
+                    if (viewModel.noteLabel.value.isEmpty() && viewModel.noteContent.value.length > 20) {
                         viewModel.noteLabel.value = it.substring(0..20)
                     }
                 }
@@ -204,7 +219,7 @@ fun NoteCreationScreen(
         },
         backHandler = {
             BackHandler {
-                if (viewModel.noteDescription.value.isNotEmpty()) {
+                if (hasChanges) {
                     needToShowCancelDialog.value = true
                 } else {
                     viewModel.resetValues()
@@ -214,7 +229,12 @@ fun NoteCreationScreen(
         }
     )
 
-    LaunchedEffect(Unit) { viewModel.parseNoteData(globalNote.value) }
+    LaunchedEffect(Unit) {
+        viewModel.parseNoteData(globalNote.value)
+        tempLabel.value = viewModel.noteLabel.value
+        tempContent.value = viewModel.noteContent.value
+        tempColor.value = viewModel.noteColor.value
+    }
 }
 
 fun saveNote(
@@ -223,7 +243,7 @@ fun saveNote(
     state: MutableTransitionState<Boolean>,
     note: Note?
 ) {
-    if (viewModel.noteDescription.value.isNotBlank() && viewModel.noteLabel.value.isNotEmpty()) {
+    if (viewModel.noteContent.value.isNotBlank() && viewModel.noteLabel.value.isNotEmpty()) {
         if (note != null) {
             viewModel.updateNote(note)
         } else {

@@ -1,14 +1,17 @@
 package ru.tech.firenote
 
-import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -47,19 +50,12 @@ class MainActivity : ComponentActivity() {
                 mutableStateOf(Firebase.auth.currentUser == null)
             }
 
-            val calcOrientation by derivedStateOf {
-                if (mainViewModel.showCreationComposable.targetState || isAuth.value) ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-                else ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-            }
-
             val navController = rememberNavController()
 
             FirenoteTheme {
                 ProvideWindowInsets(windowInsetsAnimationsEnabled = true) {
                     val snackbarHostState = remember { SnackbarHostState() }
                     val scope = rememberCoroutineScope()
-
-                    requestedOrientation = calcOrientation
 
                     if (isAuth.value) AuthScreen(isAuth)
                     else {
@@ -75,13 +71,7 @@ class MainActivity : ComponentActivity() {
                                     )
                                 },
                                 floatingActionButton = {
-                                    ExtendedFloatingActionButton(onClick = {
-                                        mainViewModel.showCreationComposable.targetState = true
-                                    }, icon = {
-                                        mainViewModel.fabIcon()
-                                    }, text = {
-                                        mainViewModel.fabText()
-                                    })
+                                    mainViewModel.fab()
                                 },
                                 bottomBar = {
                                     BottomNavigationBar(
@@ -106,7 +96,7 @@ class MainActivity : ComponentActivity() {
                         mainViewModel.creationComposable()
 
                         MaterialDialog(
-                            showDialog = remember { mutableStateOf(false) },
+                            showDialog = rememberSaveable { mutableStateOf(false) },
                             icon = Icons.Filled.ExitToApp,
                             title = R.string.exitApp,
                             message = R.string.exitAppMessage,

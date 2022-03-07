@@ -3,23 +3,13 @@ package ru.tech.firenote.ui.theme
 import androidx.compose.ui.graphics.Color
 
 val NoteYellow = Color(0xFFFFF389)
-val NotePink = Color(0xFFE76A6A)
+val NotePink = Color(0xFFE2648C)
+val NoteRed = Color(0xFFE76A6A)
 val NoteBlue = Color(0xFF7ADBE7)
+val NoteOrange = Color(0xFFE68049)
+val NoteMint = Color(0xFF3ECC89)
 val NoteViolet = Color(0xFFF5BEFF)
 val NoteGreen = Color(0xFF8DDF69)
-
-val NoteYellowDark = Color(0xFFC8CA79)
-val NotePinkDark = Color(0xFFA74D4D)
-val NoteBlueDark = Color(0xFF59A5AF)
-val NoteVioletDark = Color(0xFFC189CC)
-val NoteGreenDark = Color(0xFF709E5D)
-
-val VioletError = Color(0xFF458D1D)
-val YellowError = Color(0xFFE44F20)
-val BlueError = Color(0xFFD81B60)
-val PinkError = Color(0xFFC4BC23)
-val GreenError = Color(0xFF8E24AA)
-
 
 val md_theme_light_primary = Color(0xFF984065)
 val md_theme_light_onPrimary = Color(0xFFffffff)
