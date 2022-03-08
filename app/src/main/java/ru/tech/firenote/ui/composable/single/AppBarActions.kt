@@ -1,15 +1,24 @@
 package ru.tech.firenote.ui.composable.single
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.FilterAlt
+import androidx.compose.material.icons.filled.Palette
+import androidx.compose.material.icons.filled.TextSnippet
 import androidx.compose.material.icons.outlined.CalendarToday
 import androidx.compose.material.icons.outlined.NotificationImportant
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.TextSnippet
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import ru.tech.firenote.R
 import ru.tech.firenote.viewModel.MainViewModel
 
@@ -17,39 +26,67 @@ import ru.tech.firenote.viewModel.MainViewModel
 fun NoteActions(
     viewModel: MainViewModel
 ) {
-    IconButton(onClick = { viewModel.setFilter(true) }) {
-        Icon(
-            imageVector = Icons.Filled.FilterAlt,
-            contentDescription = null
-        )
+    val selectedModifier =
+        Modifier
+            .padding(5.dp)
+            .background(MaterialTheme.colorScheme.primaryContainer, CircleShape)
+    val unselectedModifier = Modifier.padding(5.dp)
+    val showFilter = remember { mutableStateOf(false) }
+    IconButton(onClick = { showFilter.value = true }) {
+        Icon(Icons.Filled.FilterAlt, null)
     }
     DropdownMenu(
-        expanded = viewModel.showFilter.value,
-        onDismissRequest = { viewModel.setFilter(false) }
+        expanded = showFilter.value,
+        onDismissRequest = { showFilter.value = false }
     ) {
         DropdownMenuItem(
-            onClick = { viewModel.setFilter(false) /*TODO*/ },
+            onClick = {
+                viewModel.filterType.value = 0
+                showFilter.value = false
+            },
             text = { Text(stringResource(R.string.title)) },
             leadingIcon = {
-                Icon(Icons.Outlined.TextSnippet, null)
-            })
+                Icon(
+                    if (viewModel.filterType.value == 0) Icons.Filled.TextSnippet else Icons.Outlined.TextSnippet,
+                    null
+                )
+            },
+            modifier = if (viewModel.filterType.value == 0) selectedModifier else unselectedModifier
+        )
         DropdownMenuItem(
-            onClick = { viewModel.setFilter(false) /*TODO*/ },
+            onClick = {
+                viewModel.filterType.value = 1
+                showFilter.value = false
+            },
             text = { Text(stringResource(R.string.color)) },
             leadingIcon = {
-                Icon(Icons.Outlined.Palette, null)
-            })
+                Icon(
+                    if (viewModel.filterType.value == 1) Icons.Filled.Palette else Icons.Outlined.Palette,
+                    null
+                )
+            },
+            modifier = if (viewModel.filterType.value == 1) selectedModifier else unselectedModifier
+        )
         DropdownMenuItem(
-            onClick = { viewModel.setFilter(false) /*TODO*/ },
+            onClick = {
+                viewModel.filterType.value = 2
+                showFilter.value = false
+            },
             text = { Text(stringResource(R.string.date)) },
             leadingIcon = {
-                Icon(Icons.Outlined.CalendarToday, null)
-            })
+                Icon(
+                    if (viewModel.filterType.value == 2) Icons.Filled.CalendarToday else Icons.Outlined.CalendarToday,
+                    null
+                )
+            },
+            modifier = if (viewModel.filterType.value == 2) selectedModifier else unselectedModifier
+        )
     }
 }
 
 @Composable
-fun AlarmActions(showFilter: MutableState<Boolean>) {
+fun AlarmActions() {
+    val showFilter = remember { mutableStateOf(false) }
     IconButton(onClick = { showFilter.value = true }) {
         Icon(
             imageVector = Icons.Filled.FilterAlt,

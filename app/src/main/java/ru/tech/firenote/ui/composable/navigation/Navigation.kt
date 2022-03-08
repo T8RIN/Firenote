@@ -25,7 +25,11 @@ fun Navigation(
         Modifier.padding(contentPadding)
     ) {
         composable(Screen.NoteListScreen.route) {
-            NoteListScreen(mainViewModel.showCreationComposable, mainViewModel.globalNote)
+            NoteListScreen(
+                mainViewModel.showCreationComposable,
+                mainViewModel.globalNote,
+                mainViewModel.filterType
+            )
         }
         composable(Screen.AlarmListScreen.route) {
             AlarmListScreen()

@@ -13,6 +13,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.core.view.WindowCompat
@@ -55,11 +56,10 @@ class MainActivity : ComponentActivity() {
             FirenoteTheme {
                 ProvideWindowInsets(windowInsetsAnimationsEnabled = true) {
                     val snackbarHostState = remember { SnackbarHostState() }
-                    val scope = rememberCoroutineScope()
+                    CompositionLocalProvider(LocalSnackbarHost provides snackbarHostState) {
 
-                    if (isAuth.value) AuthScreen(isAuth)
-                    else {
-                        if (isScaffoldVisible) {
+                        if (isAuth.value) AuthScreen(isAuth)
+                        else {
                             Scaffold(
                                 topBar = {
                                     AppBarWithInsets(
@@ -86,24 +86,27 @@ class MainActivity : ComponentActivity() {
                                         alwaysShowLabel = false
                                     )
                                 },
-                                snackbarHost = { SnackbarHost(snackbarHostState) },
-                                modifier = Modifier.nestedScroll(mainViewModel.scrollBehavior.value.nestedScrollConnection)
+                                snackbarHost = { SnackbarHost(LocalSnackbarHost.current) },
+                                modifier = Modifier
+                                    .nestedScroll(mainViewModel.scrollBehavior.value.nestedScrollConnection)
+                                    .alpha(if (isScaffoldVisible) 1f else 0f)
                             ) { contentPadding ->
                                 Navigation(navController, contentPadding, mainViewModel)
                             }
+
+                            mainViewModel.creationComposable()
+
+                            MaterialDialog(
+                                showDialog = rememberSaveable { mutableStateOf(false) },
+                                icon = Icons.Filled.ExitToApp,
+                                title = R.string.exitApp,
+                                message = R.string.exitAppMessage,
+                                confirmText = R.string.stay,
+                                dismissText = R.string.close,
+                                dismissAction = { finishAffinity() }
+                            )
                         }
 
-                        mainViewModel.creationComposable()
-
-                        MaterialDialog(
-                            showDialog = rememberSaveable { mutableStateOf(false) },
-                            icon = Icons.Filled.ExitToApp,
-                            title = R.string.exitApp,
-                            message = R.string.exitAppMessage,
-                            confirmText = R.string.stay,
-                            dismissText = R.string.close,
-                            dismissAction = { finishAffinity() }
-                        )
                     }
                 }
             }

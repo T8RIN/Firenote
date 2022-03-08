@@ -47,9 +47,11 @@ class NoteRepositoryImpl @Inject constructor(
     }
 
     override suspend fun insertNote(note: Note) {
-        val id = database.child(path).child(notesChild).push().key
-        note.id = id
-        database.child(path).child(notesChild + id).setValue(note)
+        if (note.id == null) {
+            val id = database.child(path).child(notesChild).push().key
+            note.id = id
+        }
+        database.child(path).child(notesChild + note.id).setValue(note)
     }
 
     override suspend fun updateNote(note: Note) {

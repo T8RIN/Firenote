@@ -48,4 +48,6 @@
     <string name="delete">Delete</string>
     <string name="title">Title</string>
     <string name="profile">Profile</string>
+    <string name="noteDeleted">Note \"*\" deleted</string>
+    <string name="undo">Undo</string>
 </resources>

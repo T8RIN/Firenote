@@ -43,7 +43,7 @@ class MainViewModel @Inject constructor(
     @OptIn(ExperimentalMaterial3Api::class)
     val scrollBehavior = mutableStateOf(TopAppBarDefaults.pinnedScrollBehavior())
 
-    val showFilter = mutableStateOf(false)
+    val filterType = mutableStateOf(2)
 
 
     val fab: @Composable () -> Unit = {
@@ -67,7 +67,7 @@ class MainViewModel @Inject constructor(
     val mainAppBarActions: @Composable () -> Unit = {
         when (selectedItem.value) {
             0 -> NoteActions(this)
-            1 -> AlarmActions(showFilter = showFilter)
+            1 -> AlarmActions()
         }
     }
 
@@ -88,20 +88,5 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun setFilter(value: Boolean) {
-        showFilter.value = value
-    }
-
-//    fun showSnackBar(scope: CoroutineScope, snackbarHostState: SnackbarHostState) {
-//        scope.launch {
-//            val snackbarResult = snackbarHostState.showSnackbar(
-//                message = "Test" /* TODO: message */,
-//                actionLabel = "Undo" /* TODO: actionText */
-//            )
-//            if (snackbarResult == SnackbarResult.ActionPerformed) {
-//                // TODO: Action
-//            }
-//        }
-//    }
 
 }
