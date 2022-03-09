@@ -44,7 +44,7 @@ fun ForgotPasswordScreen(viewModel: AuthViewModel) {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
 
-    Scaffold(
+    Surface(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)

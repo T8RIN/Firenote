@@ -6,14 +6,25 @@ import androidx.compose.ui.graphics.toArgb
 val NoteYellow = Color(0xFFFFF389)
 val NotePink = Color(0xFFE2648C)
 val NoteRed = Color(0xFFE76A6A)
-val NoteBlue = Color(0xFF7ADBE7)
+val NoteBlue = Color(0xFF81DBDF)
 val NoteOrange = Color(0xFFE68049)
 val NoteMint = Color(0xFF3ECC89)
-val NoteViolet = Color(0xFFF5BEFF)
+val NoteViolet = Color(0xFFF0A2FF)
+val NoteIndigo = Color(0xFFA7ABE9)
 val NoteGreen = Color(0xFF8DDF69)
 
 val noteColors =
-    listOf(NoteYellow, NoteGreen, NoteMint, NoteBlue, NoteViolet, NoteOrange, NoteRed, NotePink)
+    listOf(
+        NoteYellow,
+        NoteGreen,
+        NoteMint,
+        NoteBlue,
+        NoteIndigo,
+        NoteViolet,
+        NoteOrange,
+        NoteRed,
+        NotePink
+    )
 
 val Int.priority
     get() = when (this) {
@@ -21,10 +32,11 @@ val Int.priority
         NoteGreen.toArgb() -> 1
         NoteMint.toArgb() -> 2
         NoteBlue.toArgb() -> 3
-        NoteViolet.toArgb() -> 4
-        NoteOrange.toArgb() -> 5
-        NoteRed.toArgb() -> 6
-        else -> 7
+        NoteIndigo.toArgb() -> 4
+        NoteViolet.toArgb() -> 5
+        NoteOrange.toArgb() -> 6
+        NoteRed.toArgb() -> 7
+        else -> 8
     }
 
 val md_theme_light_primary = Color(0xFF984065)

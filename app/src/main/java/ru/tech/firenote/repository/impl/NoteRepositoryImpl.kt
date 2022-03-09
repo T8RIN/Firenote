@@ -1,4 +1,4 @@
-package ru.tech.firenote
+package ru.tech.firenote.repository.impl
 
 import android.net.Uri
 import com.google.firebase.auth.ktx.auth
@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import ru.tech.firenote.model.ImageUri
 import ru.tech.firenote.model.Note
+import ru.tech.firenote.repository.NoteRepository
 import javax.inject.Inject
 
 

@@ -1,4 +1,4 @@
-package ru.tech.firenote
+package ru.tech.firenote.ui.composable.provider
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult

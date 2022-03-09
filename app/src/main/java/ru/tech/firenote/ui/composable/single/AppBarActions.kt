@@ -17,7 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.tech.firenote.R
-import ru.tech.firenote.Utils.isOnline
+import ru.tech.firenote.utils.Utils.isOnline
 import ru.tech.firenote.viewModel.MainViewModel
 
 @Composable

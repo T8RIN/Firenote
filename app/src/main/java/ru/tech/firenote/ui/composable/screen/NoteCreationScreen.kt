@@ -31,13 +31,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.insets.navigationBarsPadding
 import kotlinx.coroutines.launch
 import ru.tech.firenote.R
-import ru.tech.firenote.Utils.blend
 import ru.tech.firenote.model.Note
 import ru.tech.firenote.ui.composable.single.EditText
 import ru.tech.firenote.ui.composable.single.EditableAppBar
 import ru.tech.firenote.ui.composable.single.Gradient
 import ru.tech.firenote.ui.composable.single.MaterialDialog
 import ru.tech.firenote.ui.theme.noteColors
+import ru.tech.firenote.utils.Utils.blend
 import ru.tech.firenote.viewModel.NoteCreationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)

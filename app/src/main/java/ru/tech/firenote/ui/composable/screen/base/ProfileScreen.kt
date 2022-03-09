@@ -6,10 +6,8 @@ import android.widget.Toast.makeText
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -47,6 +45,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.google.accompanist.flowlayout.FlowRow
 import ru.tech.firenote.R
 import ru.tech.firenote.model.Screen
 import ru.tech.firenote.model.UIState
@@ -59,7 +58,6 @@ import ru.tech.firenote.ui.theme.noteColors
 import ru.tech.firenote.viewModel.ProfileViewModel
 
 @Suppress("UNCHECKED_CAST")
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ProfileScreen(
     navController: NavController,
@@ -82,13 +80,13 @@ fun ProfileScreen(
     val showResetDialog = remember { mutableStateOf(false) }
     val showEmailDialog = remember { mutableStateOf(false) }
 
-    Box(
-        Modifier
+    LazyColumn(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        contentPadding = PaddingValues(start = 8.dp, end = 8.dp, bottom = 80.dp, top = 20.dp),
+        modifier = Modifier
             .fillMaxSize()
-            .padding(top = 20.dp)
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-
+        item {
             Box(Modifier.size((boxSize * 0.4).dp)) {
                 val alpha = rememberSaveable { mutableStateOf(0f) }
                 when (val state = viewModel.photoState.collectAsState().value) {
@@ -179,7 +177,7 @@ fun ProfileScreen(
                     )
                 }
             }
-            Spacer(Modifier.size(20.dp))
+            Spacer(Modifier.size(5.dp))
             when (val state = viewModel.noteCountState.collectAsState().value) {
                 is UIState.Loading -> {
                     Column(
@@ -195,14 +193,13 @@ fun ProfileScreen(
                     state.message?.let { Toast(it) }
                 }
                 is UIState.Success<*> -> {
-                    LazyVerticalGrid(
-                        cells = GridCells.Fixed(4),
-                        contentPadding = PaddingValues(start = 8.dp, end = 8.dp)
-                    ) {
-                        items(noteColors.size) {
+                    FlowRow {
+                        repeat(noteColors.size) {
                             ProfileNoteItem(
                                 noteColors[it] to ((state.data as? List<Int>)?.get(it) ?: 0),
-                                Modifier.padding(4.dp)
+                                Modifier
+                                    .padding(4.dp)
+                                    .fillMaxSize(0.25f)
                             )
                         }
                     }
@@ -210,6 +207,7 @@ fun ProfileScreen(
             }
         }
     }
+
 
     MaterialDialog(
         icon = Icons.Outlined.Password,

@@ -29,6 +29,7 @@ import com.google.accompanist.insets.ProvideWindowInsets
 import dagger.hilt.android.AndroidEntryPoint
 import ru.tech.firenote.model.Screen
 import ru.tech.firenote.ui.composable.navigation.Navigation
+import ru.tech.firenote.ui.composable.provider.LocalSnackbarHost
 import ru.tech.firenote.ui.composable.screen.AlarmCreationScreen
 import ru.tech.firenote.ui.composable.screen.NoteCreationScreen
 import ru.tech.firenote.ui.composable.screen.auth.AuthScreen

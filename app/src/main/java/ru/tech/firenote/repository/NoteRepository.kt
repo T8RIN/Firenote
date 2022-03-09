@@ -1,4 +1,4 @@
-package ru.tech.firenote
+package ru.tech.firenote.repository
 
 import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth

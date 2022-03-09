@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import ru.tech.firenote.NoteRepository
 import ru.tech.firenote.model.Screen
 import ru.tech.firenote.model.UIState
+import ru.tech.firenote.repository.NoteRepository
 import javax.inject.Inject
 
 @HiltViewModel

@@ -1,4 +1,4 @@
-package ru.tech.firenote
+package ru.tech.firenote.utils
 
 import android.content.Context
 import android.content.Context.CONNECTIVITY_SERVICE

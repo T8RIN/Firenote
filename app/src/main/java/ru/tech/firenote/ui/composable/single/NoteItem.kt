@@ -17,8 +17,8 @@ import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import ru.tech.firenote.Utils.blend
 import ru.tech.firenote.model.Note
+import ru.tech.firenote.utils.Utils.blend
 
 @Composable
 fun NoteItem(

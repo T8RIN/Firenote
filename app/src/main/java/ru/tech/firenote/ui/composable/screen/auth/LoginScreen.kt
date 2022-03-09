@@ -37,6 +37,7 @@ import ru.tech.firenote.ui.composable.single.MaterialTextField
 import ru.tech.firenote.ui.composable.single.Toast
 import ru.tech.firenote.viewModel.AuthViewModel
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(viewModel: AuthViewModel) {
@@ -59,7 +60,7 @@ fun LoginScreen(viewModel: AuthViewModel) {
 
     val focusManager = LocalFocusManager.current
 
-    Scaffold(
+    Surface(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)

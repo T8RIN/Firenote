@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import ru.tech.firenote.Utils.blend
+import ru.tech.firenote.utils.Utils.blend
 
 @Composable
 fun ProfileNoteItem(

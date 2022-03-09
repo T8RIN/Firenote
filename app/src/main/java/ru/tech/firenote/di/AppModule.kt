@@ -13,8 +13,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import ru.tech.firenote.NoteRepository
-import ru.tech.firenote.NoteRepositoryImpl
+import ru.tech.firenote.repository.NoteRepository
+import ru.tech.firenote.repository.impl.NoteRepositoryImpl
 import javax.inject.Singleton
 
 @Module

@@ -7,10 +7,10 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import ru.tech.firenote.NoteRepository
-import ru.tech.firenote.Utils.blend
 import ru.tech.firenote.model.Note
+import ru.tech.firenote.repository.NoteRepository
 import ru.tech.firenote.ui.theme.NoteYellow
+import ru.tech.firenote.utils.Utils.blend
 import javax.inject.Inject
 
 @HiltViewModel
