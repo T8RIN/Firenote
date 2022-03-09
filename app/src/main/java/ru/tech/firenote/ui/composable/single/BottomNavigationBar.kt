@@ -32,12 +32,14 @@ fun BottomNavigationBar(
                     label = { Text(stringResource(screen.resourceId)) },
                     selected = selectedItem.value == index,
                     onClick = {
-                        title.value = screen.resourceId
-                        selectedItem.value = index
-                        navController.navigate(screen.route) {
-                            navController.popBackStack()
-                            launchSingleTop = true
-                            restoreState = true
+                        if (selectedItem.value != index) {
+                            title.value = screen.resourceId
+                            selectedItem.value = index
+                            navController.navigate(screen.route) {
+                                navController.popBackStack()
+                                launchSingleTop = true
+                                restoreState = true
+                            }
                         }
                     }
                 )

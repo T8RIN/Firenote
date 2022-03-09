@@ -1,6 +1,7 @@
 package ru.tech.firenote.ui.theme
 
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 
 val NoteYellow = Color(0xFFFFF389)
 val NotePink = Color(0xFFE2648C)
@@ -10,6 +11,21 @@ val NoteOrange = Color(0xFFE68049)
 val NoteMint = Color(0xFF3ECC89)
 val NoteViolet = Color(0xFFF5BEFF)
 val NoteGreen = Color(0xFF8DDF69)
+
+val noteColors =
+    listOf(NoteYellow, NoteGreen, NoteMint, NoteBlue, NoteViolet, NoteOrange, NoteRed, NotePink)
+
+val Int.priority
+    get() = when (this) {
+        NoteYellow.toArgb() -> 0
+        NoteGreen.toArgb() -> 1
+        NoteMint.toArgb() -> 2
+        NoteBlue.toArgb() -> 3
+        NoteViolet.toArgb() -> 4
+        NoteOrange.toArgb() -> 5
+        NoteRed.toArgb() -> 6
+        else -> 7
+    }
 
 val md_theme_light_primary = Color(0xFF984065)
 val md_theme_light_onPrimary = Color(0xFFffffff)

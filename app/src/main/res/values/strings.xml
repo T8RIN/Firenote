@@ -57,4 +57,8 @@
     <string name="reset">\ Reset\ </string>
     <string name="seeYouAgain">We will be glad to see you again!</string>
     <string name="pickImage">Pick image</string>
+    <string name="resetMessage">If you would like to reset your password, we will send you a confirmation email</string>
+    <string name="changeEmail">Email changing</string>
+    <string name="newEmail">New email</string>
+    <string name="emailChanged">Email changed</string>
 </resources>

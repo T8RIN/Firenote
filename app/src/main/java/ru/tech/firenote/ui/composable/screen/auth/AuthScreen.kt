@@ -12,6 +12,10 @@ import ru.tech.firenote.viewModel.AuthViewModel
 @Composable
 fun AuthScreen(visible: MutableState<Boolean>, viewModel: AuthViewModel = viewModel()) {
 
+    if (viewModel.currentUser == null) {
+        viewModel.visibleState.targetState = true
+        viewModel.resetState()
+    }
     visible.value = viewModel.visibleState.targetState
     AnimatedVisibility(visibleState = viewModel.visibleState, enter = fadeIn(), exit = fadeOut()) {
         when (viewModel.currentScreen.value) {

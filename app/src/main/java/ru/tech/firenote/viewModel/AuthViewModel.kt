@@ -17,7 +17,7 @@ class AuthViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val auth = repository.auth
-    private val currentUser get() = auth.currentUser
+    val currentUser get() = auth.currentUser
     val visibleState = MutableTransitionState(currentUser == null)
 
     private val _logUiState = MutableStateFlow<UIState>(UIState.Empty())
@@ -42,7 +42,7 @@ class AuthViewModel @Inject constructor(
                         visibleState.targetState = false
                     }
                 } else {
-                    _logUiState.value = UIState.Empty(task.exception.toString().split(":")[1])
+                    _logUiState.value = UIState.Empty(task.exception?.localizedMessage)
                 }
             }
     }
@@ -57,7 +57,7 @@ class AuthViewModel @Inject constructor(
                         _signUiState.value = UIState.Success(currentUser)
                         auth.signOut()
                     } else {
-                        _signUiState.value = UIState.Empty(task.exception.toString().split(":")[1])
+                        _signUiState.value = UIState.Empty(task.exception?.localizedMessage)
                     }
                 }
         }

@@ -26,16 +26,17 @@ fun Navigation(
     ) {
         composable(Screen.NoteListScreen.route) {
             NoteListScreen(
-                mainViewModel.showCreationComposable,
+                mainViewModel.showNoteCreation,
                 mainViewModel.globalNote,
-                mainViewModel.filterType
+                mainViewModel.filterType,
+                mainViewModel.isDescendingFilter
             )
         }
         composable(Screen.AlarmListScreen.route) {
             AlarmListScreen()
         }
         composable(Screen.ProfileScreen.route) {
-            ProfileScreen()
+            ProfileScreen(navController, mainViewModel.selectedItem, mainViewModel.resultLauncher)
         }
     }
 }

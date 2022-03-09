@@ -1,5 +1,7 @@
 package ru.tech.firenote.viewModel
 
+import android.net.Uri
+import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
@@ -21,9 +23,11 @@ class MainViewModel @Inject constructor(
 
     val selectedItem = mutableStateOf(0)
     val globalNote: MutableState<Note?> = mutableStateOf(null)
-    val showCreationComposable = MutableTransitionState(false).apply {
+    val showNoteCreation = MutableTransitionState(false).apply {
         targetState = false
     }
+
+    val resultLauncher = mutableStateOf<ManagedActivityResultLauncher<String, Uri?>?>(null)
 
     val isAuth = mutableStateOf(repository.auth.currentUser == null)
 
@@ -31,16 +35,18 @@ class MainViewModel @Inject constructor(
     val scrollBehavior = mutableStateOf(TopAppBarDefaults.pinnedScrollBehavior())
 
     val filterType = mutableStateOf(2)
+    val isDescendingFilter = mutableStateOf(false)
 
     init {
         repository.auth.addAuthStateListener {
-            if (it.currentUser == null) isAuth.value = true
+            if (it.currentUser == null) {
+                isAuth.value = true
+            }
         }
     }
 
     fun signOut() {
         repository.auth.signOut()
-        selectedItem.value = 0
     }
 
 }

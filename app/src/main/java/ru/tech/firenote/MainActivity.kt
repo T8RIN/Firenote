@@ -13,6 +13,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.NotificationAdd
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -48,7 +49,7 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             val isScaffoldVisible by derivedStateOf {
-                !mainViewModel.showCreationComposable.currentState || !mainViewModel.showCreationComposable.targetState
+                !mainViewModel.showNoteCreation.currentState || !mainViewModel.showNoteCreation.targetState
             }
             val navController = rememberNavController()
             val context = LocalContext.current
@@ -71,6 +72,11 @@ class MainActivity : ComponentActivity() {
                                                 1 -> AlarmActions()
                                                 2 -> ProfileActions {
                                                     mainViewModel.signOut()
+                                                    mainViewModel.selectedItem.value = 0
+                                                    navController.navigate(Screen.NoteListScreen.route) {
+                                                        navController.popBackStack()
+                                                        launchSingleTop = true
+                                                    }
                                                     makeText(
                                                         context,
                                                         R.string.seeYouAgain,
@@ -82,21 +88,24 @@ class MainActivity : ComponentActivity() {
                                     )
                                 },
                                 floatingActionButton = {
-                                    if (mainViewModel.selectedItem.value != 2) {
-                                        ExtendedFloatingActionButton(onClick = {
-                                            mainViewModel.showCreationComposable.targetState = true
-                                        }, icon = {
-                                            when (mainViewModel.selectedItem.value) {
-                                                0 -> Icon(Icons.Outlined.Edit, null)
-                                                1 -> Icon(Icons.Outlined.NotificationAdd, null)
-                                            }
-                                        }, text = {
-                                            when (mainViewModel.selectedItem.value) {
-                                                0 -> Text(stringResource(R.string.addNote))
-                                                1 -> Text(stringResource(R.string.setAlarm))
-                                            }
-                                        })
-                                    }
+                                    ExtendedFloatingActionButton(onClick = {
+                                        when (mainViewModel.selectedItem.value) {
+                                            0 -> mainViewModel.showNoteCreation.targetState = true
+                                            2 -> mainViewModel.resultLauncher.value?.launch("image/*")
+                                        }
+                                    }, icon = {
+                                        when (mainViewModel.selectedItem.value) {
+                                            0 -> Icon(Icons.Outlined.Edit, null)
+                                            1 -> Icon(Icons.Outlined.NotificationAdd, null)
+                                            2 -> Icon(Icons.Outlined.Image, null)
+                                        }
+                                    }, text = {
+                                        when (mainViewModel.selectedItem.value) {
+                                            0 -> Text(stringResource(R.string.addNote))
+                                            1 -> Text(stringResource(R.string.setAlarm))
+                                            2 -> Text(stringResource(R.string.pickImage))
+                                        }
+                                    })
                                 },
                                 bottomBar = {
                                     BottomNavigationBar(
@@ -131,7 +140,6 @@ class MainActivity : ComponentActivity() {
                                 dismissAction = { finishAffinity() }
                             )
                         }
-
                     }
                 }
             }
@@ -141,18 +149,18 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Creation(mainViewModel: MainViewModel) {
-    if (!mainViewModel.showCreationComposable.currentState) {
+    if (!mainViewModel.showNoteCreation.currentState) {
         mainViewModel.globalNote.value = null
     }
     AnimatedVisibility(
-        visibleState = mainViewModel.showCreationComposable,
+        visibleState = mainViewModel.showNoteCreation,
         enter = fadeIn(),
         exit = fadeOut()
     ) {
-        BackHandler { mainViewModel.showCreationComposable.targetState = false }
+        BackHandler { mainViewModel.showNoteCreation.targetState = false }
         when (mainViewModel.selectedItem.value) {
             0 -> NoteCreationScreen(
-                state = mainViewModel.showCreationComposable,
+                state = mainViewModel.showNoteCreation,
                 globalNote = mainViewModel.globalNote
             )
             1 -> AlarmCreationScreen()

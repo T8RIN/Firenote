@@ -30,9 +30,19 @@ fun NoteActions(
             .background(MaterialTheme.colorScheme.primaryContainer, CircleShape)
     val unselectedModifier = Modifier.padding(5.dp)
     val showFilter = remember { mutableStateOf(false) }
+
+    IconButton(onClick = {
+        viewModel.isDescendingFilter.value = !viewModel.isDescendingFilter.value
+    }) {
+        Icon(
+            if (viewModel.isDescendingFilter.value) Icons.Filled.ArrowDropDown else Icons.Outlined.ArrowDropUp,
+            "filter"
+        )
+    }
     IconButton(onClick = { showFilter.value = true }) {
         Icon(Icons.Filled.FilterAlt, null)
     }
+
     DropdownMenu(
         expanded = showFilter.value,
         onDismissRequest = { showFilter.value = false }

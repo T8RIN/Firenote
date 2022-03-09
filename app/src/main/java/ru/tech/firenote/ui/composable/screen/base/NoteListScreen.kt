@@ -18,7 +18,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -29,7 +28,7 @@ import ru.tech.firenote.model.UIState
 import ru.tech.firenote.ui.composable.single.MaterialDialog
 import ru.tech.firenote.ui.composable.single.NoteItem
 import ru.tech.firenote.ui.composable.single.Toast
-import ru.tech.firenote.ui.theme.*
+import ru.tech.firenote.ui.theme.priority
 import ru.tech.firenote.viewModel.NoteListViewModel
 
 @Suppress("UNCHECKED_CAST")
@@ -39,6 +38,7 @@ fun NoteListScreen(
     showCreationComposable: MutableTransitionState<Boolean>,
     globalNote: MutableState<Note?> = mutableStateOf(null),
     filterType: MutableState<Int>,
+    isDescendingFilter: MutableState<Boolean>,
     viewModel: NoteListViewModel = hiltViewModel()
 ) {
     val notePaddingValues = PaddingValues(top = 10.dp, start = 10.dp, end = 10.dp, bottom = 140.dp)
@@ -63,10 +63,18 @@ fun NoteListScreen(
         }
         is UIState.Success<*> -> {
             val repoList = state.data as List<Note>
-            val data = when (filterType.value) {
-                1 -> repoList.sortedByDescending { (it.color ?: 0).priority }
-                2 -> repoList.sortedBy { it.timestamp }
-                else -> repoList.sortedBy { it.title }
+            val data = if (isDescendingFilter.value) {
+                when (filterType.value) {
+                    1 -> repoList.sortedByDescending { (it.color ?: 0).priority }
+                    2 -> repoList.sortedBy { it.timestamp }
+                    else -> repoList.sortedBy { it.title }
+                }
+            } else {
+                when (filterType.value) {
+                    1 -> repoList.sortedBy { (it.color ?: 0).priority }
+                    2 -> repoList.sortedByDescending { it.timestamp }
+                    else -> repoList.sortedByDescending { it.title }
+                }
             }
 
             LazyColumn(
@@ -115,15 +123,3 @@ fun NoteListScreen(
         backHandler = { }
     )
 }
-
-private val Int.priority
-    get() = when (this) {
-        NoteYellow.toArgb() -> 0
-        NoteGreen.toArgb() -> 1
-        NoteMint.toArgb() -> 2
-        NoteBlue.toArgb() -> 3
-        NoteViolet.toArgb() -> 4
-        NoteOrange.toArgb() -> 5
-        NoteRed.toArgb() -> 6
-        else -> 7
-    }

@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import ru.tech.firenote.NoteRepository
 import ru.tech.firenote.Utils.blend
 import ru.tech.firenote.model.Note
-import ru.tech.firenote.ui.theme.*
+import ru.tech.firenote.ui.theme.NoteYellow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,9 +23,6 @@ class NoteCreationViewModel @Inject constructor(
 
     val noteLabel = mutableStateOf("")
     val noteContent = mutableStateOf("")
-
-    val colors =
-        listOf(NoteYellow, NoteGreen, NoteMint, NoteBlue, NoteViolet, NoteOrange, NoteRed, NotePink)
 
     fun saveNote() {
         viewModelScope.launch {

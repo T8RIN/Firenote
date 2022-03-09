@@ -16,7 +16,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -64,7 +63,6 @@ fun RegistrationScreen(viewModel: AuthViewModel) {
         password != passwordConfirm
     }
 
-    val context = LocalContext.current
     val focusManager = LocalFocusManager.current
 
     Scaffold(

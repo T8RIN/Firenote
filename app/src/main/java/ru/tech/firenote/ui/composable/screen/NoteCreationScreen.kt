@@ -37,6 +37,7 @@ import ru.tech.firenote.ui.composable.single.EditText
 import ru.tech.firenote.ui.composable.single.EditableAppBar
 import ru.tech.firenote.ui.composable.single.Gradient
 import ru.tech.firenote.ui.composable.single.MaterialDialog
+import ru.tech.firenote.ui.theme.noteColors
 import ru.tech.firenote.viewModel.NoteCreationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -121,8 +122,8 @@ fun NoteCreationScreen(
                     end = 15.dp
                 )
             ) {
-                items(viewModel.colors.size) { index ->
-                    val color = viewModel.colors[index]
+                items(noteColors.size) { index ->
+                    val color = noteColors[index]
                     val colorInt = color.toArgb()
                     Box(
                         modifier = Modifier
