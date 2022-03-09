@@ -62,7 +62,7 @@ dependencies {
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.okhttp3:okhttp:4.9.2")
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.2")
 
     // Coroutines
@@ -83,6 +83,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx:21.0.1")
     implementation("com.google.android.gms:play-services-auth:20.1.0")
     implementation("com.google.firebase:firebase-database-ktx:20.0.3")
+    implementation("com.google.firebase:firebase-storage-ktx:20.0.0")
     annotationProcessor("androidx.room:room-compiler:2.4.2")
     implementation("androidx.room:room-common:2.4.2")
     kapt("com.google.dagger:hilt-android-compiler:2.38.1")
@@ -117,16 +118,21 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation("androidx.datastore:datastore-preferences-core:1.0.0")
 
-    //Koin
-    implementation("io.insert-koin:koin-android:3.1.5")
-    implementation("io.insert-koin:koin-androidx-workmanager:3.1.5")
-    implementation("io.insert-koin:koin-androidx-navigation:3.1.5")
-    implementation("io.insert-koin:koin-androidx-compose:3.1.5")
+    //Coil
+    implementation("io.coil-kt:coil:2.0.0-rc01")
+    implementation("io.coil-kt:coil-compose:2.0.0-rc01")
 
-    //WorkManager
-    implementation("androidx.work:work-runtime-ktx:2.7.1")
-    androidTestImplementation("androidx.work:work-testing:2.7.1")
-    implementation("androidx.work:work-multiprocess:2.7.1")
+
+//    Koin
+//    implementation("io.insert-koin:koin-android:3.1.5")
+//    implementation("io.insert-koin:koin-androidx-workmanager:3.1.5")
+//    implementation("io.insert-koin:koin-androidx-navigation:3.1.5")
+//    implementation("io.insert-koin:koin-androidx-compose:3.1.5")
+//
+//    //WorkManager
+//    implementation("androidx.work:work-runtime-ktx:2.7.1")
+//    androidTestImplementation("androidx.work:work-testing:2.7.1")
+//    implementation("androidx.work:work-multiprocess:2.7.1")
 
     //Accompanist
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.24.2-alpha")

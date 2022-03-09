@@ -1,33 +1,37 @@
 package ru.tech.firenote
 
 import android.os.Bundle
+import android.widget.Toast.LENGTH_SHORT
+import android.widget.Toast.makeText
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.NotificationAdd
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.ProvideWindowInsets
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import ru.tech.firenote.model.Screen
 import ru.tech.firenote.ui.composable.navigation.Navigation
+import ru.tech.firenote.ui.composable.screen.AlarmCreationScreen
+import ru.tech.firenote.ui.composable.screen.NoteCreationScreen
 import ru.tech.firenote.ui.composable.screen.auth.AuthScreen
-import ru.tech.firenote.ui.composable.single.AppBarWithInsets
-import ru.tech.firenote.ui.composable.single.BottomNavigationBar
-import ru.tech.firenote.ui.composable.single.MaterialDialog
+import ru.tech.firenote.ui.composable.single.*
 import ru.tech.firenote.ui.theme.FirenoteTheme
 import ru.tech.firenote.viewModel.MainViewModel
 
@@ -46,19 +50,15 @@ class MainActivity : ComponentActivity() {
             val isScaffoldVisible by derivedStateOf {
                 !mainViewModel.showCreationComposable.currentState || !mainViewModel.showCreationComposable.targetState
             }
-
-            val isAuth = remember {
-                mutableStateOf(Firebase.auth.currentUser == null)
-            }
-
             val navController = rememberNavController()
+            val context = LocalContext.current
 
             FirenoteTheme {
                 ProvideWindowInsets(windowInsetsAnimationsEnabled = true) {
                     val snackbarHostState = remember { SnackbarHostState() }
                     CompositionLocalProvider(LocalSnackbarHost provides snackbarHostState) {
 
-                        if (isAuth.value) AuthScreen(isAuth)
+                        if (mainViewModel.isAuth.value) AuthScreen(mainViewModel.isAuth)
                         else {
                             Scaffold(
                                 topBar = {
@@ -66,12 +66,37 @@ class MainActivity : ComponentActivity() {
                                         scrollBehavior = mainViewModel.scrollBehavior.value,
                                         title = stringResource(mainViewModel.title.value),
                                         actions = {
-                                            mainViewModel.mainAppBarActions()
+                                            when (mainViewModel.selectedItem.value) {
+                                                0 -> NoteActions(mainViewModel)
+                                                1 -> AlarmActions()
+                                                2 -> ProfileActions {
+                                                    mainViewModel.signOut()
+                                                    makeText(
+                                                        context,
+                                                        R.string.seeYouAgain,
+                                                        LENGTH_SHORT
+                                                    ).show()
+                                                }
+                                            }
                                         }
                                     )
                                 },
                                 floatingActionButton = {
-                                    mainViewModel.fab()
+                                    if (mainViewModel.selectedItem.value != 2) {
+                                        ExtendedFloatingActionButton(onClick = {
+                                            mainViewModel.showCreationComposable.targetState = true
+                                        }, icon = {
+                                            when (mainViewModel.selectedItem.value) {
+                                                0 -> Icon(Icons.Outlined.Edit, null)
+                                                1 -> Icon(Icons.Outlined.NotificationAdd, null)
+                                            }
+                                        }, text = {
+                                            when (mainViewModel.selectedItem.value) {
+                                                0 -> Text(stringResource(R.string.addNote))
+                                                1 -> Text(stringResource(R.string.setAlarm))
+                                            }
+                                        })
+                                    }
                                 },
                                 bottomBar = {
                                     BottomNavigationBar(
@@ -94,7 +119,7 @@ class MainActivity : ComponentActivity() {
                                 Navigation(navController, contentPadding, mainViewModel)
                             }
 
-                            mainViewModel.creationComposable()
+                            Creation(mainViewModel)
 
                             MaterialDialog(
                                 showDialog = rememberSaveable { mutableStateOf(false) },
@@ -111,17 +136,26 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-
-        //startService()
-
     }
+}
 
-
-//    private fun startService(func: (() -> Unit)? = null) {
-//        ForegroundService.func = func
-//        val serviceIntent = Intent(this, ForegroundService::class.java)
-//        serviceIntent.putExtra("inputExtra", "Foreground Service Example in Android")
-//        ContextCompat.startForegroundService(this, serviceIntent)
-//    }
-
+@Composable
+fun Creation(mainViewModel: MainViewModel) {
+    if (!mainViewModel.showCreationComposable.currentState) {
+        mainViewModel.globalNote.value = null
+    }
+    AnimatedVisibility(
+        visibleState = mainViewModel.showCreationComposable,
+        enter = fadeIn(),
+        exit = fadeOut()
+    ) {
+        BackHandler { mainViewModel.showCreationComposable.targetState = false }
+        when (mainViewModel.selectedItem.value) {
+            0 -> NoteCreationScreen(
+                state = mainViewModel.showCreationComposable,
+                globalNote = mainViewModel.globalNote
+            )
+            1 -> AlarmCreationScreen()
+        }
+    }
 }

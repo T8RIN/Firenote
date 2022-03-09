@@ -1,25 +1,23 @@
 package ru.tech.firenote.ui.composable.single
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CalendarToday
-import androidx.compose.material.icons.filled.FilterAlt
-import androidx.compose.material.icons.filled.Palette
-import androidx.compose.material.icons.filled.TextSnippet
-import androidx.compose.material.icons.outlined.CalendarToday
-import androidx.compose.material.icons.outlined.NotificationImportant
-import androidx.compose.material.icons.outlined.Palette
-import androidx.compose.material.icons.outlined.TextSnippet
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.tech.firenote.R
+import ru.tech.firenote.Utils.isOnline
 import ru.tech.firenote.viewModel.MainViewModel
 
 @Composable
@@ -111,4 +109,28 @@ fun AlarmActions() {
             Icon(Icons.Outlined.CalendarToday, null)
         })
     }
+}
+
+@Composable
+fun ProfileActions(onClick: () -> Unit) {
+    val showDialog = rememberSaveable { mutableStateOf(false) }
+    val context = LocalContext.current
+
+    IconButton(onClick = {
+        if (context.isOnline()) showDialog.value = true
+        else Toast.makeText(context, R.string.noInternet, Toast.LENGTH_LONG).show()
+    }) {
+        Icon(Icons.Filled.Logout, null)
+    }
+
+    MaterialDialog(
+        showDialog = showDialog,
+        icon = Icons.Outlined.Logout,
+        title = R.string.logOut,
+        message = R.string.logoutMessage,
+        confirmText = R.string.stay,
+        dismissText = R.string.logOut,
+        dismissAction = onClick,
+        backHandler = {}
+    )
 }

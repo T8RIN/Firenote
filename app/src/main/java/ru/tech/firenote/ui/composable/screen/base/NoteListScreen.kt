@@ -44,6 +44,11 @@ fun NoteListScreen(
     val notePaddingValues = PaddingValues(top = 10.dp, start = 10.dp, end = 10.dp, bottom = 140.dp)
     val needToShowDeleteDialog = remember { mutableStateOf(false) }
     var note by remember { mutableStateOf(Note()) }
+    val scope = rememberCoroutineScope()
+    val host = LocalSnackbarHost.current
+
+    val message = stringResource(R.string.noteDeleted)
+    val action = stringResource(R.string.undo)
 
     when (val state = viewModel.uiState.collectAsState().value) {
         is UIState.Loading -> {
@@ -59,13 +64,10 @@ fun NoteListScreen(
         is UIState.Success<*> -> {
             val repoList = state.data as List<Note>
             val data = when (filterType.value) {
-                1 -> repoList.sortedBy { (it.color ?: 0).priority }
+                1 -> repoList.sortedByDescending { (it.color ?: 0).priority }
                 2 -> repoList.sortedBy { it.timestamp }
                 else -> repoList.sortedBy { it.title }
             }
-
-            val scope = rememberCoroutineScope()
-            val host = LocalSnackbarHost.current
 
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -87,20 +89,6 @@ fun NoteListScreen(
                     )
                 }
             }
-
-            val message = stringResource(R.string.noteDeleted)
-            val action = stringResource(R.string.undo)
-
-            MaterialDialog(
-                showDialog = needToShowDeleteDialog,
-                icon = Icons.Outlined.Delete,
-                title = R.string.deleteNote,
-                message = R.string.deleteNoteMessage,
-                confirmText = R.string.close,
-                dismissText = R.string.delete,
-                dismissAction = { viewModel.deleteNote(note, scope, host, message, action) },
-                backHandler = { }
-            )
         }
         is UIState.Empty -> {
             state.message?.let { Toast(it) }
@@ -115,6 +103,17 @@ fun NoteListScreen(
             }
         }
     }
+
+    MaterialDialog(
+        showDialog = needToShowDeleteDialog,
+        icon = Icons.Outlined.Delete,
+        title = R.string.deleteNote,
+        message = R.string.deleteNoteMessage,
+        confirmText = R.string.close,
+        dismissText = R.string.delete,
+        dismissAction = { viewModel.deleteNote(note, scope, host, message, action) },
+        backHandler = { }
+    )
 }
 
 private val Int.priority

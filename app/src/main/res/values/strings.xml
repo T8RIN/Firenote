@@ -50,4 +50,11 @@
     <string name="profile">Profile</string>
     <string name="noteDeleted">Note \"*\" deleted</string>
     <string name="undo">Undo</string>
+    <string name="logOut">Log out</string>
+    <string name="logoutMessage">You will be logged out, but all your notes will be saved in the cloud</string>
+    <string name="noInternet">No internet connection!</string>
+    <string name="change">Change</string>
+    <string name="reset">\ Reset\ </string>
+    <string name="seeYouAgain">We will be glad to see you again!</string>
+    <string name="pickImage">Pick image</string>
 </resources>

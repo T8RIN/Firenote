@@ -97,6 +97,7 @@ fun NoteCreationScreen(
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
+                modifier = Modifier.navigationBarsPadding(),
                 text = { Text(stringResource(R.string.save)) },
                 icon = { Icon(Icons.Outlined.Save, null) },
                 onClick = { saveNote(viewModel, context, state, globalNote.value) })
