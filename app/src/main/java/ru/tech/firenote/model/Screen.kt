@@ -39,5 +39,4 @@ sealed class Screen(
     object RegistrationScreen : Screen("register")
     object ForgotPasswordScreen : Screen("forgot")
 
-
 }

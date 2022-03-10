@@ -20,6 +20,7 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
     val title = mutableStateOf(Screen.NoteListScreen.resourceId)
+    val profileTitle = mutableStateOf("User")
 
     val selectedItem = mutableStateOf(0)
     val globalNote: MutableState<Note?> = mutableStateOf(null)
@@ -31,6 +32,8 @@ class MainViewModel @Inject constructor(
 
     val isAuth = mutableStateOf(repository.auth.currentUser == null)
 
+    val showUsernameDialog = mutableStateOf(false)
+
     @OptIn(ExperimentalMaterial3Api::class)
     val scrollBehavior = mutableStateOf(TopAppBarDefaults.pinnedScrollBehavior())
 
@@ -39,14 +42,10 @@ class MainViewModel @Inject constructor(
 
     init {
         repository.auth.addAuthStateListener {
-            if (it.currentUser == null) {
-                isAuth.value = true
-            }
+            if (it.currentUser == null) isAuth.value = true
         }
     }
 
-    fun signOut() {
-        repository.auth.signOut()
-    }
+    fun signOut() = repository.auth.signOut()
 
 }

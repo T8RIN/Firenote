@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import ru.tech.firenote.model.ImageUri
 import ru.tech.firenote.model.Note
+import ru.tech.firenote.model.Username
 import ru.tech.firenote.repository.NoteRepository
 import javax.inject.Inject
 
@@ -25,11 +26,12 @@ class NoteRepositoryImpl @Inject constructor(
     private val storage: StorageReference
 ) : NoteRepository {
 
-    override val auth = Firebase.auth
+    override val auth get() = Firebase.auth
 
     private val path get() = Firebase.auth.uid.toString() + "/"
     private val notesChild = "notes/"
     private val imageChild = "image/"
+    private val usernameChild = "username/"
 
     override suspend fun getNotes(): Flow<Result<List<Note>>> {
         return callbackFlow {
@@ -97,6 +99,32 @@ class NoteRepositoryImpl @Inject constructor(
                     database.child(path).child(imageChild).setValue(ImageUri(uri.toString()))
                 }
             }
+    }
+
+    override suspend fun getUsername(): Flow<Result<String>> {
+        return callbackFlow {
+            val postListener = object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    this@callbackFlow.trySendBlocking(Result.failure(error.toException()))
+                }
+
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val tempUsername =
+                        dataSnapshot.getValue(Username::class.java)?.username
+                            ?: (auth.currentUser?.email ?: "").split("@")[0]
+                    this@callbackFlow.trySendBlocking(Result.success(tempUsername))
+                }
+            }
+            database.child(path).child(usernameChild).addValueEventListener(postListener)
+
+            awaitClose {
+                database.child(path).child(usernameChild).removeEventListener(postListener)
+            }
+        }
+    }
+
+    override suspend fun setUsername(username: String) {
+        database.child(path).child(usernameChild).setValue(Username(username))
     }
 
 }

@@ -29,7 +29,11 @@ class ProfileViewModel @Inject constructor(
     private val _noteCountState = MutableStateFlow<UIState>(UIState.Empty())
     val noteCountState: StateFlow<UIState> = _noteCountState
 
+    private val _username = MutableStateFlow<UIState>(UIState.Success(email.split("@")[0]))
+    var username: StateFlow<UIState> = _username
+
     init {
+        loadUsername()
         loadProfileImage()
         getNotes()
     }
@@ -63,7 +67,7 @@ class ProfileViewModel @Inject constructor(
                 val profileImageUri = it.getOrNull()
 
                 if (profileImageUri != null) _photoState.value = UIState.Success(profileImageUri)
-                else _photoState.value = UIState.Empty()
+                else _photoState.value = UIState.Empty(it.exceptionOrNull()?.localizedMessage)
             }
         }
     }
@@ -73,6 +77,18 @@ class ProfileViewModel @Inject constructor(
             viewModelScope.launch {
                 _photoState.value = UIState.Loading
                 repository.setProfileUri(uri)
+            }
+        }
+    }
+
+    private fun loadUsername() {
+        viewModelScope.launch {
+            _username.value = UIState.Loading
+            repository.getUsername().collect {
+                val username = it.getOrNull()
+
+                if (username != null) _username.value = UIState.Success(username)
+                else _username.value = UIState.Empty(it.exceptionOrNull()?.localizedMessage)
             }
         }
     }
@@ -87,6 +103,13 @@ class ProfileViewModel @Inject constructor(
 
     fun signOut() {
         repository.auth.signOut()
+    }
+
+    fun updateUsername(username: String) {
+        viewModelScope.launch {
+            _username.value = UIState.Loading
+            repository.setUsername(username)
+        }
     }
 
     fun changeEmail(oldEmail: String, password: String, newEmail: String) {

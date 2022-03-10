@@ -20,4 +20,8 @@ interface NoteRepository {
     suspend fun getProfileUri(): Flow<Result<Uri?>>
 
     suspend fun setProfileUri(uri: Uri)
+
+    suspend fun getUsername(): Flow<Result<String>>
+
+    suspend fun setUsername(username: String)
 }

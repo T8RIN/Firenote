@@ -36,7 +36,13 @@ fun Navigation(
             AlarmListScreen()
         }
         composable(Screen.ProfileScreen.route) {
-            ProfileScreen(navController, mainViewModel.selectedItem, mainViewModel.resultLauncher)
+            ProfileScreen(
+                navController,
+                mainViewModel.selectedItem,
+                mainViewModel.resultLauncher,
+                mainViewModel.profileTitle,
+                mainViewModel.showUsernameDialog
+            )
         }
     }
 }

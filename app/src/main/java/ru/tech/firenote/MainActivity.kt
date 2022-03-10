@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.NotificationAdd
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -64,29 +65,50 @@ class MainActivity : ComponentActivity() {
                         else {
                             Scaffold(
                                 topBar = {
-                                    AppBarWithInsets(
-                                        scrollBehavior = mainViewModel.scrollBehavior.value,
-                                        title = stringResource(mainViewModel.title.value),
-                                        actions = {
-                                            when (mainViewModel.selectedItem.value) {
-                                                0 -> NoteActions(mainViewModel)
-                                                1 -> AlarmActions()
-                                                2 -> ProfileActions {
-                                                    mainViewModel.signOut()
-                                                    mainViewModel.selectedItem.value = 0
-                                                    navController.navigate(Screen.NoteListScreen.route) {
-                                                        navController.popBackStack()
-                                                        launchSingleTop = true
+                                    when (mainViewModel.selectedItem.value) {
+                                        2 -> {
+                                            AppBarWithInsets(
+                                                type = APP_BAR_CENTER,
+                                                navigationIcon = {
+                                                    IconButton(onClick = {
+                                                        mainViewModel.showUsernameDialog.value =
+                                                            true
+                                                    }) {
+                                                        Icon(Icons.Rounded.Edit, null)
                                                     }
-                                                    makeText(
-                                                        context,
-                                                        R.string.seeYouAgain,
-                                                        LENGTH_SHORT
-                                                    ).show()
+                                                },
+                                                scrollBehavior = mainViewModel.scrollBehavior.value,
+                                                title = mainViewModel.profileTitle.value,
+                                                actions = {
+                                                    ProfileActions {
+                                                        navController.navigate(Screen.NoteListScreen.route) {
+                                                            navController.popBackStack()
+                                                            launchSingleTop = true
+                                                        }
+                                                        makeText(
+                                                            context,
+                                                            R.string.seeYouAgain,
+                                                            LENGTH_SHORT
+                                                        ).show()
+
+                                                        mainViewModel.signOut()
+                                                    }
                                                 }
-                                            }
+                                            )
                                         }
-                                    )
+                                        else -> {
+                                            AppBarWithInsets(
+                                                scrollBehavior = mainViewModel.scrollBehavior.value,
+                                                title = stringResource(mainViewModel.title.value),
+                                                actions = {
+                                                    when (mainViewModel.selectedItem.value) {
+                                                        0 -> NoteActions(mainViewModel)
+                                                        1 -> AlarmActions()
+                                                    }
+                                                }
+                                            )
+                                        }
+                                    }
                                 },
                                 floatingActionButton = {
                                     ExtendedFloatingActionButton(onClick = {

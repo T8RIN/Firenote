@@ -19,14 +19,18 @@ fun BottomNavigationBar(
 ) {
     Surface(color = TopAppBarDefaults.smallTopAppBarColors().containerColor(100f).value) {
         NavigationBar(modifier = Modifier.navigationBarsPadding()) {
+
             items.forEachIndexed { index, screen ->
+
+                selectedItem.value =
+                    items.indexOfFirst { it.route == navController.currentDestination?.route }
+
                 NavigationBarItem(
                     icon = {
-                        if (selectedItem.value == index) Icon(
-                            screen.selectedIcon,
-                            contentDescription = null
+                        Icon(
+                            if (selectedItem.value == index) screen.selectedIcon else screen.icon,
+                            null
                         )
-                        else Icon(screen.icon, contentDescription = null)
                     },
                     alwaysShowLabel = alwaysShowLabel,
                     label = { Text(stringResource(screen.resourceId)) },
@@ -38,7 +42,6 @@ fun BottomNavigationBar(
                             navController.navigate(screen.route) {
                                 navController.popBackStack()
                                 launchSingleTop = true
-                                restoreState = true
                             }
                         }
                     }

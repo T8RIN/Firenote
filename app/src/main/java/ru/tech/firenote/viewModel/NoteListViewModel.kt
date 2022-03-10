@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -31,6 +32,11 @@ class NoteListViewModel @Inject constructor(
     private fun getNotes() {
         viewModelScope.launch {
             _uiState.value = UIState.Loading
+
+            while (repository.auth.currentUser == null) {
+                delay(200)
+            }
+
             repository.getNotes().collect {
                 if (it.isSuccess) {
                     if (it.getOrNull().isNullOrEmpty()) _uiState.value = UIState.Empty()
@@ -65,6 +71,5 @@ class NoteListViewModel @Inject constructor(
             }
         }
     }
-
 
 }

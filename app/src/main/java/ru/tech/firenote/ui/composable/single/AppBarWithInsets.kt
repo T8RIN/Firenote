@@ -13,6 +13,7 @@ import com.google.accompanist.insets.statusBarsPadding
 fun AppBarWithInsets(
     modifier: Modifier = Modifier,
     title: String,
+    type: Int = APP_BAR_SIMPLE,
     scrollBehavior: TopAppBarScrollBehavior? = null,
     navigationIcon: @Composable () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
@@ -26,19 +27,42 @@ fun AppBarWithInsets(
         scrolledContainerColor = Color.Transparent
     )
     Surface(color = backgroundColor) {
-        SmallTopAppBar(
-            title = {
-                Text(
-                    text = title,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+        when (type) {
+            APP_BAR_CENTER -> {
+                CenterAlignedTopAppBar(
+                    title = {
+                        Text(
+                            text = title,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    },
+                    navigationIcon = navigationIcon,
+                    actions = actions,
+                    scrollBehavior = scrollBehavior,
+                    colors = foregroundColors,
+                    modifier = modifier.statusBarsPadding()
                 )
-            },
-            navigationIcon = navigationIcon,
-            actions = actions,
-            scrollBehavior = scrollBehavior,
-            colors = foregroundColors,
-            modifier = modifier.statusBarsPadding()
-        )
+            }
+            APP_BAR_SIMPLE -> {
+                SmallTopAppBar(
+                    title = {
+                        Text(
+                            text = title,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    },
+                    navigationIcon = navigationIcon,
+                    actions = actions,
+                    scrollBehavior = scrollBehavior,
+                    colors = foregroundColors,
+                    modifier = modifier.statusBarsPadding()
+                )
+            }
+        }
     }
 }
+
+const val APP_BAR_SIMPLE = 0
+const val APP_BAR_CENTER = 1

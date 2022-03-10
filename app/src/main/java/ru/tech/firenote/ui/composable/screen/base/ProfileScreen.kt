@@ -18,6 +18,7 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Password
 import androidx.compose.material.icons.twotone.Email
@@ -63,6 +64,8 @@ fun ProfileScreen(
     navController: NavController,
     selectedItem: MutableState<Int>,
     resultLauncher: MutableState<ManagedActivityResultLauncher<String, Uri?>?>,
+    profileTitle: MutableState<String>,
+    showUsernameDialog: MutableState<Boolean>,
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -79,6 +82,16 @@ fun ProfileScreen(
 
     val showResetDialog = remember { mutableStateOf(false) }
     val showEmailDialog = remember { mutableStateOf(false) }
+
+    when (val state = viewModel.username.collectAsState().value) {
+        is UIState.Empty -> {
+            state.message?.let { Toast(it) }
+        }
+        is UIState.Success<*> -> {
+            profileTitle.value = state.data as String
+        }
+        else -> {}
+    }
 
     LazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -134,7 +147,7 @@ fun ProfileScreen(
             Row(
                 Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
+                    .padding(start = 20.dp, end = 15.dp),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -157,7 +170,7 @@ fun ProfileScreen(
             Row(
                 Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
+                    .padding(start = 20.dp, end = 15.dp),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -182,7 +195,8 @@ fun ProfileScreen(
                 is UIState.Loading -> {
                     Column(
                         modifier = Modifier
-                            .fillMaxSize(),
+                            .fillMaxSize()
+                            .padding(top = 60.dp),
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
@@ -321,16 +335,8 @@ fun ProfileScreen(
                                 singleLine = true,
                                 keyboardOptions = KeyboardOptions(
                                     keyboardType = KeyboardType.Password,
-                                    imeAction = ImeAction.Done
+                                    imeAction = ImeAction.Next
                                 ),
-                                keyboardActions = KeyboardActions(onDone = {
-                                    focusManager.clearFocus()
-                                    if (isFormValid) viewModel.changeEmail(
-                                        emailOld,
-                                        password,
-                                        emailNew
-                                    )
-                                }),
                                 visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                                 trailingIcon = {
                                     IconButton(onClick = {
@@ -356,6 +362,14 @@ fun ProfileScreen(
                                     keyboardType = KeyboardType.Email,
                                     imeAction = ImeAction.Next
                                 ),
+                                keyboardActions = KeyboardActions(onDone = {
+                                    focusManager.clearFocus()
+                                    if (isFormValid) viewModel.changeEmail(
+                                        emailOld,
+                                        password,
+                                        emailNew
+                                    )
+                                }),
                                 trailingIcon = {
                                     if (emailOld.isNotBlank())
                                         IconButton(onClick = { emailOld = "" }) {
@@ -367,6 +381,14 @@ fun ProfileScreen(
                     }
                     is UIState.Success<*> -> {
                         Toast(R.string.emailChanged)
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            CircularProgressIndicator()
+                        }
                         viewModel.sendVerifyEmail()
                         viewModel.signOut()
                         selectedItem.value = 0
@@ -378,6 +400,56 @@ fun ProfileScreen(
                 }
             },
             onDismissRequest = { }
+        )
+    }
+
+    if (showUsernameDialog.value) {
+        val focusManager = LocalFocusManager.current
+        var username by remember { mutableStateOf(profileTitle.value) }
+
+
+        AlertDialog(
+            icon = { Icon(Icons.Outlined.Edit, null) },
+            title = { Text(stringResource(R.string.changeUsername)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    showUsernameDialog.value = false
+                    viewModel.updateUsername(username)
+                }) {
+                    Text(stringResource(R.string.change))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    showUsernameDialog.value = false
+                }) {
+                    Text(stringResource(R.string.close))
+                }
+            },
+            text = {
+                MaterialTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = username,
+                    onValueChange = { username = it },
+                    label = { Text(text = stringResource(R.string.username)) },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Email,
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(onDone = {
+                        focusManager.clearFocus()
+                        viewModel.updateUsername(username)
+                    }),
+                    trailingIcon = {
+                        if (username.isNotBlank())
+                            IconButton(onClick = { username = "" }) {
+                                Icon(Icons.Filled.Clear, null)
+                            }
+                    }
+                )
+            },
+            onDismissRequest = { showUsernameDialog.value = false }
         )
     }
 }
