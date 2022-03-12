@@ -15,37 +15,39 @@ fun EditableAppBar(
     modifier: Modifier = Modifier,
     hint: String,
     color: Color,
+    backgroundColor: Color,
     text: MutableState<String> = mutableStateOf(""),
     errorColor: Int = MaterialTheme.colorScheme.error.toArgb(),
     scrollBehavior: TopAppBarScrollBehavior? = null,
     navigationIcon: @Composable () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
+    enabled: Boolean = true,
     onValueChange: (String) -> Unit = {}
 ) {
-    val backgroundColors = TopAppBarDefaults.smallTopAppBarColors()
-    val backgroundColor = backgroundColors.containerColor(
-        scrollFraction = scrollBehavior?.scrollFraction ?: 0f
-    ).value
     val foregroundColors = TopAppBarDefaults.smallTopAppBarColors(
         containerColor = Color.Transparent,
         scrolledContainerColor = Color.Transparent
     )
-    Surface(color = backgroundColor) {
-        SmallTopAppBar(
-            title = {
-                EditText(
-                    hintText = hint,
-                    onValueChange = onValueChange,
-                    errorColor = errorColor,
-                    color = color,
-                    textFieldState = text
-                )
-            },
-            navigationIcon = navigationIcon,
-            scrollBehavior = scrollBehavior,
-            colors = foregroundColors,
-            modifier = modifier.statusBarsPadding(),
-            actions = actions
-        )
+    Surface(color = Color.DarkGray) {
+        Surface(color = backgroundColor) {
+            SmallTopAppBar(
+                title = {
+                    EditText(
+                        hintText = hint,
+                        onValueChange = onValueChange,
+                        errorColor = errorColor,
+                        color = color,
+                        enabled = enabled,
+                        textFieldState = text
+                    )
+                },
+                navigationIcon = navigationIcon,
+                scrollBehavior = scrollBehavior,
+                colors = foregroundColors,
+                modifier = modifier.statusBarsPadding(),
+                actions = actions
+            )
+        }
     }
+
 }

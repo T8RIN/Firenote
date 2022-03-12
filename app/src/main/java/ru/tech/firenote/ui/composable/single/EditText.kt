@@ -40,8 +40,9 @@ fun EditText(
     singleLine: Boolean = true,
     color: Color = MaterialTheme.colorScheme.onBackground,
     errorEnabled: Boolean = true,
-    shadowColor: Color = Color.Black,
+    shadowColor: Color = Color.DarkGray,
     topPadding: Dp = 0.dp,
+    enabled: Boolean = true,
     errorColor: Int = MaterialTheme.colorScheme.error.toArgb(),
     onValueChange: (String) -> Unit = {}
 ) {
@@ -67,11 +68,12 @@ fun EditText(
             keyboardActions = KeyboardActions(
                 onDone = { localFocusManager.clearFocus() }
             ),
-            singleLine = singleLine
+            singleLine = singleLine,
+            enabled = enabled
         )
 
         if (textFieldState.value.isEmpty()) {
-            val color =
+            val localColor =
                 if (errorEnabled) Color(errorColor)
                 else MaterialTheme.colorScheme.onSurfaceVariant
             Text(
@@ -82,7 +84,7 @@ fun EditText(
                         Alignment.TopStart
                     ),
                 fontSize = 22.sp,
-                color = color,
+                color = localColor,
                 style = LocalTextStyle.current.copy(
                     shadow = Shadow(
                         color = shadowColor,
@@ -93,7 +95,7 @@ fun EditText(
             )
             if (errorEnabled) {
                 Icon(
-                    Icons.Filled.ErrorOutline, null, tint = color, modifier = Modifier
+                    Icons.Filled.ErrorOutline, null, tint = localColor, modifier = Modifier
                         .align(
                             Alignment.TopEnd
                         )

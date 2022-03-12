@@ -84,6 +84,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth:20.1.0")
     implementation("com.google.firebase:firebase-database-ktx:20.0.3")
     implementation("com.google.firebase:firebase-storage-ktx:20.0.0")
+    implementation("androidx.window:window:1.0.0-alpha09")
     annotationProcessor("androidx.room:room-compiler:2.4.2")
     implementation("androidx.room:room-common:2.4.2")
     kapt("com.google.dagger:hilt-android-compiler:2.38.1")

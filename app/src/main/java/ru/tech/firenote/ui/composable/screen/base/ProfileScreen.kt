@@ -6,6 +6,7 @@ import android.widget.Toast.makeText
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
@@ -48,8 +49,10 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.accompanist.flowlayout.FlowRow
 import ru.tech.firenote.R
+import ru.tech.firenote.WindowSize
 import ru.tech.firenote.model.Screen
 import ru.tech.firenote.model.UIState
+import ru.tech.firenote.ui.composable.provider.LocalWindowSize
 import ru.tech.firenote.ui.composable.screen.auth.isValid
 import ru.tech.firenote.ui.composable.single.MaterialDialog
 import ru.tech.firenote.ui.composable.single.MaterialTextField
@@ -71,8 +74,11 @@ fun ProfileScreen(
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
 
-    val boxSize =
-        if (configuration.screenWidthDp <= configuration.screenHeightDp) configuration.screenWidthDp else configuration.screenHeightDp
+    var boxSize: Double =
+        if (configuration.screenWidthDp <= configuration.screenHeightDp) configuration.screenWidthDp.toDouble() else configuration.screenHeightDp.toDouble()
+
+    boxSize *= if (LocalWindowSize.current == WindowSize.Compact) 0.4
+    else 0.16
 
     resultLauncher.value = rememberLauncherForActivityResult(
         ActivityResultContracts.GetContent()
@@ -100,7 +106,7 @@ fun ProfileScreen(
             .fillMaxSize()
     ) {
         item {
-            Box(Modifier.size((boxSize * 0.4).dp)) {
+            Box(Modifier.size(boxSize.dp)) {
                 val alpha = rememberSaveable { mutableStateOf(0f) }
                 when (val state = viewModel.photoState.collectAsState().value) {
                     is UIState.Loading -> alpha.value = 1f
@@ -156,7 +162,9 @@ fun ProfileScreen(
                 Text(
                     text = viewModel.email,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
+                        .horizontalScroll(rememberScrollState())
                 )
                 TextButton(
                     modifier = Modifier.padding(start = 20.dp),
@@ -179,7 +187,9 @@ fun ProfileScreen(
                 Text(
                     text = "•••••••••••••",
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
+                        .horizontalScroll(rememberScrollState())
                 )
                 TextButton(modifier = Modifier.padding(start = 20.dp), onClick = {
                     showResetDialog.value = true

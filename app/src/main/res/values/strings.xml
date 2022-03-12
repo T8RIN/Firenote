@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Firenote</string>
+    <string name="app_name" translatable="false">Firenote</string>
     <string name="notes">Notes</string>
     <string name="createNote">Note creation</string>
     <string name="calendar">Calendar</string>
@@ -63,4 +63,6 @@
     <string name="emailChanged">Email changed</string>
     <string name="changeUsername">Username changing</string>
     <string name="username">Username</string>
+    <string name="edit">Edit</string>
+    <string name="selectNote">Create or select note to edit/view it here</string>
 </resources>

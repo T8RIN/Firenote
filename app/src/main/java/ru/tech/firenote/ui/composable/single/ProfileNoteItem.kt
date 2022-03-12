@@ -1,7 +1,10 @@
 package ru.tech.firenote.ui.composable.single
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -52,20 +55,18 @@ fun ProfileNoteItem(
                 )
             }
         }
-        Column(
+        Spacer(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(32.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = pair.second.toString(),
-                style = MaterialTheme.typography.bodyLarge,
-                color = Color.Black,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
+                .padding(top = 50.dp, bottom = 40.dp, end = 40.dp, start = 40.dp)
+        )
+        Text(
+            text = pair.second.toString(),
+            style = MaterialTheme.typography.bodyLarge,
+            color = Color.Black,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.align(Alignment.Center)
+        )
     }
 }

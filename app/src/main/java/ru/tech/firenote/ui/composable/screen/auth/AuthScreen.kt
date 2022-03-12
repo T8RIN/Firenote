@@ -3,12 +3,25 @@ package ru.tech.firenote.ui.composable.screen.auth
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import ru.tech.firenote.R
+import ru.tech.firenote.WindowSize
 import ru.tech.firenote.model.Screen
+import ru.tech.firenote.ui.composable.provider.LocalWindowSize
 import ru.tech.firenote.viewModel.AuthViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AuthScreen(visible: MutableState<Boolean>, viewModel: AuthViewModel = viewModel()) {
 
@@ -18,10 +31,51 @@ fun AuthScreen(visible: MutableState<Boolean>, viewModel: AuthViewModel = viewMo
     }
     visible.value = viewModel.visibleState.targetState
     AnimatedVisibility(visibleState = viewModel.visibleState, enter = fadeIn(), exit = fadeOut()) {
-        when (viewModel.currentScreen.value) {
-            Screen.LoginScreen.route -> LoginScreen(viewModel)
-            Screen.RegistrationScreen.route -> RegistrationScreen(viewModel)
-            Screen.ForgotPasswordScreen.route -> ForgotPasswordScreen(viewModel)
+        Surface(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+        ) {
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .systemBarsPadding(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.ic_fire_144),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .weight(0.6f)
+                )
+                Card(
+                    Modifier
+                        .weight(
+                            when (LocalWindowSize.current) {
+                                WindowSize.Compact -> 2f
+                                WindowSize.Medium -> 1f
+                                else -> 0.5f
+                            }
+                        )
+                        .padding(
+                            when (LocalWindowSize.current) {
+                                WindowSize.Compact -> 12.dp
+                                WindowSize.Medium -> 48.dp
+                                else -> 96.dp
+                            }
+                        ),
+                    shape = RoundedCornerShape(24.dp),
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                    elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+                ) {
+                    when (viewModel.currentScreen.value) {
+                        Screen.LoginScreen.route -> LoginScreen(viewModel)
+                        Screen.RegistrationScreen.route -> RegistrationScreen(viewModel)
+                        Screen.ForgotPasswordScreen.route -> ForgotPasswordScreen(viewModel)
+                    }
+                }
+            }
         }
     }
 

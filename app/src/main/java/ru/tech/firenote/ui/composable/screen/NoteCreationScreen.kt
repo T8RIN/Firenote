@@ -10,15 +10,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Save
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -34,7 +35,6 @@ import ru.tech.firenote.R
 import ru.tech.firenote.model.Note
 import ru.tech.firenote.ui.composable.single.EditText
 import ru.tech.firenote.ui.composable.single.EditableAppBar
-import ru.tech.firenote.ui.composable.single.Gradient
 import ru.tech.firenote.ui.composable.single.MaterialDialog
 import ru.tech.firenote.ui.theme.noteColors
 import ru.tech.firenote.utils.Utils.blend
@@ -52,7 +52,11 @@ fun NoteCreationScreen(
     val tempColor = rememberSaveable { mutableStateOf(0) }
 
     val hasChanges by derivedStateOf {
-        tempLabel.value != viewModel.noteLabel.value || tempContent.value != viewModel.noteContent.value || tempColor.value != viewModel.noteColor.value
+        tempLabel.value != viewModel.noteLabel.value
+                || tempContent.value != viewModel.noteContent.value
+                || (tempColor.value != viewModel.noteColor.value
+                && viewModel.noteContent.value.isNotEmpty()
+                && viewModel.noteLabel.value.isNotEmpty())
     }
 
     val context = LocalContext.current
@@ -68,14 +72,14 @@ fun NoteCreationScreen(
         )
     }
 
-    val gradientColor = rememberSaveable { mutableStateOf(noteBackgroundAnimatable.value.toArgb()) }
-
     val needToShowCancelDialog = rememberSaveable { mutableStateOf(false) }
+
+    var editionMode by remember { mutableStateOf(globalNote.value == null) }
 
     Scaffold(
         topBar = {
             EditableAppBar(
-                modifier = Modifier.background(appBarAnimatable.value),
+                backgroundColor = appBarAnimatable.value,
                 text = viewModel.noteLabel,
                 navigationIcon = {
                     IconButton(onClick = {
@@ -91,7 +95,8 @@ fun NoteCreationScreen(
                 },
                 hint = stringResource(R.string.enterNoteLabel),
                 errorColor = viewModel.noteColor.value,
-                color = Color.Black
+                color = Color.Black,
+                enabled = editionMode
             ) {
                 viewModel.noteLabel.value = it
             }
@@ -99,73 +104,87 @@ fun NoteCreationScreen(
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 modifier = Modifier.navigationBarsPadding(),
-                text = { Text(stringResource(R.string.save)) },
-                icon = { Icon(Icons.Outlined.Save, null) },
-                onClick = { saveNote(viewModel, context, state, globalNote.value) })
+                text = {
+                    Text(
+                        stringResource(
+                            if (editionMode) R.string.save else R.string.edit
+                        )
+                    )
+                },
+                icon = {
+                    Icon(
+                        if (editionMode) Icons.Outlined.Save else Icons.Outlined.Edit,
+                        null
+                    )
+                },
+                onClick = {
+                    if (editionMode) {
+                        saveNote(viewModel, context, state, globalNote.value)
+                    } else {
+                        editionMode = true
+                    }
+                })
         }
     ) { contentPadding ->
-        Column(
+        LazyColumn(
             Modifier
-                .background(noteBackgroundAnimatable.value)
                 .fillMaxSize()
+                .background(noteBackgroundAnimatable.value)
                 .navigationBarsPadding()
-                .padding(contentPadding)
+                .padding(contentPadding),
+            contentPadding = PaddingValues(
+                bottom = 400.dp
+            )
         ) {
-            LazyRow(
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                modifier = Modifier
-                    .fillMaxWidth(),
-                contentPadding = PaddingValues(
-                    top = 30.dp,
-                    bottom = 30.dp,
-                    start = 15.dp,
-                    end = 15.dp
-                )
-            ) {
-                items(noteColors.size) { index ->
-                    val color = noteColors[index]
-                    val colorInt = color.toArgb()
-                    Box(
-                        modifier = Modifier
-                            .size(60.dp)
-                            .padding(5.dp)
-                            .shadow(15.dp, CircleShape)
-                            .clip(CircleShape)
-                            .background(color)
-                            .border(
-                                width = 3.dp,
-                                color = if (viewModel.noteColor.value == colorInt) {
-                                    Color.Black
-                                } else Color.Transparent,
-                                shape = CircleShape
-                            )
-                            .clickable {
-                                gradientColor.value = Color.Transparent.toArgb()
-                                viewModel.noteColor.value = colorInt
-                                viewModel.appBarColor.value = colorInt.blend()
+            item {
+                if (editionMode) {
+                    LazyRow(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        contentPadding = PaddingValues(15.dp)
+                    ) {
+                        items(noteColors.size) { index ->
+                            val color = noteColors[index]
+                            val colorInt = color.toArgb()
+                            Box(
+                                modifier = Modifier
+                                    .size(60.dp)
+                                    .padding(5.dp)
+                                    .shadow(15.dp, CircleShape)
+                                    .clip(CircleShape)
+                                    .background(color)
+                                    .border(
+                                        width = 3.dp,
+                                        color = if (viewModel.noteColor.value == colorInt) {
+                                            Color.Black
+                                        } else Color.Transparent,
+                                        shape = CircleShape
+                                    )
+                                    .clickable {
+                                        viewModel.noteColor.value = colorInt
+                                        viewModel.appBarColor.value = colorInt.blend()
 
-                                scope.launch {
-                                    noteBackgroundAnimatable.animateTo(
-                                        targetValue = Color(colorInt),
-                                        animationSpec = tween(
-                                            durationMillis = 500
-                                        )
-                                    )
-                                    gradientColor.value = colorInt
-                                }
-                                scope.launch {
-                                    appBarAnimatable.animateTo(
-                                        targetValue = Color(viewModel.appBarColor.value),
-                                        animationSpec = tween(
-                                            durationMillis = 500
-                                        )
-                                    )
-                                }
-                            }
-                    )
+                                        scope.launch {
+                                            noteBackgroundAnimatable.animateTo(
+                                                targetValue = Color(colorInt),
+                                                animationSpec = tween(
+                                                    durationMillis = 500
+                                                )
+                                            )
+                                        }
+                                        scope.launch {
+                                            appBarAnimatable.animateTo(
+                                                targetValue = Color(viewModel.appBarColor.value),
+                                                animationSpec = tween(
+                                                    durationMillis = 500
+                                                )
+                                            )
+                                        }
+                                    }
+                            )
+                        }
+                    }
                 }
-            }
-            Box(modifier = Modifier.wrapContentHeight()) {
                 EditText(
                     textFieldState = viewModel.noteContent,
                     topPadding = 20.dp,
@@ -173,36 +192,15 @@ fun NoteCreationScreen(
                     hintText = stringResource(R.string.noteText),
                     errorColor = viewModel.noteColor.value.blend(0.7f),
                     singleLine = false,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(0.7f)
-                        .padding(
-                            start = 30.dp,
-                            end = 30.dp,
-                        ),
                     color = Color.Black,
-                    shadowColor = Color.DarkGray
+                    enabled = editionMode,
+                    modifier = Modifier.padding(horizontal = 30.dp)
                 ) {
                     viewModel.noteContent.value = it
                     if (viewModel.noteLabel.value.isEmpty() && viewModel.noteContent.value.length > 20) {
                         viewModel.noteLabel.value = it.substring(0..20)
                     }
                 }
-                Gradient(
-                    Modifier
-                        .fillMaxWidth()
-                        .height(30.dp),
-                    Color(gradientColor.value),
-                    Color.Transparent
-                )
-                Gradient(
-                    Modifier
-                        .fillMaxWidth()
-                        .height(30.dp)
-                        .align(Alignment.BottomCenter),
-                    Color.Transparent,
-                    Color(gradientColor.value)
-                )
             }
         }
     }
@@ -221,7 +219,7 @@ fun NoteCreationScreen(
         },
         backHandler = {
             BackHandler {
-                if (hasChanges) {
+                if (hasChanges && editionMode) {
                     needToShowCancelDialog.value = true
                 } else {
                     viewModel.resetValues()
@@ -231,11 +229,28 @@ fun NoteCreationScreen(
         }
     )
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(globalNote.value) {
         viewModel.parseNoteData(globalNote.value)
         tempLabel.value = viewModel.noteLabel.value
         tempContent.value = viewModel.noteContent.value
         tempColor.value = viewModel.noteColor.value
+        editionMode = globalNote.value == null
+        scope.launch {
+            noteBackgroundAnimatable.animateTo(
+                targetValue = Color(viewModel.noteColor.value),
+                animationSpec = tween(
+                    durationMillis = 500
+                )
+            )
+        }
+        scope.launch {
+            appBarAnimatable.animateTo(
+                targetValue = Color(viewModel.appBarColor.value),
+                animationSpec = tween(
+                    durationMillis = 500
+                )
+            )
+        }
     }
 }
 

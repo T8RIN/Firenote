@@ -40,11 +40,10 @@ class ProfileViewModel @Inject constructor(
 
     private fun getNotes() {
         viewModelScope.launch {
-            val tempList = ArrayList(List(noteColors.size) { 0 })
-
             _noteCountState.value = UIState.Loading
             repository.getNotes().collect {
                 if (it.isSuccess) {
+                    val tempList = ArrayList(List(noteColors.size) { 0 })
                     val list = it.getOrNull()
                     if (list.isNullOrEmpty()) _noteCountState.value = UIState.Success(tempList)
                     else {
