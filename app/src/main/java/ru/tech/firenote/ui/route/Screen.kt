@@ -1,4 +1,4 @@
-package ru.tech.firenote.model
+package ru.tech.firenote.ui.route
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons

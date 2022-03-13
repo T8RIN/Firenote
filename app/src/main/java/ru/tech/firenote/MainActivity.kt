@@ -34,13 +34,15 @@ import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.ProvideWindowInsets
 import dagger.hilt.android.AndroidEntryPoint
-import ru.tech.firenote.model.Screen
 import ru.tech.firenote.ui.composable.navigation.Navigation
 import ru.tech.firenote.ui.composable.provider.LocalSnackbarHost
 import ru.tech.firenote.ui.composable.provider.LocalWindowSize
 import ru.tech.firenote.ui.composable.screen.NoteCreationScreen
 import ru.tech.firenote.ui.composable.screen.auth.AuthScreen
 import ru.tech.firenote.ui.composable.single.*
+import ru.tech.firenote.ui.composable.utils.WindowSize
+import ru.tech.firenote.ui.composable.utils.rememberWindowSizeClass
+import ru.tech.firenote.ui.route.Screen
 import ru.tech.firenote.ui.theme.FirenoteTheme
 import ru.tech.firenote.viewModel.MainViewModel
 import kotlin.math.min
@@ -292,6 +294,7 @@ class MainActivity : ComponentActivity() {
                                 dismissText = R.string.close,
                                 dismissAction = { finishAffinity() }
                             )
+
                         }
                     }
                 }

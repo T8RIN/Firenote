@@ -49,15 +49,15 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.accompanist.flowlayout.FlowRow
 import ru.tech.firenote.R
-import ru.tech.firenote.WindowSize
-import ru.tech.firenote.model.Screen
-import ru.tech.firenote.model.UIState
 import ru.tech.firenote.ui.composable.provider.LocalWindowSize
 import ru.tech.firenote.ui.composable.screen.auth.isValid
 import ru.tech.firenote.ui.composable.single.MaterialDialog
 import ru.tech.firenote.ui.composable.single.MaterialTextField
 import ru.tech.firenote.ui.composable.single.ProfileNoteItem
 import ru.tech.firenote.ui.composable.single.Toast
+import ru.tech.firenote.ui.composable.utils.WindowSize
+import ru.tech.firenote.ui.route.Screen
+import ru.tech.firenote.ui.state.UIState
 import ru.tech.firenote.ui.theme.noteColors
 import ru.tech.firenote.viewModel.ProfileViewModel
 

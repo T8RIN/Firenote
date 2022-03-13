@@ -7,7 +7,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
-import ru.tech.firenote.model.Screen
+import ru.tech.firenote.ui.route.Screen
 
 @Composable
 fun BottomNavigationBar(

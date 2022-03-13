@@ -23,7 +23,7 @@ object Utils {
                 capabilities?.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) == true -> true
                 else -> false
             }
-        } else {
+        } else @Suppress("DEPRECATION") {
             val activeNetworkInfo = connectivityManager.activeNetworkInfo
             activeNetworkInfo != null && activeNetworkInfo.isConnected
         }

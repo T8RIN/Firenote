@@ -23,11 +23,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.tech.firenote.R
 import ru.tech.firenote.model.Note
-import ru.tech.firenote.model.UIState
 import ru.tech.firenote.ui.composable.provider.LocalSnackbarHost
 import ru.tech.firenote.ui.composable.single.MaterialDialog
 import ru.tech.firenote.ui.composable.single.NoteItem
 import ru.tech.firenote.ui.composable.single.Toast
+import ru.tech.firenote.ui.state.UIState
 import ru.tech.firenote.ui.theme.priority
 import ru.tech.firenote.viewModel.NoteListViewModel
 

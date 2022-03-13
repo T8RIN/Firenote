@@ -11,9 +11,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import ru.tech.firenote.model.Note
-import ru.tech.firenote.model.UIState
 import ru.tech.firenote.repository.NoteRepository
 import ru.tech.firenote.ui.composable.provider.showSnackbar
+import ru.tech.firenote.ui.state.UIState
 import javax.inject.Inject
 
 @HiltViewModel

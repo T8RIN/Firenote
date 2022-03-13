@@ -16,9 +16,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.tech.firenote.R
-import ru.tech.firenote.WindowSize
-import ru.tech.firenote.model.Screen
 import ru.tech.firenote.ui.composable.provider.LocalWindowSize
+import ru.tech.firenote.ui.composable.utils.WindowSize
+import ru.tech.firenote.ui.route.Screen
 import ru.tech.firenote.viewModel.AuthViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,11 +35,11 @@ fun AuthScreen(visible: MutableState<Boolean>, viewModel: AuthViewModel = viewMo
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
+                .systemBarsPadding()
         ) {
             Column(
                 Modifier
-                    .fillMaxSize()
-                    .systemBarsPadding(),
+                    .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top
             ) {

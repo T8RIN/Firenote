@@ -1,4 +1,4 @@
-package ru.tech.firenote
+package ru.tech.firenote.ui.composable.utils
 
 import android.app.Activity
 import androidx.compose.runtime.Composable
@@ -11,11 +11,11 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.window.layout.WindowMetricsCalculator
 
-
 /**
  * Opinionated set of viewport breakpoints
+ *
  *     - Compact: Most phones in portrait mode
- *     - Medium: Most foldables and tablets in portrait mode
+ *     - Medium: Most fold devices and tablets in portrait mode
  *     - Expanded: Most tablets in landscape mode
  *
  */

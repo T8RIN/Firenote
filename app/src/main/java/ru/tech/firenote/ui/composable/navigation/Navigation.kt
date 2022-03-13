@@ -7,10 +7,10 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import ru.tech.firenote.model.Screen
 import ru.tech.firenote.ui.composable.screen.base.AlarmListScreen
 import ru.tech.firenote.ui.composable.screen.base.NoteListScreen
 import ru.tech.firenote.ui.composable.screen.base.ProfileScreen
+import ru.tech.firenote.ui.route.Screen
 import ru.tech.firenote.viewModel.MainViewModel
 
 @Composable

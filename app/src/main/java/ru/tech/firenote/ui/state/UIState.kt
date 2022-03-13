@@ -1,4 +1,4 @@
-package ru.tech.firenote.model
+package ru.tech.firenote.ui.state
 
 sealed class UIState {
     class Empty(var message: String? = null) : UIState()

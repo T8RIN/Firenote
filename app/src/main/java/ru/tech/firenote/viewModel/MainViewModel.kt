@@ -10,8 +10,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ru.tech.firenote.model.Note
-import ru.tech.firenote.model.Screen
 import ru.tech.firenote.repository.NoteRepository
+import ru.tech.firenote.ui.route.Screen
 import javax.inject.Inject
 
 @HiltViewModel
