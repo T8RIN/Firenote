@@ -3,11 +3,11 @@ package ru.tech.firenote.ui.route
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.NotificationsActive
+import androidx.compose.material.icons.filled.FactCheck
 import androidx.compose.material.icons.filled.PhoneAndroid
 import androidx.compose.material.icons.filled.StickyNote2
 import androidx.compose.material.icons.outlined.AccountCircle
-import androidx.compose.material.icons.outlined.NotificationsActive
+import androidx.compose.material.icons.outlined.FactCheck
 import androidx.compose.material.icons.outlined.StickyNote2
 import androidx.compose.ui.graphics.vector.ImageVector
 import ru.tech.firenote.R
@@ -21,11 +21,11 @@ sealed class Screen(
     object NoteListScreen :
         Screen("notes", R.string.notes, Icons.Outlined.StickyNote2, Icons.Filled.StickyNote2)
 
-    object AlarmListScreen : Screen(
-        "alarms",
-        R.string.alarms,
-        Icons.Outlined.NotificationsActive,
-        Icons.Filled.NotificationsActive
+    object GoalsScreen : Screen(
+        "goals",
+        R.string.goals,
+        Icons.Outlined.FactCheck,
+        Icons.Filled.FactCheck
     )
 
     object ProfileScreen : Screen(

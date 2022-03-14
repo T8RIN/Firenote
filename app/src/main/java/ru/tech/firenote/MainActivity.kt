@@ -15,9 +15,9 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.outlined.AddTask
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Image
-import androidx.compose.material.icons.outlined.NotificationAdd
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.twotone.StickyNote2
 import androidx.compose.material3.*
@@ -45,7 +45,7 @@ import ru.tech.firenote.ui.composable.utils.rememberWindowSizeClass
 import ru.tech.firenote.ui.route.Screen
 import ru.tech.firenote.ui.theme.FirenoteTheme
 import ru.tech.firenote.viewModel.MainViewModel
-import kotlin.math.min
+
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -57,12 +57,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_Firenote)
         super.onCreate(savedInstanceState)
-
-        val dp = min(resources.configuration.screenHeightDp, resources.configuration.screenWidthDp)
-        requestedOrientation = when {
-            dp < 600 -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-            else -> ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-        }
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
@@ -76,6 +70,17 @@ class MainActivity : ComponentActivity() {
             val splitScreen = windowSize != WindowSize.Compact
 
             FirenoteTheme {
+
+                MaterialDialog(
+                    showDialog = rememberSaveable { mutableStateOf(false) },
+                    icon = Icons.Filled.ExitToApp,
+                    title = R.string.exitApp,
+                    message = R.string.exitAppMessage,
+                    confirmText = R.string.stay,
+                    dismissText = R.string.close,
+                    dismissAction = { finishAffinity() }
+                )
+
                 ProvideWindowInsets {
                     val snackbarHostState = remember { SnackbarHostState() }
                     CompositionLocalProvider(
@@ -155,13 +160,13 @@ class MainActivity : ComponentActivity() {
                                             }, icon = {
                                                 when (mainViewModel.selectedItem.value) {
                                                     0 -> Icon(Icons.Outlined.Edit, null)
-                                                    1 -> Icon(Icons.Outlined.NotificationAdd, null)
+                                                    1 -> Icon(Icons.Outlined.AddTask, null)
                                                     2 -> Icon(Icons.Outlined.Image, null)
                                                 }
                                             }, text = {
                                                 when (mainViewModel.selectedItem.value) {
                                                     0 -> Text(stringResource(R.string.addNote))
-                                                    1 -> Text(stringResource(R.string.setAlarm))
+                                                    1 -> Text(stringResource(R.string.makeGoal))
                                                     2 -> Text(stringResource(R.string.pickImage))
                                                 }
                                             })
@@ -173,7 +178,7 @@ class MainActivity : ComponentActivity() {
                                                 navController = navController,
                                                 items = listOf(
                                                     Screen.NoteListScreen,
-                                                    Screen.AlarmListScreen,
+                                                    Screen.GoalsScreen,
                                                     Screen.ProfileScreen
                                                 ),
                                                 alwaysShowLabel = false
@@ -251,13 +256,13 @@ class MainActivity : ComponentActivity() {
                                         }, icon = {
                                             when (mainViewModel.selectedItem.value) {
                                                 0 -> Icon(Icons.Outlined.Edit, null)
-                                                1 -> Icon(Icons.Outlined.NotificationAdd, null)
+                                                1 -> Icon(Icons.Outlined.AddTask, null)
                                                 2 -> Icon(Icons.Outlined.Image, null)
                                             }
                                         }, text = {
                                             when (mainViewModel.selectedItem.value) {
                                                 0 -> Text(stringResource(R.string.addNote))
-                                                1 -> Text(stringResource(R.string.setAlarm))
+                                                1 -> Text(stringResource(R.string.makeGoal))
                                                 2 -> Text(stringResource(R.string.pickImage))
                                             }
                                         })
@@ -269,7 +274,7 @@ class MainActivity : ComponentActivity() {
                                             navController = navController,
                                             items = listOf(
                                                 Screen.NoteListScreen,
-                                                Screen.AlarmListScreen,
+                                                Screen.GoalsScreen,
                                                 Screen.ProfileScreen
                                             ),
                                             alwaysShowLabel = false
@@ -284,16 +289,6 @@ class MainActivity : ComponentActivity() {
                                 }
                                 Creation(mainViewModel, splitScreen)
                             }
-
-                            MaterialDialog(
-                                showDialog = rememberSaveable { mutableStateOf(false) },
-                                icon = Icons.Filled.ExitToApp,
-                                title = R.string.exitApp,
-                                message = R.string.exitAppMessage,
-                                confirmText = R.string.stay,
-                                dismissText = R.string.close,
-                                dismissAction = { finishAffinity() }
-                            )
 
                         }
                     }

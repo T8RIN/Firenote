@@ -14,5 +14,15 @@
       </map>
     </option>
   </component>
+  <component name="EntryPointsManager">
+    <list size="6">
+      <item index="0" class="java.lang.String" itemvalue="dagger.Module" />
+      <item index="1" class="java.lang.String" itemvalue="dagger.Provides" />
+      <item index="2" class="java.lang.String" itemvalue="dagger.Provides" />
+      <item index="3" class="java.lang.String" itemvalue="dagger.Provides" />
+      <item index="4" class="java.lang.String" itemvalue="dagger.Provides" />
+      <item index="5" class="java.lang.String" itemvalue="dagger.hilt.android.HiltAndroidApp" />
+    </list>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
 </project>

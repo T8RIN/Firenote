@@ -32,7 +32,7 @@ fun Navigation(
                 mainViewModel.isDescendingFilter
             )
         }
-        composable(Screen.AlarmListScreen.route) {
+        composable(Screen.GoalsScreen.route) {
             AlarmListScreen()
         }
         composable(Screen.ProfileScreen.route) {

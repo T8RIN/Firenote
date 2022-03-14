@@ -1,8 +1,6 @@
 package ru.tech.firenote.ui.composable.single
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -76,31 +74,31 @@ fun EditText(
             val localColor =
                 if (errorEnabled) Color(errorColor)
                 else MaterialTheme.colorScheme.onSurfaceVariant
-            Text(
-                hintText,
-                Modifier
-                    .padding(start = 40.dp)
-                    .align(
-                        Alignment.TopStart
-                    ),
-                fontSize = 22.sp,
-                color = localColor,
-                style = LocalTextStyle.current.copy(
-                    shadow = Shadow(
-                        color = shadowColor,
-                        offset = Offset(4f, 4f),
-                        blurRadius = 8f
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    hintText,
+                    Modifier
+                        .weight(1f)
+                        .padding(start = 40.dp),
+                    fontSize = 22.sp,
+                    color = localColor,
+                    style = LocalTextStyle.current.copy(
+                        shadow = Shadow(
+                            color = shadowColor,
+                            offset = Offset(4f, 4f),
+                            blurRadius = 8f
+                        )
                     )
                 )
-            )
-            if (errorEnabled) {
-                Icon(
-                    Icons.Filled.ErrorOutline, null, tint = localColor, modifier = Modifier
-                        .align(
-                            Alignment.TopEnd
-                        )
-                        .padding(end = endPaddingIcon)
-                )
+                if (errorEnabled) {
+                    Icon(
+                        Icons.Filled.ErrorOutline, null, tint = localColor, modifier = Modifier
+                            .padding(end = endPaddingIcon)
+                    )
+                }
             }
         }
     }

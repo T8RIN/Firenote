@@ -65,4 +65,6 @@
     <string name="username">Username</string>
     <string name="edit">Edit</string>
     <string name="selectNote">Create or select note to edit/view it here</string>
+    <string name="goals">Goals</string>
+    <string name="makeGoal">Make goal</string>
 </resources>

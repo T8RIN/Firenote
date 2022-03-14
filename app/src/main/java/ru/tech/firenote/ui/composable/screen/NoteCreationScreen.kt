@@ -44,7 +44,7 @@ import ru.tech.firenote.viewModel.NoteCreationViewModel
 @Composable
 fun NoteCreationScreen(
     state: MutableTransitionState<Boolean>,
-    globalNote: MutableState<Note?> = mutableStateOf(null),
+    globalNote: MutableState<Note?>,
     viewModel: NoteCreationViewModel = viewModel()
 ) {
     val tempLabel = rememberSaveable { mutableStateOf("") }
@@ -63,18 +63,18 @@ fun NoteCreationScreen(
     val scope = rememberCoroutineScope()
     val noteBackgroundAnimatable = remember {
         Animatable(
-            Color(globalNote.value?.color ?: viewModel.noteColor.value)
+            Color(viewModel.noteColor.value)
         )
     }
     val appBarAnimatable = remember {
         Animatable(
-            Color(globalNote.value?.appBarColor ?: viewModel.appBarColor.value)
+            Color(viewModel.appBarColor.value)
         )
     }
 
     val needToShowCancelDialog = rememberSaveable { mutableStateOf(false) }
 
-    var editionMode by remember { mutableStateOf(globalNote.value == null) }
+    var editionMode by rememberSaveable { mutableStateOf(globalNote.value == null) }
 
     Scaffold(
         topBar = {
@@ -94,7 +94,7 @@ fun NoteCreationScreen(
                     }
                 },
                 hint = stringResource(R.string.enterNoteLabel),
-                errorColor = viewModel.noteColor.value,
+                errorColor = if (state.targetState) viewModel.noteColor.value else Color.Transparent.toArgb(),
                 color = Color.Black,
                 enabled = editionMode
             ) {
@@ -230,26 +230,28 @@ fun NoteCreationScreen(
     )
 
     LaunchedEffect(globalNote.value) {
-        viewModel.parseNoteData(globalNote.value)
-        tempLabel.value = viewModel.noteLabel.value
-        tempContent.value = viewModel.noteContent.value
-        tempColor.value = viewModel.noteColor.value
-        editionMode = globalNote.value == null
-        scope.launch {
-            noteBackgroundAnimatable.animateTo(
-                targetValue = Color(viewModel.noteColor.value),
-                animationSpec = tween(
-                    durationMillis = 500
+        if (viewModel.note != globalNote.value) {
+            viewModel.parseNoteData(globalNote.value)
+            tempLabel.value = viewModel.noteLabel.value
+            tempContent.value = viewModel.noteContent.value
+            tempColor.value = viewModel.noteColor.value
+            editionMode = globalNote.value == null
+            scope.launch {
+                noteBackgroundAnimatable.animateTo(
+                    targetValue = Color(viewModel.noteColor.value),
+                    animationSpec = tween(
+                        durationMillis = 500
+                    )
                 )
-            )
-        }
-        scope.launch {
-            appBarAnimatable.animateTo(
-                targetValue = Color(viewModel.appBarColor.value),
-                animationSpec = tween(
-                    durationMillis = 500
+            }
+            scope.launch {
+                appBarAnimatable.animateTo(
+                    targetValue = Color(viewModel.appBarColor.value),
+                    animationSpec = tween(
+                        durationMillis = 500
+                    )
                 )
-            )
+            }
         }
     }
 }

@@ -5,7 +5,6 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.tech.firenote.model.Note
 import ru.tech.firenote.repository.NoteRepository
@@ -17,6 +16,8 @@ import javax.inject.Inject
 class NoteCreationViewModel @Inject constructor(
     private val repository: NoteRepository
 ) : ViewModel() {
+
+    var note: Note? = null
 
     val noteColor = mutableStateOf(NoteYellow.toArgb())
     val appBarColor = mutableStateOf(noteColor.value.blend())
@@ -56,21 +57,19 @@ class NoteCreationViewModel @Inject constructor(
     }
 
     fun parseNoteData(note: Note?) {
-        noteLabel.value = note?.title ?: ""
-        noteContent.value = note?.content ?: ""
-        noteColor.value = note?.color ?: NoteYellow.toArgb()
-        appBarColor.value = note?.appBarColor ?: noteColor.value.blend()
+        this.note = note
+        note?.title?.let { noteLabel.value = it }
+        note?.content?.let { noteContent.value = it }
+        note?.color?.let { noteColor.value = it }
+        note?.appBarColor?.let { appBarColor.value = it }
     }
 
     fun resetValues() {
-        viewModelScope.launch {
-            delay(500)
-            noteColor.value = NoteYellow.toArgb()
-            appBarColor.value = noteColor.value.blend()
+        noteColor.value = NoteYellow.toArgb()
+        appBarColor.value = noteColor.value.blend()
 
-            noteLabel.value = ""
-            noteContent.value = ""
-        }
+        noteLabel.value = ""
+        noteContent.value = ""
     }
 
 }
