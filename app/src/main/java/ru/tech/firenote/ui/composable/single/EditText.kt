@@ -1,6 +1,9 @@
 package ru.tech.firenote.ui.composable.single
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -48,7 +51,7 @@ fun EditText(
 
     Box(Modifier.padding(top = topPadding)) {
         BasicTextField(
-            modifier = modifier.fillMaxWidth(),
+            modifier = modifier,
             value = textFieldState.value,
             onValueChange = {
                 onValueChange(it)

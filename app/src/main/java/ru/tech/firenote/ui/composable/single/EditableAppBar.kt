@@ -1,6 +1,7 @@
 package ru.tech.firenote.ui.composable.single
 
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -33,6 +34,7 @@ fun EditableAppBar(
             SmallTopAppBar(
                 title = {
                     EditText(
+                        modifier = Modifier.fillMaxWidth(),
                         hintText = hint,
                         onValueChange = onValueChange,
                         errorColor = errorColor,

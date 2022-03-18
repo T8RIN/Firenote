@@ -67,4 +67,14 @@
     <string name="selectNote">Create or select note to edit/view it here</string>
     <string name="goals">Goals</string>
     <string name="makeGoal">Make goal</string>
+    <string name="noGoals">You have no goals</string>
+    <string name="deleteGoal">Delete goal</string>
+    <string name="deleteGoalMessage">Are you really want to delete this goal? This action cannot be undone!</string>
+    <string name="goalDeleted">Goal \"*\" deleted</string>
+    <string name="selectGoal">Create or select goal to edit/view it here</string>
+    <string name="saveGoal">Goal saving</string>
+    <string name="goalSavingDialogMessage">You started creating/editing goal, do you want to save it or exit without saving?</string>
+    <string name="enterGoalLabel">Enter goal label</string>
+    <string name="addSubGoal">Add subgoal</string>
+    <string name="subGoalHere">Enter your subgoal here</string>
 </resources>

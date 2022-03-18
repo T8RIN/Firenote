@@ -28,5 +28,4 @@ object Utils {
             activeNetworkInfo != null && activeNetworkInfo.isConnected
         }
     }
-
 }

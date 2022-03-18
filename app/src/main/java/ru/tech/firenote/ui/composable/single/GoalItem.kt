@@ -14,22 +14,32 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.clipPath
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import ru.tech.firenote.model.Note
+import ru.tech.firenote.model.Goal
 import ru.tech.firenote.ui.composable.provider.LocalWindowSize
 import ru.tech.firenote.ui.composable.utils.WindowSize
 import ru.tech.firenote.utils.Utils.blend
 
 @Composable
-fun NoteItem(
-    note: Note,
+fun GoalItem(
+    goal: Goal,
     modifier: Modifier = Modifier,
     cornerRadius: Dp = 10.dp,
     cutCornerSize: Dp = 30.dp,
     onDeleteClick: () -> Unit
 ) {
+    var doneAll = true
+    val mapped = goal.content?.mapIndexed { index, item ->
+        var text = ""
+        text += ("• ${item.content}")
+        if (index != goal.content.lastIndex) text += "\n"
+        if (item.done == false) doneAll = false
+        item.copy(content = text)
+    }
+
     Box(
         modifier = modifier,
     ) {
@@ -44,13 +54,13 @@ fun NoteItem(
 
             clipPath(clipPath) {
                 drawRoundRect(
-                    color = Color(note.color ?: 0),
+                    color = Color(goal.color ?: 0),
                     size = size,
                     cornerRadius = CornerRadius(cornerRadius.toPx())
                 )
                 drawRoundRect(
                     color = Color(
-                        (note.color ?: 0).blend()
+                        (goal.color ?: 0).blend()
                     ),
                     topLeft = Offset(size.width - cutCornerSize.toPx(), -100f),
                     size = Size(cutCornerSize.toPx() + 100f, cutCornerSize.toPx() + 100f),
@@ -65,24 +75,33 @@ fun NoteItem(
                 .padding(end = 32.dp)
         ) {
             Text(
-                text = note.title ?: "",
+                text = goal.title ?: "",
                 style = MaterialTheme.typography.bodyLarge,
-                color = Color.Black,
+                color = if (doneAll) Color.DarkGray else Color.Black,
+                textDecoration = if (doneAll) TextDecoration.LineThrough else TextDecoration.None,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = note.content ?: "",
-                style = MaterialTheme.typography.bodySmall,
-                color = Color.Black,
-                maxLines = when (LocalWindowSize.current) {
-                    WindowSize.Compact -> 10
-                    WindowSize.Medium -> 20
-                    else -> 30
-                },
-                overflow = TextOverflow.Ellipsis
-            )
+            Column {
+                mapped?.let {
+                    it.forEachIndexed { index, item ->
+                        if (index > when (LocalWindowSize.current) {
+                                WindowSize.Compact -> 10
+                                WindowSize.Medium -> 20
+                                else -> 30
+                            }
+                        ) return
+                        Text(
+                            text = item.content ?: "",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = if (item.done == true) Color.DarkGray else Color.Black,
+                            textDecoration = if (item.done == true) TextDecoration.LineThrough else TextDecoration.None,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                }
+            }
         }
         IconButton(
             onClick = onDeleteClick,

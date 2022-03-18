@@ -42,7 +42,7 @@ class NoteCreationViewModel @Inject constructor(
 
     fun updateNote(note: Note) {
         viewModelScope.launch {
-            repository.updateNote(
+            repository.insertNote(
                 Note(
                     noteLabel.value,
                     noteContent.value,
@@ -58,13 +58,14 @@ class NoteCreationViewModel @Inject constructor(
 
     fun parseNoteData(note: Note?) {
         this.note = note
-        note?.title?.let { noteLabel.value = it }
-        note?.content?.let { noteContent.value = it }
-        note?.color?.let { noteColor.value = it }
-        note?.appBarColor?.let { appBarColor.value = it }
+        noteLabel.value = note?.title ?: ""
+        noteContent.value = note?.content ?: ""
+        noteColor.value = note?.color ?: NoteYellow.toArgb()
+        appBarColor.value = note?.appBarColor ?: noteColor.value.blend()
     }
 
     fun resetValues() {
+        note = null
         noteColor.value = NoteYellow.toArgb()
         appBarColor.value = noteColor.value.blend()
 

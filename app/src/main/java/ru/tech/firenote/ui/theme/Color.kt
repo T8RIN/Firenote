@@ -13,6 +13,10 @@ val NoteViolet = Color(0xFFF0A2FF)
 val NoteIndigo = Color(0xFFA7ABE9)
 val NoteGreen = Color(0xFF8DDF69)
 
+val GoalGreen = Color(0xFF92CC77)
+val GoalCarrot = Color(0xFFBB7C5A)
+val GoalRed = Color(0xFFD57171)
+
 val noteColors =
     listOf(
         NoteYellow,
@@ -24,6 +28,13 @@ val noteColors =
         NoteOrange,
         NoteRed,
         NotePink
+    )
+
+val goalColors =
+    listOf(
+        GoalGreen,
+        GoalCarrot,
+        GoalRed
     )
 
 val Int.priority

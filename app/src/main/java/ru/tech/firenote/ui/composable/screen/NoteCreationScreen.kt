@@ -63,12 +63,18 @@ fun NoteCreationScreen(
     val scope = rememberCoroutineScope()
     val noteBackgroundAnimatable = remember {
         Animatable(
-            Color(viewModel.noteColor.value)
+            Color(
+                if (viewModel.note != null) viewModel.noteColor.value else globalNote.value?.color
+                    ?: viewModel.noteColor.value
+            )
         )
     }
     val appBarAnimatable = remember {
         Animatable(
-            Color(viewModel.appBarColor.value)
+            Color(
+                if (viewModel.note != null) viewModel.appBarColor.value else globalNote.value?.appBarColor
+                    ?: viewModel.appBarColor.value
+            )
         )
     }
 
@@ -83,7 +89,7 @@ fun NoteCreationScreen(
                 text = viewModel.noteLabel,
                 navigationIcon = {
                     IconButton(onClick = {
-                        if (hasChanges) {
+                        if (hasChanges && editionMode) {
                             needToShowCancelDialog.value = true
                         } else {
                             viewModel.resetValues()
@@ -94,7 +100,7 @@ fun NoteCreationScreen(
                     }
                 },
                 hint = stringResource(R.string.enterNoteLabel),
-                errorColor = if (state.targetState) viewModel.noteColor.value else Color.Transparent.toArgb(),
+                errorColor = if (state.targetState) noteBackgroundAnimatable.value.toArgb() else Color.Transparent.toArgb(),
                 color = Color.Black,
                 enabled = editionMode
             ) {
@@ -194,7 +200,9 @@ fun NoteCreationScreen(
                     singleLine = false,
                     color = Color.Black,
                     enabled = editionMode,
-                    modifier = Modifier.padding(horizontal = 30.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 30.dp)
                 ) {
                     viewModel.noteContent.value = it
                     if (viewModel.noteLabel.value.isEmpty() && viewModel.noteContent.value.length > 20) {
@@ -256,7 +264,7 @@ fun NoteCreationScreen(
     }
 }
 
-fun saveNote(
+private fun saveNote(
     viewModel: NoteCreationViewModel,
     context: Context,
     state: MutableTransitionState<Boolean>,

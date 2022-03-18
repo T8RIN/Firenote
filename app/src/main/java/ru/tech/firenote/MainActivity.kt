@@ -19,6 +19,7 @@ import androidx.compose.material.icons.outlined.AddTask
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.twotone.FactCheck
 import androidx.compose.material.icons.twotone.StickyNote2
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -37,6 +38,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import ru.tech.firenote.ui.composable.navigation.Navigation
 import ru.tech.firenote.ui.composable.provider.LocalSnackbarHost
 import ru.tech.firenote.ui.composable.provider.LocalWindowSize
+import ru.tech.firenote.ui.composable.screen.GoalCreationScreen
 import ru.tech.firenote.ui.composable.screen.NoteCreationScreen
 import ru.tech.firenote.ui.composable.screen.auth.AuthScreen
 import ru.tech.firenote.ui.composable.single.*
@@ -61,7 +63,10 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             val isScaffoldVisible by derivedStateOf {
-                !mainViewModel.showNoteCreation.currentState || !mainViewModel.showNoteCreation.targetState
+                !mainViewModel.showNoteCreation.currentState
+                        || !mainViewModel.showNoteCreation.targetState
+                        || !mainViewModel.showGoalCreation.currentState
+                        || !mainViewModel.showGoalCreation.targetState
             }
             val navController = rememberNavController()
             val context = LocalContext.current
@@ -122,10 +127,6 @@ class MainActivity : ComponentActivity() {
                                                                     LENGTH_SHORT
                                                                 ).show()
 
-                                                                mainViewModel.showNoteCreation.targetState =
-                                                                    false
-                                                                mainViewModel.globalNote.value =
-                                                                    null
                                                                 mainViewModel.signOut()
                                                             }
                                                         }
@@ -151,6 +152,19 @@ class MainActivity : ComponentActivity() {
                                                     0 -> {
                                                         mainViewModel.showNoteCreation.targetState =
                                                             true
+                                                        mainViewModel.globalNote.value = null
+
+                                                        mainViewModel.showGoalCreation.targetState =
+                                                            false
+                                                        mainViewModel.globalGoal.value = null
+                                                    }
+                                                    1 -> {
+                                                        mainViewModel.showGoalCreation.targetState =
+                                                            true
+                                                        mainViewModel.globalGoal.value = null
+
+                                                        mainViewModel.showNoteCreation.targetState =
+                                                            false
                                                         mainViewModel.globalNote.value = null
                                                     }
                                                     2 -> mainViewModel.resultLauncher.value?.launch(
@@ -251,6 +265,11 @@ class MainActivity : ComponentActivity() {
                                                         true
                                                     mainViewModel.globalNote.value = null
                                                 }
+                                                1 -> {
+                                                    mainViewModel.showGoalCreation.targetState =
+                                                        true
+                                                    mainViewModel.globalGoal.value = null
+                                                }
                                                 2 -> mainViewModel.resultLauncher.value?.launch("image/*")
                                             }
                                         }, icon = {
@@ -303,7 +322,7 @@ fun Creation(mainViewModel: MainViewModel, splitScreen: Boolean) {
     Box(Modifier.fillMaxSize()) {
         if (!mainViewModel.showNoteCreation.currentState) {
             mainViewModel.globalNote.value = null
-            if (splitScreen) {
+            if (splitScreen && mainViewModel.selectedItem.value == 0) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize(),
@@ -315,6 +334,21 @@ fun Creation(mainViewModel: MainViewModel, splitScreen: Boolean) {
                 }
             }
         }
+        if (!mainViewModel.showGoalCreation.currentState) {
+            mainViewModel.globalGoal.value = null
+            if (splitScreen && mainViewModel.selectedItem.value in 1..2) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(Icons.TwoTone.FactCheck, null, modifier = Modifier.fillMaxSize(0.3f))
+                    Text(stringResource(R.string.selectGoal))
+                }
+            }
+        }
+
         AnimatedVisibility(
             visibleState = mainViewModel.showNoteCreation,
             enter = fadeIn(),
@@ -327,6 +361,20 @@ fun Creation(mainViewModel: MainViewModel, splitScreen: Boolean) {
                 globalNote = mainViewModel.globalNote
             )
         }
+
+        AnimatedVisibility(
+            visibleState = mainViewModel.showGoalCreation,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            BackHandler { mainViewModel.showGoalCreation.targetState = false }
+
+            GoalCreationScreen(
+                state = mainViewModel.showGoalCreation,
+                globalGoal = mainViewModel.globalGoal
+            )
+        }
+
         if (splitScreen) {
             Divider(
                 Modifier

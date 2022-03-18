@@ -9,6 +9,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import ru.tech.firenote.model.Goal
 import ru.tech.firenote.model.Note
 import ru.tech.firenote.repository.NoteRepository
 import ru.tech.firenote.ui.route.Screen
@@ -23,8 +24,14 @@ class MainViewModel @Inject constructor(
     val profileTitle = mutableStateOf("User")
 
     val selectedItem = mutableStateOf(0)
+
     val globalNote: MutableState<Note?> = mutableStateOf(null)
     val showNoteCreation = MutableTransitionState(false).apply {
+        targetState = false
+    }
+
+    val globalGoal: MutableState<Goal?> = mutableStateOf(null)
+    val showGoalCreation = MutableTransitionState(false).apply {
         targetState = false
     }
 
@@ -46,6 +53,13 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun signOut() = repository.auth.signOut()
+    fun signOut() {
+        showNoteCreation.targetState = false
+        showGoalCreation.targetState = false
+        globalNote.value = null
+        globalGoal.value = null
+
+        repository.auth.signOut()
+    }
 
 }
