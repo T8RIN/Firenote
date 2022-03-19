@@ -14,7 +14,7 @@ val NoteIndigo = Color(0xFFA7ABE9)
 val NoteGreen = Color(0xFF8DDF69)
 
 val GoalGreen = Color(0xFF92CC77)
-val GoalCarrot = Color(0xFFBB7C5A)
+val GoalCarrot = Color(0xFFBBA05A)
 val GoalRed = Color(0xFFD57171)
 
 val noteColors =
