@@ -33,7 +33,12 @@ fun Navigation(
             )
         }
         composable(Screen.GoalsScreen.route) {
-            GoalListScreen(mainViewModel.showGoalCreation, mainViewModel.globalGoal)
+            GoalListScreen(
+                mainViewModel.showGoalCreation,
+                mainViewModel.globalGoal,
+                mainViewModel.filterType,
+                mainViewModel.isDescendingFilter
+            )
         }
         composable(Screen.ProfileScreen.route) {
             ProfileScreen(

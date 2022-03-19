@@ -86,19 +86,20 @@ fun GoalItem(
             Column {
                 mapped?.let {
                     it.forEachIndexed { index, item ->
-                        if (index > when (LocalWindowSize.current) {
+                        if (index <= when (LocalWindowSize.current) {
                                 WindowSize.Compact -> 10
                                 WindowSize.Medium -> 20
                                 else -> 30
                             }
-                        ) return
-                        Text(
-                            text = item.content ?: "",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = if (item.done == true) Color.DarkGray else Color.Black,
-                            textDecoration = if (item.done == true) TextDecoration.LineThrough else TextDecoration.None,
-                            overflow = TextOverflow.Ellipsis
-                        )
+                        ) {
+                            Text(
+                                text = item.content ?: "",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = if (item.done == true) Color.DarkGray else Color.Black,
+                                textDecoration = if (item.done == true) TextDecoration.LineThrough else TextDecoration.None,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
                     }
                 }
             }

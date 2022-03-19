@@ -77,4 +77,5 @@
     <string name="enterGoalLabel">Enter goal label</string>
     <string name="addSubGoal">Add subgoal</string>
     <string name="subGoalHere">Enter your subgoal here</string>
+    <string name="completion">Completion</string>
 </resources>

@@ -50,6 +50,13 @@ val Int.priority
         else -> 8
     }
 
+val Int.priorityGoal
+    get() = when (this) {
+        GoalGreen.toArgb() -> 0
+        GoalCarrot.toArgb() -> 1
+        else -> 2
+    }
+
 val md_theme_light_primary = Color(0xFF984065)
 val md_theme_light_onPrimary = Color(0xFFffffff)
 val md_theme_light_primaryContainer = Color(0xFFffd8e5)

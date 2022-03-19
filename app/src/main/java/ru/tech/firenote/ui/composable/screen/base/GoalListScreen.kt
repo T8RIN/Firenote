@@ -29,6 +29,7 @@ import ru.tech.firenote.ui.composable.single.GoalItem
 import ru.tech.firenote.ui.composable.single.MaterialDialog
 import ru.tech.firenote.ui.composable.single.Toast
 import ru.tech.firenote.ui.state.UIState
+import ru.tech.firenote.ui.theme.priorityGoal
 import ru.tech.firenote.viewModel.GoalListViewModel
 
 @Suppress("UNCHECKED_CAST")
@@ -36,8 +37,8 @@ import ru.tech.firenote.viewModel.GoalListViewModel
 fun GoalListScreen(
     showGoalCreation: MutableTransitionState<Boolean>,
     globalGoal: MutableState<Goal?> = mutableStateOf(null),
-//    filterType: MutableState<Int>,
-//    isDescendingFilter: MutableState<Boolean>,
+    filterType: MutableState<Int>,
+    isDescendingFilter: MutableState<Boolean>,
     viewModel: GoalListViewModel = hiltViewModel()
 ) {
     val paddingValues = PaddingValues(top = 10.dp, start = 10.dp, end = 10.dp, bottom = 140.dp)
@@ -62,7 +63,33 @@ fun GoalListScreen(
         }
         is UIState.Success<*> -> {
             val repoList = state.data as List<Goal>
-            val data = repoList.sortedBy { it.timestamp }
+            val data = if (isDescendingFilter.value) {
+                when (filterType.value) {
+                    1 -> repoList.sortedBy { (it.color ?: 0).priorityGoal }
+                    3 -> repoList.sortedBy { it.timestamp }
+                    2 -> repoList.sortedByDescending {
+                        var cnt = 0f
+                        it.content?.forEach { data ->
+                            if (data.done == true) cnt++
+                        }
+                        cnt / (it.content?.size ?: 1)
+                    }
+                    else -> repoList.sortedBy { it.title }
+                }
+            } else {
+                when (filterType.value) {
+                    1 -> repoList.sortedByDescending { (it.color ?: 0).priorityGoal }
+                    3 -> repoList.sortedByDescending { it.timestamp }
+                    2 -> repoList.sortedBy {
+                        var cnt = 0f
+                        it.content?.forEach { data ->
+                            if (data.done == true) cnt++
+                        }
+                        cnt / (it.content?.size ?: 1)
+                    }
+                    else -> repoList.sortedByDescending { it.title }
+                }
+            }
 
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(8.dp),

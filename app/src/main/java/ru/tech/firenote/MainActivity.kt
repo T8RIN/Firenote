@@ -139,7 +139,7 @@ class MainActivity : ComponentActivity() {
                                                         actions = {
                                                             when (mainViewModel.selectedItem.value) {
                                                                 0 -> NoteActions(mainViewModel)
-                                                                1 -> AlarmActions()
+                                                                1 -> GoalActions(mainViewModel)
                                                             }
                                                         }
                                                     )
@@ -189,6 +189,7 @@ class MainActivity : ComponentActivity() {
                                             BottomNavigationBar(
                                                 title = mainViewModel.title,
                                                 selectedItem = mainViewModel.selectedItem,
+                                                filterType = mainViewModel.filterType,
                                                 navController = navController,
                                                 items = listOf(
                                                     Screen.NoteListScreen,
@@ -250,7 +251,7 @@ class MainActivity : ComponentActivity() {
                                                     actions = {
                                                         when (mainViewModel.selectedItem.value) {
                                                             0 -> NoteActions(mainViewModel)
-                                                            1 -> AlarmActions()
+                                                            1 -> GoalActions(mainViewModel)
                                                         }
                                                     }
                                                 )
@@ -290,6 +291,7 @@ class MainActivity : ComponentActivity() {
                                         BottomNavigationBar(
                                             title = mainViewModel.title,
                                             selectedItem = mainViewModel.selectedItem,
+                                            filterType = mainViewModel.filterType,
                                             navController = navController,
                                             items = listOf(
                                                 Screen.NoteListScreen,

@@ -62,9 +62,8 @@ fun GoalCreationScreen(
 
     val hasChanges by derivedStateOf {
         tempLabel.value != viewModel.goalLabel.value
-                || !(tempContent.value.containsAll(viewModel.goalContent.value) && viewModel.goalContent.value.containsAll(
-            tempContent.value
-        ))
+                || !(tempContent.value.containsAll(viewModel.goalContent.value)
+                && viewModel.goalContent.value.containsAll(tempContent.value))
                 || (tempColor.value != viewModel.goalColor.value
                 && viewModel.goalContent.value.isNotEmpty()
                 && viewModel.goalLabel.value.isNotEmpty())

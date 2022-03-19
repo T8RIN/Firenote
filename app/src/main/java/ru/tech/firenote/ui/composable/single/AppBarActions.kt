@@ -77,47 +77,102 @@ fun NoteActions(
         )
         DropdownMenuItem(
             onClick = {
-                viewModel.filterType.value = 2
+                viewModel.filterType.value in 2..3
                 showFilter.value = false
             },
             text = { Text(stringResource(R.string.date)) },
             leadingIcon = {
                 Icon(
-                    if (viewModel.filterType.value == 2) Icons.Filled.CalendarToday else Icons.Outlined.CalendarToday,
+                    if (viewModel.filterType.value in 2..3) Icons.Filled.CalendarToday else Icons.Outlined.CalendarToday,
                     null
                 )
             },
-            modifier = if (viewModel.filterType.value == 2) selectedModifier else unselectedModifier
+            modifier = if (viewModel.filterType.value in 2..3) selectedModifier else unselectedModifier
         )
     }
 }
 
 @Composable
-fun AlarmActions() {
+fun GoalActions(viewModel: MainViewModel) {
+    val selectedModifier =
+        Modifier
+            .padding(5.dp)
+            .background(MaterialTheme.colorScheme.primaryContainer, CircleShape)
+    val unselectedModifier = Modifier.padding(5.dp)
     val showFilter = remember { mutableStateOf(false) }
-    IconButton(onClick = { showFilter.value = true }) {
+
+    IconButton(onClick = {
+        viewModel.isDescendingFilter.value = !viewModel.isDescendingFilter.value
+    }) {
         Icon(
-            imageVector = Icons.Filled.FilterAlt,
-            contentDescription = null
+            if (viewModel.isDescendingFilter.value) Icons.Filled.ArrowDropDown else Icons.Outlined.ArrowDropUp,
+            null
         )
     }
+    IconButton(onClick = { showFilter.value = true }) {
+        Icon(Icons.Filled.FilterAlt, null)
+    }
+
     DropdownMenu(
         expanded = showFilter.value,
         onDismissRequest = { showFilter.value = false }
     ) {
         DropdownMenuItem(
-            onClick = { showFilter.value = false /*TODO*/ },
-            text = { Text(stringResource(R.string.importance)) },
+            onClick = {
+                viewModel.filterType.value = 0
+                showFilter.value = false
+            },
+            text = { Text(stringResource(R.string.title)) },
             leadingIcon = {
-                Icon(Icons.Outlined.NotificationImportant, null)
-            })
-        DropdownMenuItem(onClick = { showFilter.value = false /*TODO*/ }, text = {
-            Text(
-                stringResource(R.string.date)
-            )
-        }, leadingIcon = {
-            Icon(Icons.Outlined.CalendarToday, null)
-        })
+                Icon(
+                    if (viewModel.filterType.value == 0) Icons.Filled.TextSnippet else Icons.Outlined.TextSnippet,
+                    null
+                )
+            },
+            modifier = if (viewModel.filterType.value == 0) selectedModifier else unselectedModifier
+        )
+        DropdownMenuItem(
+            onClick = {
+                viewModel.filterType.value = 1
+                showFilter.value = false
+            },
+            text = { Text(stringResource(R.string.color)) },
+            leadingIcon = {
+                Icon(
+                    if (viewModel.filterType.value == 1) Icons.Filled.Palette else Icons.Outlined.Palette,
+                    null
+                )
+            },
+            modifier = if (viewModel.filterType.value == 1) selectedModifier else unselectedModifier
+        )
+        DropdownMenuItem(
+            onClick = {
+                viewModel.filterType.value = 3
+                showFilter.value = false
+            },
+            text = { Text(stringResource(R.string.date)) },
+            leadingIcon = {
+                Icon(
+                    if (viewModel.filterType.value == 3) Icons.Filled.CalendarToday else Icons.Outlined.CalendarToday,
+                    null
+                )
+            },
+            modifier = if (viewModel.filterType.value == 3) selectedModifier else unselectedModifier
+        )
+        DropdownMenuItem(
+            onClick = {
+                viewModel.filterType.value = 2
+                showFilter.value = false
+            },
+            text = { Text(stringResource(R.string.completion)) },
+            leadingIcon = {
+                Icon(
+                    if (viewModel.filterType.value == 2) Icons.Filled.CheckCircle else Icons.Outlined.CheckCircle,
+                    null
+                )
+            },
+            modifier = if (viewModel.filterType.value == 2) selectedModifier else unselectedModifier
+        )
     }
 }
 
