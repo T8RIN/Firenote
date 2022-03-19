@@ -6,13 +6,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextOverflow
 import com.google.accompanist.insets.statusBarsPadding
 
 @Composable
 fun AppBarWithInsets(
     modifier: Modifier = Modifier,
-    title: String,
+    title: @Composable () -> Unit = {},
     type: Int = APP_BAR_SIMPLE,
     scrollBehavior: TopAppBarScrollBehavior? = null,
     navigationIcon: @Composable () -> Unit = {},
@@ -30,13 +29,7 @@ fun AppBarWithInsets(
         when (type) {
             APP_BAR_CENTER -> {
                 CenterAlignedTopAppBar(
-                    title = {
-                        Text(
-                            text = title,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    },
+                    title = title,
                     navigationIcon = navigationIcon,
                     actions = actions,
                     scrollBehavior = scrollBehavior,
@@ -46,13 +39,7 @@ fun AppBarWithInsets(
             }
             APP_BAR_SIMPLE -> {
                 SmallTopAppBar(
-                    title = {
-                        Text(
-                            text = title,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    },
+                    title = title,
                     navigationIcon = navigationIcon,
                     actions = actions,
                     scrollBehavior = scrollBehavior,

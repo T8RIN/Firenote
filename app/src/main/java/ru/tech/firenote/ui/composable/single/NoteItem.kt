@@ -6,6 +6,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
@@ -14,13 +17,18 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.clipPath
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import ru.tech.firenote.model.Note
 import ru.tech.firenote.ui.composable.provider.LocalWindowSize
 import ru.tech.firenote.ui.composable.utils.WindowSize
 import ru.tech.firenote.utils.Utils.blend
+import java.text.SimpleDateFormat
+import java.util.*
 
 @Composable
 fun NoteItem(
@@ -64,13 +72,34 @@ fun NoteItem(
                 .padding(16.dp)
                 .padding(end = 32.dp)
         ) {
-            Text(
-                text = note.title ?: "",
-                style = MaterialTheme.typography.bodyLarge,
-                color = Color.Black,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
+            val convertTime by derivedStateOf {
+                SimpleDateFormat("dd/MM/yyyy\nHH:mm", Locale.getDefault()).format(
+                    note.timestamp ?: 0L
+                )
+            }
+
+            Row(modifier = Modifier.fillMaxWidth()) {
+                Text(
+                    modifier = Modifier.weight(2f),
+                    text = note.title ?: "",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = Color.Black,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+                    Text(
+                        modifier = Modifier.weight(1f),
+                        text = convertTime,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.DarkGray,
+                        maxLines = 2,
+                        textAlign = TextAlign.Justify,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+
+            }
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = note.content ?: "",

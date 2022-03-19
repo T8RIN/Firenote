@@ -21,7 +21,7 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
     val title = mutableStateOf(Screen.NoteListScreen.resourceId)
-    val profileTitle = mutableStateOf("User")
+    val profileTitle = mutableStateOf("")
 
     val selectedItem = mutableStateOf(0)
 
@@ -34,6 +34,9 @@ class MainViewModel @Inject constructor(
     val showGoalCreation = MutableTransitionState(false).apply {
         targetState = false
     }
+
+    val searchMode = mutableStateOf(false)
+    val searchString = mutableStateOf("")
 
     val resultLauncher = mutableStateOf<ManagedActivityResultLauncher<String, Uri?>?>(null)
 

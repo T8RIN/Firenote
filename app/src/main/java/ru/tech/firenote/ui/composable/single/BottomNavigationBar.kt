@@ -13,7 +13,7 @@ import ru.tech.firenote.ui.route.Screen
 fun BottomNavigationBar(
     navController: NavHostController,
     items: List<Screen>,
-    filterType: MutableState<Int>,
+    searchMode: MutableState<Boolean>,
     title: MutableState<Int>,
     selectedItem: MutableState<Int>,
     alwaysShowLabel: Boolean = true
@@ -44,6 +44,7 @@ fun BottomNavigationBar(
                                 navController.popBackStack()
                                 launchSingleTop = true
                             }
+                            searchMode.value = false
                         }
                     }
                 )

@@ -16,11 +16,11 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Save
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -234,7 +234,9 @@ fun GoalCreationScreen(
                             if (text.isEmpty()) {
                                 Text(
                                     stringResource(R.string.subGoalHere),
-                                    modifier = Modifier.align(Alignment.CenterStart),
+                                    modifier = Modifier
+                                        .align(Alignment.CenterStart)
+                                        .padding(start = 12.dp),
                                     color = Color.DarkGray
                                 )
                             }
@@ -245,7 +247,7 @@ fun GoalCreationScreen(
                         IconButton(onClick = {
                             viewModel.removeFromContent(index)
                         }) {
-                            Icon(Icons.Filled.Close, null, tint = darkColorScheme().onTertiary)
+                            Icon(Icons.Rounded.Close, null, tint = darkColorScheme().onTertiary)
                         }
 
                         Spacer(Modifier.size(8.dp))

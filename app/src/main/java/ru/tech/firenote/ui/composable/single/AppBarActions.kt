@@ -77,7 +77,7 @@ fun NoteActions(
         )
         DropdownMenuItem(
             onClick = {
-                viewModel.filterType.value in 2..3
+                viewModel.filterType.value = 2
                 showFilter.value = false
             },
             text = { Text(stringResource(R.string.date)) },

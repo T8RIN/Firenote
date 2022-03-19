@@ -29,7 +29,8 @@ fun Navigation(
                 mainViewModel.showNoteCreation,
                 mainViewModel.globalNote,
                 mainViewModel.filterType,
-                mainViewModel.isDescendingFilter
+                mainViewModel.isDescendingFilter,
+                mainViewModel.searchString
             )
         }
         composable(Screen.GoalsScreen.route) {
@@ -37,7 +38,8 @@ fun Navigation(
                 mainViewModel.showGoalCreation,
                 mainViewModel.globalGoal,
                 mainViewModel.filterType,
-                mainViewModel.isDescendingFilter
+                mainViewModel.isDescendingFilter,
+                mainViewModel.searchString
             )
         }
         composable(Screen.ProfileScreen.route) {

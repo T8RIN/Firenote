@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.twotone.Cloud
+import androidx.compose.material.icons.twotone.FindInPage
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarResult
@@ -39,6 +40,7 @@ fun GoalListScreen(
     globalGoal: MutableState<Goal?> = mutableStateOf(null),
     filterType: MutableState<Int>,
     isDescendingFilter: MutableState<Boolean>,
+    searchString: MutableState<String>,
     viewModel: GoalListViewModel = hiltViewModel()
 ) {
     val paddingValues = PaddingValues(top = 10.dp, start = 10.dp, end = 10.dp, bottom = 140.dp)
@@ -63,7 +65,7 @@ fun GoalListScreen(
         }
         is UIState.Success<*> -> {
             val repoList = state.data as List<Goal>
-            val data = if (isDescendingFilter.value) {
+            var data = if (isDescendingFilter.value) {
                 when (filterType.value) {
                     1 -> repoList.sortedBy { (it.color ?: 0).priorityGoal }
                     3 -> repoList.sortedBy { it.timestamp }
@@ -91,6 +93,32 @@ fun GoalListScreen(
                 }
             }
 
+            if (searchString.value.isNotEmpty()) {
+                data = repoList.filter {
+                    val statement1 =
+                        it.title?.lowercase()?.contains(searchString.value.lowercase()) ?: false
+                    var statement2 = false
+                    it.content?.forEach { data ->
+                        if (data.content?.lowercase()
+                                ?.contains(searchString.value.lowercase()) == true
+                        ) statement2 = true
+                    }
+
+                    statement1 or statement2
+                }
+                if (data.isEmpty()) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Icon(Icons.TwoTone.FindInPage, null, modifier = Modifier.fillMaxSize(0.3f))
+                        Text(stringResource(R.string.nothingFound))
+                    }
+                }
+            }
+
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 contentPadding = paddingValues
@@ -98,7 +126,6 @@ fun GoalListScreen(
                 items(data.size) { index ->
                     val locGoal = data[index]
                     GoalItem(
-                        cutCornerSize = 0.dp,
                         goal = locGoal,
                         onDeleteClick = {
                             goal = locGoal

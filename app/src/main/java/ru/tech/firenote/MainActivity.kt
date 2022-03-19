@@ -13,12 +13,17 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.outlined.AddTask
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Image
+import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.twotone.FactCheck
 import androidx.compose.material.icons.twotone.StickyNote2
 import androidx.compose.material3.*
@@ -27,10 +32,16 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.ProvideWindowInsets
@@ -85,6 +96,9 @@ class MainActivity : ComponentActivity() {
                     dismissText = R.string.close,
                     dismissAction = { finishAffinity() }
                 )
+                if (mainViewModel.searchMode.value) BackHandler {
+                    mainViewModel.searchMode.value = false
+                }
 
                 ProvideWindowInsets {
                     val snackbarHostState = remember { SnackbarHostState() }
@@ -101,22 +115,119 @@ class MainActivity : ComponentActivity() {
                                 Row {
                                     Scaffold(
                                         topBar = {
-                                            when (mainViewModel.selectedItem.value) {
-                                                2 -> {
-                                                    AppBarWithInsets(
-                                                        type = APP_BAR_CENTER,
-                                                        navigationIcon = {
+                                            AppBarWithInsets(
+                                                type = APP_BAR_CENTER,
+                                                navigationIcon = {
+                                                    when (mainViewModel.selectedItem.value) {
+                                                        0 -> {
+                                                            if (!mainViewModel.searchMode.value) {
+                                                                IconButton(onClick = {
+                                                                    mainViewModel.searchMode
+                                                                        .value = true
+                                                                    mainViewModel.searchString.value =
+                                                                        ""
+                                                                }) {
+                                                                    Icon(Icons.Rounded.Search, null)
+                                                                }
+                                                            } else {
+                                                                IconButton(onClick = {
+                                                                    mainViewModel.searchMode
+                                                                        .value = false
+                                                                    mainViewModel.searchString.value =
+                                                                        ""
+                                                                }) {
+                                                                    Icon(
+                                                                        Icons.Rounded.ArrowBack,
+                                                                        null
+                                                                    )
+                                                                }
+                                                            }
+                                                        }
+                                                        1 -> {
+                                                            if (!mainViewModel.searchMode.value) {
+                                                                IconButton(onClick = {
+                                                                    mainViewModel.searchMode
+                                                                        .value = true
+                                                                    mainViewModel.searchString.value =
+                                                                        ""
+
+                                                                }) {
+                                                                    Icon(Icons.Rounded.Search, null)
+                                                                }
+                                                            } else {
+                                                                IconButton(onClick = {
+                                                                    mainViewModel.searchMode
+                                                                        .value = false
+                                                                    mainViewModel.searchString.value =
+                                                                        ""
+                                                                }) {
+                                                                    Icon(
+                                                                        Icons.Rounded.ArrowBack,
+                                                                        null
+                                                                    )
+                                                                }
+                                                            }
+                                                        }
+                                                        2 -> {
                                                             IconButton(onClick = {
                                                                 mainViewModel.showUsernameDialog.value =
                                                                     true
                                                             }) {
                                                                 Icon(Icons.Rounded.Edit, null)
                                                             }
-                                                        },
-                                                        scrollBehavior = mainViewModel.scrollBehavior.value,
-                                                        title = mainViewModel.profileTitle.value,
-                                                        actions = {
-                                                            ProfileActions {
+                                                        }
+                                                    }
+                                                },
+                                                scrollBehavior = mainViewModel.scrollBehavior.value,
+                                                title = {
+                                                    if (!mainViewModel.searchMode.value) {
+                                                        Text(
+                                                            text = if (mainViewModel.selectedItem.value == 2) mainViewModel.profileTitle.value
+                                                            else stringResource(mainViewModel.title.value),
+                                                            maxLines = 1,
+                                                            overflow = TextOverflow.Ellipsis
+                                                        )
+                                                    } else {
+                                                        val localFocusManager =
+                                                            LocalFocusManager.current
+                                                        BasicTextField(
+                                                            modifier = Modifier.fillMaxWidth(),
+                                                            value = mainViewModel.searchString.value,
+                                                            textStyle = TextStyle(
+                                                                fontSize = 22.sp,
+                                                                color = MaterialTheme.colorScheme.onBackground,
+                                                                textAlign = TextAlign.Start,
+                                                            ),
+                                                            keyboardActions = KeyboardActions(
+                                                                onDone = { localFocusManager.clearFocus() }
+                                                            ),
+                                                            singleLine = true,
+                                                            cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
+                                                            onValueChange = {
+                                                                mainViewModel.searchString.value =
+                                                                    it
+                                                            })
+                                                        if (mainViewModel.searchString.value.isEmpty()) {
+                                                            Text(
+                                                                text = stringResource(R.string.searchHere),
+                                                                modifier = Modifier
+                                                                    .fillMaxWidth()
+                                                                    .padding(start = 12.dp),
+                                                                style = TextStyle(
+                                                                    fontSize = 22.sp,
+                                                                    color = MaterialTheme.colorScheme.outline,
+                                                                    textAlign = TextAlign.Start,
+                                                                )
+                                                            )
+                                                        }
+                                                    }
+                                                },
+                                                actions = {
+                                                    if (!mainViewModel.searchMode.value) {
+                                                        when (mainViewModel.selectedItem.value) {
+                                                            0 -> NoteActions(mainViewModel)
+                                                            1 -> GoalActions(mainViewModel)
+                                                            2 -> ProfileActions {
                                                                 navController.navigate(Screen.NoteListScreen.route) {
                                                                     navController.popBackStack()
                                                                     launchSingleTop = true
@@ -130,21 +241,15 @@ class MainActivity : ComponentActivity() {
                                                                 mainViewModel.signOut()
                                                             }
                                                         }
-                                                    )
-                                                }
-                                                else -> {
-                                                    AppBarWithInsets(
-                                                        scrollBehavior = mainViewModel.scrollBehavior.value,
-                                                        title = stringResource(mainViewModel.title.value),
-                                                        actions = {
-                                                            when (mainViewModel.selectedItem.value) {
-                                                                0 -> NoteActions(mainViewModel)
-                                                                1 -> GoalActions(mainViewModel)
-                                                            }
+                                                    } else {
+                                                        IconButton(onClick = {
+                                                            mainViewModel.searchString.value = ""
+                                                        }) {
+                                                            Icon(Icons.Rounded.Close, null)
                                                         }
-                                                    )
+                                                    }
                                                 }
-                                            }
+                                            )
                                         },
                                         floatingActionButton = {
                                             ExtendedFloatingActionButton(onClick = {
@@ -189,7 +294,7 @@ class MainActivity : ComponentActivity() {
                                             BottomNavigationBar(
                                                 title = mainViewModel.title,
                                                 selectedItem = mainViewModel.selectedItem,
-                                                filterType = mainViewModel.filterType,
+                                                searchMode = mainViewModel.searchMode,
                                                 navController = navController,
                                                 items = listOf(
                                                     Screen.NoteListScreen,
@@ -213,22 +318,113 @@ class MainActivity : ComponentActivity() {
                             } else {
                                 Scaffold(
                                     topBar = {
-                                        when (mainViewModel.selectedItem.value) {
-                                            2 -> {
-                                                AppBarWithInsets(
-                                                    type = APP_BAR_CENTER,
-                                                    navigationIcon = {
+                                        AppBarWithInsets(
+                                            type = APP_BAR_CENTER,
+                                            navigationIcon = {
+                                                when (mainViewModel.selectedItem.value) {
+                                                    0 -> {
+                                                        if (!mainViewModel.searchMode.value) {
+                                                            IconButton(onClick = {
+                                                                mainViewModel.searchMode
+                                                                    .value = true
+                                                                mainViewModel.searchString.value =
+                                                                    ""
+
+                                                            }) {
+                                                                Icon(Icons.Rounded.Search, null)
+                                                            }
+                                                        } else {
+                                                            IconButton(onClick = {
+                                                                mainViewModel.searchMode
+                                                                    .value = false
+                                                                mainViewModel.searchString.value =
+                                                                    ""
+                                                            }) {
+                                                                Icon(Icons.Rounded.ArrowBack, null)
+                                                            }
+                                                        }
+                                                    }
+                                                    1 -> {
+                                                        if (!mainViewModel.searchMode.value) {
+                                                            IconButton(onClick = {
+                                                                mainViewModel.searchMode
+                                                                    .value = true
+                                                                mainViewModel.searchString.value =
+                                                                    ""
+
+                                                            }) {
+                                                                Icon(Icons.Rounded.Search, null)
+                                                            }
+                                                        } else {
+                                                            IconButton(onClick = {
+                                                                mainViewModel.searchMode
+                                                                    .value = false
+                                                                mainViewModel.searchString.value =
+                                                                    ""
+                                                            }) {
+                                                                Icon(Icons.Rounded.ArrowBack, null)
+                                                            }
+                                                        }
+                                                    }
+                                                    2 -> {
                                                         IconButton(onClick = {
                                                             mainViewModel.showUsernameDialog.value =
                                                                 true
                                                         }) {
                                                             Icon(Icons.Rounded.Edit, null)
                                                         }
-                                                    },
-                                                    scrollBehavior = mainViewModel.scrollBehavior.value,
-                                                    title = mainViewModel.profileTitle.value,
-                                                    actions = {
-                                                        ProfileActions {
+                                                    }
+                                                }
+                                            },
+                                            scrollBehavior = mainViewModel.scrollBehavior.value,
+                                            title = {
+                                                if (!mainViewModel.searchMode.value) {
+                                                    Text(
+                                                        text = if (mainViewModel.selectedItem.value == 2) mainViewModel.profileTitle.value
+                                                        else stringResource(mainViewModel.title.value),
+                                                        maxLines = 1,
+                                                        overflow = TextOverflow.Ellipsis
+                                                    )
+                                                } else {
+                                                    val localFocusManager =
+                                                        LocalFocusManager.current
+                                                    BasicTextField(
+                                                        modifier = Modifier.fillMaxWidth(),
+                                                        value = mainViewModel.searchString.value,
+                                                        textStyle = TextStyle(
+                                                            fontSize = 22.sp,
+                                                            color = MaterialTheme.colorScheme.onBackground,
+                                                            textAlign = TextAlign.Start,
+                                                        ),
+                                                        keyboardActions = KeyboardActions(
+                                                            onDone = { localFocusManager.clearFocus() }
+                                                        ),
+                                                        singleLine = true,
+                                                        cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
+                                                        onValueChange = {
+                                                            mainViewModel.searchString.value = it
+                                                        })
+                                                    if (mainViewModel.searchString.value.isEmpty()) {
+                                                        Text(
+                                                            text = stringResource(R.string.searchHere),
+                                                            modifier = Modifier
+                                                                .fillMaxWidth()
+                                                                .padding(start = 12.dp),
+                                                            style = TextStyle(
+                                                                fontSize = 22.sp,
+                                                                color = MaterialTheme.colorScheme.outline,
+                                                                textAlign = TextAlign.Start,
+                                                            )
+                                                        )
+                                                    }
+                                                }
+                                            },
+                                            actions = {
+                                                if (!mainViewModel.searchMode.value) {
+                                                    when (mainViewModel.selectedItem.value) {
+                                                        0 -> NoteActions(mainViewModel)
+                                                        1 -> GoalActions(mainViewModel)
+                                                        2 -> ProfileActions {
                                                             navController.navigate(Screen.NoteListScreen.route) {
                                                                 navController.popBackStack()
                                                                 launchSingleTop = true
@@ -242,21 +438,15 @@ class MainActivity : ComponentActivity() {
                                                             mainViewModel.signOut()
                                                         }
                                                     }
-                                                )
-                                            }
-                                            else -> {
-                                                AppBarWithInsets(
-                                                    scrollBehavior = mainViewModel.scrollBehavior.value,
-                                                    title = stringResource(mainViewModel.title.value),
-                                                    actions = {
-                                                        when (mainViewModel.selectedItem.value) {
-                                                            0 -> NoteActions(mainViewModel)
-                                                            1 -> GoalActions(mainViewModel)
-                                                        }
+                                                } else {
+                                                    IconButton(onClick = {
+                                                        mainViewModel.searchString.value = ""
+                                                    }) {
+                                                        Icon(Icons.Rounded.Close, null)
                                                     }
-                                                )
+                                                }
                                             }
-                                        }
+                                        )
                                     },
                                     floatingActionButton = {
                                         ExtendedFloatingActionButton(onClick = {
@@ -291,7 +481,7 @@ class MainActivity : ComponentActivity() {
                                         BottomNavigationBar(
                                             title = mainViewModel.title,
                                             selectedItem = mainViewModel.selectedItem,
-                                            filterType = mainViewModel.filterType,
+                                            searchMode = mainViewModel.searchMode,
                                             navController = navController,
                                             items = listOf(
                                                 Screen.NoteListScreen,
