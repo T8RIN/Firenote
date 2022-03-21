@@ -15,8 +15,8 @@ android {
         applicationId = "ru.tech.firenote"
         minSdk = 21
         targetSdk = 32
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -105,10 +105,6 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling:1.2.0-alpha05")
     debugImplementation("androidx.compose.ui:ui-test-manifest:1.2.0-alpha05")
 
-    //DataStore
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
-    implementation("androidx.datastore:datastore-preferences-core:1.0.0")
-
     //Coil
     implementation("io.coil-kt:coil:2.0.0-rc01")
     implementation("io.coil-kt:coil-compose:2.0.0-rc01")
@@ -121,6 +117,10 @@ dependencies {
     implementation("com.google.firebase:firebase-crashlytics-ktx:18.2.9")
     implementation("com.google.firebase:firebase-analytics-ktx:20.1.1")
 
+
+//    //DataStore
+//    implementation("androidx.datastore:datastore-preferences:1.0.0")
+//    implementation("androidx.datastore:datastore-preferences-core:1.0.0")
 //    //Retrofit
 //    implementation("com.squareup.retrofit2:retrofit:2.9.0")
 //    implementation("com.squareup.retrofit2:converter-gson:2.9.0")

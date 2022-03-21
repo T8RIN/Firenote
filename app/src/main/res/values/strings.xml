@@ -2,19 +2,12 @@
     <string name="app_name" translatable="false">Firenote</string>
     <string name="notes">Notes</string>
     <string name="createNote">Note creation</string>
-    <string name="calendar">Calendar</string>
     <string name="note">Note</string>
     <string name="exitApp">App closing</string>
     <string name="exitAppMessage">The app wil be closed, but it still needs to be in background to send you alarms</string>
-    <string name="alarms">Alarms</string>
     <string name="addNote">Add note</string>
-    <string name="setAlarm">Set alarm</string>
-    <string name="viewList">List</string>
-    <string name="viewCompact">Compact</string>
-    <string name="viewGrid">Grid</string>
     <string name="color">Color</string>
     <string name="date">Date</string>
-    <string name="importance">Importance</string>
     <string name="enterNoteLabel">Enter note label</string>
     <string name="stay">Stay</string>
     <string name="close">Close</string>
@@ -52,7 +45,7 @@
     <string name="undo">Undo</string>
     <string name="logOut">Log out</string>
     <string name="logoutMessage">You will be logged out, but all your notes will be saved in the cloud</string>
-    <string name="noInternet">No internet connection!</string>
+    <string name="noInternet">No internet connection</string>
     <string name="change">Change</string>
     <string name="reset">\ Reset\ </string>
     <string name="seeYouAgain">We will be glad to see you again!</string>
