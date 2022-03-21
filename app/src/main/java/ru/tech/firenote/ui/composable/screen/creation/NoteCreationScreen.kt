@@ -6,9 +6,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -85,6 +83,7 @@ fun NoteCreationScreen(
     Scaffold(
         topBar = {
             EditableAppBar(
+                textModifier = Modifier.horizontalScroll(rememberScrollState()),
                 backgroundColor = appBarAnimatable.value,
                 text = viewModel.noteLabel,
                 navigationIcon = {

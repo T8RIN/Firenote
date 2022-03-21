@@ -15,6 +15,7 @@ import ru.tech.firenote.ui.composable.single.text.EditText
 @Composable
 fun EditableAppBar(
     modifier: Modifier = Modifier,
+    textModifier: Modifier = Modifier,
     hint: String,
     color: Color,
     backgroundColor: Color,
@@ -35,7 +36,7 @@ fun EditableAppBar(
             SmallTopAppBar(
                 title = {
                     EditText(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = textModifier.fillMaxWidth(),
                         hintText = hint,
                         onValueChange = onValueChange,
                         errorColor = errorColor,

@@ -14,6 +14,7 @@ fun BottomNavigationBar(
     navController: NavHostController,
     items: List<Screen>,
     searchMode: MutableState<Boolean>,
+    searchString: MutableState<String>,
     title: MutableState<Int>,
     selectedItem: MutableState<Int>,
     alwaysShowLabel: Boolean = true
@@ -45,6 +46,7 @@ fun BottomNavigationBar(
                                 launchSingleTop = true
                             }
                             searchMode.value = false
+                            searchString.value = ""
                         }
                     }
                 )

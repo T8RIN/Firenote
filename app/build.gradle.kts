@@ -4,6 +4,7 @@ plugins {
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
     id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -117,6 +118,8 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth:20.1.0")
     implementation("com.google.firebase:firebase-database-ktx:20.0.4")
     implementation("com.google.firebase:firebase-storage-ktx:20.0.1")
+    implementation("com.google.firebase:firebase-crashlytics-ktx:18.2.9")
+    implementation("com.google.firebase:firebase-analytics-ktx:20.1.1")
 
 //    //Retrofit
 //    implementation("com.squareup.retrofit2:retrofit:2.9.0")

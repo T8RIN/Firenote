@@ -87,7 +87,6 @@ class MainActivity : ComponentActivity() {
             val splitScreen = windowSize != WindowSize.Compact
 
             FirenoteTheme {
-
                 MaterialDialog(
                     showDialog = rememberSaveable { mutableStateOf(false) },
                     icon = Icons.Filled.ExitToApp,
@@ -99,6 +98,7 @@ class MainActivity : ComponentActivity() {
                 )
                 if (mainViewModel.searchMode.value) BackHandler {
                     mainViewModel.searchMode.value = false
+                    mainViewModel.searchString.value = ""
                 }
 
                 ProvideWindowInsets {
@@ -297,6 +297,7 @@ class MainActivity : ComponentActivity() {
                                                 title = mainViewModel.title,
                                                 selectedItem = mainViewModel.selectedItem,
                                                 searchMode = mainViewModel.searchMode,
+                                                searchString = mainViewModel.searchString,
                                                 navController = navController,
                                                 items = listOf(
                                                     Screen.NoteListScreen,
@@ -317,7 +318,8 @@ class MainActivity : ComponentActivity() {
                                         Creation(mainViewModel, splitScreen)
                                     }
                                 }
-                            } else {
+                            }
+                            else {
                                 Scaffold(
                                     topBar = {
                                         AppBarWithInsets(
@@ -484,6 +486,7 @@ class MainActivity : ComponentActivity() {
                                             title = mainViewModel.title,
                                             selectedItem = mainViewModel.selectedItem,
                                             searchMode = mainViewModel.searchMode,
+                                            searchString = mainViewModel.searchString,
                                             navController = navController,
                                             items = listOf(
                                                 Screen.NoteListScreen,
@@ -502,7 +505,6 @@ class MainActivity : ComponentActivity() {
                                 }
                                 Creation(mainViewModel, splitScreen)
                             }
-
                         }
                     }
                 }

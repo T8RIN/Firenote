@@ -6,10 +6,8 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -95,6 +93,7 @@ fun GoalCreationScreen(
     Scaffold(
         topBar = {
             EditableAppBar(
+                textModifier = Modifier.horizontalScroll(rememberScrollState()),
                 backgroundColor = appBarAnimatable.value,
                 text = viewModel.goalLabel,
                 navigationIcon = {
@@ -297,7 +296,10 @@ fun GoalCreationScreen(
                             text = viewModel.goalContent.value[index].content ?: "",
                             modifier = Modifier
                                 .weight(1f)
-                                .padding(top = 12.dp),
+                                .padding(top = 12.dp)
+                                .clickable(remember { MutableInteractionSource() }, null) {
+                                    viewModel.updateDone(index, !(viewModel.goalContent.value[index].done ?: false))
+                                },
                             style = TextStyle(
                                 fontSize = 22.sp,
                                 color = if (viewModel.goalContent.value[index].done == true) Color.DarkGray else Color.Black,
