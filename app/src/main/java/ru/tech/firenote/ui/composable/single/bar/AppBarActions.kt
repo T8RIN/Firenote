@@ -5,7 +5,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Palette
+import androidx.compose.material.icons.filled.TextSnippet
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -36,12 +39,12 @@ fun NoteActions(
         viewModel.isDescendingFilter.value = !viewModel.isDescendingFilter.value
     }) {
         Icon(
-            if (viewModel.isDescendingFilter.value) Icons.Filled.ArrowDropDown else Icons.Outlined.ArrowDropUp,
+            if (viewModel.isDescendingFilter.value) Icons.Outlined.ArrowDropDown else Icons.Outlined.ArrowDropUp,
             "filter"
         )
     }
     IconButton(onClick = { showFilter.value = true }) {
-        Icon(Icons.Filled.FilterAlt, null)
+        Icon(Icons.Outlined.FilterAlt, null)
     }
 
     DropdownMenu(
@@ -106,12 +109,12 @@ fun GoalActions(viewModel: MainViewModel) {
         viewModel.isDescendingFilter.value = !viewModel.isDescendingFilter.value
     }) {
         Icon(
-            if (viewModel.isDescendingFilter.value) Icons.Filled.ArrowDropDown else Icons.Outlined.ArrowDropUp,
+            if (viewModel.isDescendingFilter.value) Icons.Outlined.ArrowDropDown else Icons.Outlined.ArrowDropUp,
             null
         )
     }
     IconButton(onClick = { showFilter.value = true }) {
-        Icon(Icons.Filled.FilterAlt, null)
+        Icon(Icons.Outlined.FilterAlt, null)
     }
 
     DropdownMenu(
@@ -186,7 +189,7 @@ fun ProfileActions(onClick: () -> Unit) {
         if (context.isOnline()) showDialog.value = true
         else Toast.makeText(context, R.string.noInternet, Toast.LENGTH_LONG).show()
     }) {
-        Icon(Icons.Filled.Logout, null)
+        Icon(Icons.Outlined.Logout, null)
     }
 
     MaterialDialog(

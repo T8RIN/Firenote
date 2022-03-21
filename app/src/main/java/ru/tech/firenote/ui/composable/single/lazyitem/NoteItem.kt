@@ -3,7 +3,7 @@ package ru.tech.firenote.ui.composable.single.lazyitem
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -117,7 +117,7 @@ fun NoteItem(
             modifier = Modifier.align(Alignment.BottomEnd)
         ) {
             Icon(
-                imageVector = Icons.Default.Delete,
+                imageVector = Icons.Outlined.Delete,
                 contentDescription = "Delete note",
                 tint = darkColorScheme().onTertiary
             )

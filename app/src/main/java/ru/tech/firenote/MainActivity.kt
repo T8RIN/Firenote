@@ -22,7 +22,6 @@ import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.twotone.FactCheck
 import androidx.compose.material.icons.twotone.StickyNote2
@@ -49,10 +48,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import ru.tech.firenote.ui.composable.navigation.Navigation
 import ru.tech.firenote.ui.composable.provider.LocalSnackbarHost
 import ru.tech.firenote.ui.composable.provider.LocalWindowSize
+import ru.tech.firenote.ui.composable.screen.auth.AuthScreen
 import ru.tech.firenote.ui.composable.screen.creation.GoalCreationScreen
 import ru.tech.firenote.ui.composable.screen.creation.NoteCreationScreen
-import ru.tech.firenote.ui.composable.screen.auth.AuthScreen
-import ru.tech.firenote.ui.composable.single.*
+import ru.tech.firenote.ui.composable.single.MaterialDialog
 import ru.tech.firenote.ui.composable.single.bar.*
 import ru.tech.firenote.ui.composable.utils.WindowSize
 import ru.tech.firenote.ui.composable.utils.rememberWindowSizeClass
@@ -175,7 +174,7 @@ class MainActivity : ComponentActivity() {
                                                                 mainViewModel.showUsernameDialog.value =
                                                                     true
                                                             }) {
-                                                                Icon(Icons.Rounded.Edit, null)
+                                                                Icon(Icons.Outlined.Edit, null)
                                                             }
                                                         }
                                                     }
@@ -375,7 +374,7 @@ class MainActivity : ComponentActivity() {
                                                             mainViewModel.showUsernameDialog.value =
                                                                 true
                                                         }) {
-                                                            Icon(Icons.Rounded.Edit, null)
+                                                            Icon(Icons.Outlined.Edit, null)
                                                         }
                                                     }
                                                 }
