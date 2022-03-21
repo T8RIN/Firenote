@@ -1,4 +1,4 @@
-package ru.tech.firenote.ui.composable.single
+package ru.tech.firenote.ui.composable.single.text
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column

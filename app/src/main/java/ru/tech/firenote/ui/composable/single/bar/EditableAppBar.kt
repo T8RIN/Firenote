@@ -1,4 +1,4 @@
-package ru.tech.firenote.ui.composable.single
+package ru.tech.firenote.ui.composable.single.bar
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.google.accompanist.insets.statusBarsPadding
+import ru.tech.firenote.ui.composable.single.text.EditText
 
 @Composable
 fun EditableAppBar(

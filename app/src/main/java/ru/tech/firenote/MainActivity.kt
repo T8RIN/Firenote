@@ -49,10 +49,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import ru.tech.firenote.ui.composable.navigation.Navigation
 import ru.tech.firenote.ui.composable.provider.LocalSnackbarHost
 import ru.tech.firenote.ui.composable.provider.LocalWindowSize
-import ru.tech.firenote.ui.composable.screen.GoalCreationScreen
-import ru.tech.firenote.ui.composable.screen.NoteCreationScreen
+import ru.tech.firenote.ui.composable.screen.creation.GoalCreationScreen
+import ru.tech.firenote.ui.composable.screen.creation.NoteCreationScreen
 import ru.tech.firenote.ui.composable.screen.auth.AuthScreen
 import ru.tech.firenote.ui.composable.single.*
+import ru.tech.firenote.ui.composable.single.bar.*
 import ru.tech.firenote.ui.composable.utils.WindowSize
 import ru.tech.firenote.ui.composable.utils.rememberWindowSizeClass
 import ru.tech.firenote.ui.route.Screen
@@ -109,7 +110,8 @@ class MainActivity : ComponentActivity() {
                         if (mainViewModel.isAuth.value) {
                             AuthScreen(mainViewModel.isAuth)
                             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-                        } else {
+                        }
+                        else {
                             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
                             if (splitScreen) {
                                 Row {

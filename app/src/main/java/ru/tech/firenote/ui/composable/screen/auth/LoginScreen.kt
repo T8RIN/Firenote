@@ -26,7 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.tech.firenote.R
-import ru.tech.firenote.ui.composable.single.MaterialTextField
+import ru.tech.firenote.ui.composable.single.text.MaterialTextField
 import ru.tech.firenote.ui.composable.single.Toast
 import ru.tech.firenote.ui.route.Screen
 import ru.tech.firenote.ui.state.UIState

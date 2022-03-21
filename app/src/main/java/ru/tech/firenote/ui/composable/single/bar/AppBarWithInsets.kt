@@ -1,4 +1,4 @@
-package ru.tech.firenote.ui.composable.single
+package ru.tech.firenote.ui.composable.single.bar
 
 
 import androidx.compose.foundation.layout.RowScope

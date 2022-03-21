@@ -1,4 +1,4 @@
-package ru.tech.firenote.ui.composable.single
+package ru.tech.firenote.ui.composable.single.bar
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -17,6 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.tech.firenote.R
+import ru.tech.firenote.ui.composable.single.MaterialDialog
 import ru.tech.firenote.utils.Utils.isOnline
 import ru.tech.firenote.viewModel.MainViewModel
 

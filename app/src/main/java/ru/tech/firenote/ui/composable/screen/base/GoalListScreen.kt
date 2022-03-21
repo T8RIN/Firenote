@@ -26,7 +26,7 @@ import ru.tech.firenote.R
 import ru.tech.firenote.model.Goal
 import ru.tech.firenote.ui.composable.provider.LocalSnackbarHost
 import ru.tech.firenote.ui.composable.provider.showSnackbar
-import ru.tech.firenote.ui.composable.single.GoalItem
+import ru.tech.firenote.ui.composable.single.lazyitem.GoalItem
 import ru.tech.firenote.ui.composable.single.MaterialDialog
 import ru.tech.firenote.ui.composable.single.Toast
 import ru.tech.firenote.ui.state.UIState

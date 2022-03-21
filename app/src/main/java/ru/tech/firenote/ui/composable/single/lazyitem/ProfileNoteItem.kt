@@ -1,4 +1,4 @@
-package ru.tech.firenote.ui.composable.single
+package ru.tech.firenote.ui.composable.single.lazyitem
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box

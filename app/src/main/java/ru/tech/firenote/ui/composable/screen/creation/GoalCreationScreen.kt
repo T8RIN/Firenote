@@ -1,4 +1,4 @@
-package ru.tech.firenote.ui.composable.screen
+package ru.tech.firenote.ui.composable.screen.creation
 
 import android.content.Context
 import android.widget.Toast
@@ -43,7 +43,7 @@ import kotlinx.coroutines.launch
 import ru.tech.firenote.R
 import ru.tech.firenote.model.Goal
 import ru.tech.firenote.model.GoalData
-import ru.tech.firenote.ui.composable.single.EditableAppBar
+import ru.tech.firenote.ui.composable.single.bar.EditableAppBar
 import ru.tech.firenote.ui.composable.single.MaterialDialog
 import ru.tech.firenote.ui.theme.goalColors
 import ru.tech.firenote.utils.Utils.blend

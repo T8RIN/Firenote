@@ -1,4 +1,4 @@
-package ru.tech.firenote.ui.composable.single
+package ru.tech.firenote.ui.composable.single.lazyitem
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
@@ -92,7 +92,6 @@ fun GoalItem(
                         text = convertTime,
                         style = MaterialTheme.typography.bodySmall,
                         color = Color.DarkGray,
-                        maxLines = 2,
                         textAlign = TextAlign.Justify,
                         overflow = TextOverflow.Ellipsis
                     )

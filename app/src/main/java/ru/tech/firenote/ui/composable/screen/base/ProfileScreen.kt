@@ -52,8 +52,8 @@ import ru.tech.firenote.R
 import ru.tech.firenote.ui.composable.provider.LocalWindowSize
 import ru.tech.firenote.ui.composable.screen.auth.isValid
 import ru.tech.firenote.ui.composable.single.MaterialDialog
-import ru.tech.firenote.ui.composable.single.MaterialTextField
-import ru.tech.firenote.ui.composable.single.ProfileNoteItem
+import ru.tech.firenote.ui.composable.single.text.MaterialTextField
+import ru.tech.firenote.ui.composable.single.lazyitem.ProfileNoteItem
 import ru.tech.firenote.ui.composable.single.Toast
 import ru.tech.firenote.ui.composable.utils.WindowSize
 import ru.tech.firenote.ui.route.Screen
