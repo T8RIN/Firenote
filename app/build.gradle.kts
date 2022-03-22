@@ -91,10 +91,10 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0-alpha04")
     implementation("androidx.navigation:navigation-compose:2.5.0-alpha03")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.0")
+    implementation("androidx.compose.foundation:foundation:1.2.0-alpha05")
 
     //Accompanist
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.24.2-alpha")
-    implementation("com.google.accompanist:accompanist-insets:0.24.2-alpha")
     implementation("com.google.accompanist:accompanist-flowlayout:0.24.2-alpha")
 
     //Tests

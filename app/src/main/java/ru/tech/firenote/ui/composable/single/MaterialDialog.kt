@@ -12,6 +12,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 
 @Composable
 fun MaterialDialog(
@@ -28,9 +29,9 @@ fun MaterialDialog(
 ) {
     if (showDialog.value) {
         AlertDialog(
-            icon = { Icon(icon, contentDescription = null) },
+            icon = { Icon(icon, null) },
             title = { Text(title) },
-            text = { Text(message) },
+            text = { Text(message, textAlign = TextAlign.Center) },
             confirmButton = {
                 TextButton(onClick = {
                     confirmAction()
@@ -73,9 +74,9 @@ fun MaterialDialog(
 
     if (showDialog.value) {
         AlertDialog(
-            icon = { Icon(icon, contentDescription = null) },
+            icon = { Icon(icon, null) },
             title = { Text(stringResource(title)) },
-            text = { Text(stringResource(message)) },
+            text = { Text(stringResource(message), textAlign = TextAlign.Center) },
             confirmButton = {
                 TextButton(onClick = {
                     confirmAction()

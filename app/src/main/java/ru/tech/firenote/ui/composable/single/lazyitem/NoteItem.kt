@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import ru.tech.firenote.model.Note
 import ru.tech.firenote.ui.composable.provider.LocalWindowSize
 import ru.tech.firenote.ui.composable.utils.WindowSize
-import ru.tech.firenote.utils.Utils.blend
+import ru.tech.firenote.utils.GlobalUtils.blend
 import java.text.SimpleDateFormat
 import java.util.*
 

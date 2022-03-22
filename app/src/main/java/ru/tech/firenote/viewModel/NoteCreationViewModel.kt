@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 import ru.tech.firenote.model.Note
 import ru.tech.firenote.repository.NoteRepository
 import ru.tech.firenote.ui.theme.NoteYellow
-import ru.tech.firenote.utils.Utils.blend
+import ru.tech.firenote.utils.GlobalUtils.blend
 import javax.inject.Inject
 
 @HiltViewModel

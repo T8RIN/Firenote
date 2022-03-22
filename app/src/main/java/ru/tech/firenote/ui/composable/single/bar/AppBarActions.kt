@@ -21,7 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.tech.firenote.R
 import ru.tech.firenote.ui.composable.single.MaterialDialog
-import ru.tech.firenote.utils.Utils.isOnline
+import ru.tech.firenote.utils.GlobalUtils.isOnline
 import ru.tech.firenote.viewModel.MainViewModel
 
 @Composable

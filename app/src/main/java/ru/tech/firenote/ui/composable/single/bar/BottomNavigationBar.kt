@@ -21,7 +21,6 @@ fun BottomNavigationBar(
 ) {
     Surface(color = TopAppBarDefaults.smallTopAppBarColors().containerColor(100f).value) {
         NavigationBar(modifier = Modifier.navigationBarsPadding()) {
-
             items.forEachIndexed { index, screen ->
 
                 selectedItem.value =

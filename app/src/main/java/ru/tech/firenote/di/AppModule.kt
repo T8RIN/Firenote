@@ -29,7 +29,6 @@ object AppModule {
     fun provideNoteRepository(
         database: DatabaseReference,
         storage: StorageReference
-    ): NoteRepository =
-        NoteRepositoryImpl(database, storage)
+    ): NoteRepository = NoteRepositoryImpl(database, storage)
 
 }

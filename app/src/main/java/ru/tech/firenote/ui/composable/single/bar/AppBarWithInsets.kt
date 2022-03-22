@@ -2,11 +2,11 @@ package ru.tech.firenote.ui.composable.single.bar
 
 
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.google.accompanist.insets.statusBarsPadding
 
 @Composable
 fun AppBarWithInsets(

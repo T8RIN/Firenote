@@ -27,15 +27,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.accompanist.insets.navigationBarsPadding
 import kotlinx.coroutines.launch
 import ru.tech.firenote.R
 import ru.tech.firenote.model.Note
-import ru.tech.firenote.ui.composable.single.text.EditText
-import ru.tech.firenote.ui.composable.single.bar.EditableAppBar
 import ru.tech.firenote.ui.composable.single.MaterialDialog
+import ru.tech.firenote.ui.composable.single.bar.EditableAppBar
+import ru.tech.firenote.ui.composable.single.text.EditText
 import ru.tech.firenote.ui.theme.noteColors
-import ru.tech.firenote.utils.Utils.blend
+import ru.tech.firenote.utils.GlobalUtils.blend
 import ru.tech.firenote.viewModel.NoteCreationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)

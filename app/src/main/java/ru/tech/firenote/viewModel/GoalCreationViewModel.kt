@@ -11,7 +11,7 @@ import ru.tech.firenote.model.GoalData
 import ru.tech.firenote.repository.NoteRepository
 import ru.tech.firenote.ui.theme.GoalGreen
 import ru.tech.firenote.ui.theme.NoteYellow
-import ru.tech.firenote.utils.Utils.blend
+import ru.tech.firenote.utils.GlobalUtils.blend
 import javax.inject.Inject
 
 @HiltViewModel

@@ -70,7 +70,7 @@
     <string name="enterGoalLabel">Введите заголовок</string>
     <string name="addSubGoal">Добавить подзадачу</string>
     <string name="subGoalHere">Введите подзадачу</string>
-    <string name="completion">Прохождение</string>
+    <string name="completion">Выполненность</string>
     <string name="searchHere">Ищите тут</string>
     <string name="nothingFound">Ничего не найдено по вашему запросу</string>
 </resources>

@@ -36,15 +36,14 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.accompanist.insets.navigationBarsPadding
 import kotlinx.coroutines.launch
 import ru.tech.firenote.R
 import ru.tech.firenote.model.Goal
 import ru.tech.firenote.model.GoalData
-import ru.tech.firenote.ui.composable.single.bar.EditableAppBar
 import ru.tech.firenote.ui.composable.single.MaterialDialog
+import ru.tech.firenote.ui.composable.single.bar.EditableAppBar
 import ru.tech.firenote.ui.theme.goalColors
-import ru.tech.firenote.utils.Utils.blend
+import ru.tech.firenote.utils.GlobalUtils.blend
 import ru.tech.firenote.viewModel.GoalCreationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -298,7 +297,10 @@ fun GoalCreationScreen(
                                 .weight(1f)
                                 .padding(top = 12.dp)
                                 .clickable(remember { MutableInteractionSource() }, null) {
-                                    viewModel.updateDone(index, !(viewModel.goalContent.value[index].done ?: false))
+                                    viewModel.updateDone(
+                                        index,
+                                        !(viewModel.goalContent.value[index].done ?: false)
+                                    )
                                 },
                             style = TextStyle(
                                 fontSize = 22.sp,

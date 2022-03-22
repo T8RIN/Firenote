@@ -7,7 +7,7 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import androidx.core.graphics.ColorUtils
 
-object Utils {
+object GlobalUtils {
 
     fun Int.blend(ratio: Float = 0.2f, with: Int = 0x000000) =
         ColorUtils.blendARGB(this, with, ratio)
