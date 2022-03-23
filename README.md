@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">  
-Smart and lightweight notepad, that allows you to manage and create goals, notes with different colors and store them in the cloud
+Smart and lightweight notepad, that allows you to manage and create goals, notes with different colors and store them in the cloud.</br>It will look fantastic on each device, because its layout adapt to every screen size.
 </p>
 </br>
 
@@ -25,13 +25,13 @@ Go to the [Releases](https://github.com/t8rin/Firenote/releases) to download the
 
 - [Kotlin](https://kotlinlang.org/) based 
 
-- [Coroutines](https://github.com/Kotlin/kotlinx.coroutines) to work with internet and move tasks to a secondary thread
+- [Coroutines](https://github.com/Kotlin/kotlinx.coroutines) for asynchronous work
 
-- [Flow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/) to emit values from database directly to compose state
+- [Flow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/) to emit values from database directly to compose state.
 
-- [Accompanist](https://github.com/google/accompanist) to expand jetpcak compose abilities
+- [Accompanist](https://github.com/google/accompanist) to expand jetpcak compose opportunities.
 
-- [Firebase](https://github.com/firebase/FirebaseUI-Android) for registering/signing in and storing data in the cloud
+- [Firebase](https://github.com/firebase/FirebaseUI-Android) for registering/signing in and storing data in the cloud.
 
 - [Hilt](https://dagger.dev/hilt/) for dependency injection.
 
