@@ -40,11 +40,11 @@ import kotlinx.coroutines.launch
 import ru.tech.firenote.R
 import ru.tech.firenote.model.Goal
 import ru.tech.firenote.model.GoalData
-import ru.tech.firenote.ui.composable.single.MaterialDialog
 import ru.tech.firenote.ui.composable.single.bar.EditableAppBar
+import ru.tech.firenote.ui.composable.single.dialog.MaterialDialog
 import ru.tech.firenote.ui.theme.goalColors
 import ru.tech.firenote.utils.GlobalUtils.blend
-import ru.tech.firenote.viewModel.GoalCreationViewModel
+import ru.tech.firenote.viewModel.creation.GoalCreationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

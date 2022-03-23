@@ -1,4 +1,4 @@
-package ru.tech.firenote.viewModel
+package ru.tech.firenote.viewModel.auth
 
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.runtime.mutableStateOf

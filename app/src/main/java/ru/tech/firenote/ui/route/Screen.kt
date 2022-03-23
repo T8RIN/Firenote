@@ -4,39 +4,44 @@ import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.FactCheck
-import androidx.compose.material.icons.filled.PhoneAndroid
 import androidx.compose.material.icons.filled.StickyNote2
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.FactCheck
+import androidx.compose.material.icons.outlined.PhoneAndroid
 import androidx.compose.material.icons.outlined.StickyNote2
+import androidx.compose.material.icons.rounded.PhoneAndroid
 import androidx.compose.ui.graphics.vector.ImageVector
 import ru.tech.firenote.R
 
 sealed class Screen(
     val route: String,
     @StringRes val resourceId: Int = R.string.app_name,
-    val icon: ImageVector = Icons.Default.PhoneAndroid,
-    val selectedIcon: ImageVector = Icons.Default.PhoneAndroid
+    val baseIcon: ImageVector = Icons.Outlined.PhoneAndroid,
+    val selectedIcon: ImageVector = Icons.Rounded.PhoneAndroid
 ) {
-    object NoteListScreen :
-        Screen("notes", R.string.notes, Icons.Outlined.StickyNote2, Icons.Filled.StickyNote2)
+    object NoteListScreen : Screen(
+        route = "notes",
+        resourceId = R.string.notes,
+        baseIcon = Icons.Outlined.StickyNote2,
+        selectedIcon = Icons.Filled.StickyNote2
+    )
 
     object GoalsScreen : Screen(
-        "goals",
-        R.string.goals,
-        Icons.Outlined.FactCheck,
-        Icons.Filled.FactCheck
+        route = "goals",
+        resourceId = R.string.goals,
+        baseIcon = Icons.Outlined.FactCheck,
+        selectedIcon = Icons.Filled.FactCheck
     )
 
     object ProfileScreen : Screen(
-        "profile",
-        R.string.profile,
-        Icons.Outlined.AccountCircle,
-        Icons.Filled.AccountCircle
+        route = "profile",
+        resourceId = R.string.profile,
+        baseIcon = Icons.Outlined.AccountCircle,
+        selectedIcon = Icons.Filled.AccountCircle
     )
 
-    object LoginScreen : Screen("login")
-    object RegistrationScreen : Screen("register")
-    object ForgotPasswordScreen : Screen("forgot")
+    object LoginScreen : Screen(route = "login")
+    object RegistrationScreen : Screen(route = "register")
+    object ForgotPasswordScreen : Screen(route = "forgot")
 
 }

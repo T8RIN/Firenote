@@ -20,9 +20,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.tech.firenote.R
-import ru.tech.firenote.ui.composable.single.MaterialDialog
+import ru.tech.firenote.ui.composable.single.dialog.MaterialDialog
 import ru.tech.firenote.utils.GlobalUtils.isOnline
-import ru.tech.firenote.viewModel.MainViewModel
+import ru.tech.firenote.viewModel.main.MainViewModel
 
 @Composable
 fun NoteActions(

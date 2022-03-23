@@ -1,4 +1,4 @@
-package ru.tech.firenote.viewModel
+package ru.tech.firenote.viewModel.creation
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.toArgb

@@ -1,4 +1,4 @@
-package ru.tech.firenote.viewModel
+package ru.tech.firenote.viewModel.navigation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,26 +7,25 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import ru.tech.firenote.model.Goal
+import ru.tech.firenote.model.Note
 import ru.tech.firenote.repository.NoteRepository
 import ru.tech.firenote.ui.state.UIState
 import javax.inject.Inject
 
 @HiltViewModel
-class GoalListViewModel @Inject constructor(
+class NoteListViewModel @Inject constructor(
     private val repository: NoteRepository
 ) : ViewModel() {
-
 
     private val _uiState = MutableStateFlow<UIState>(UIState.Empty())
     val uiState: StateFlow<UIState> = _uiState
 
 
     init {
-        getGoals()
+        getNotes()
     }
 
-    private fun getGoals() {
+    private fun getNotes() {
         viewModelScope.launch {
             _uiState.value = UIState.Loading
 
@@ -34,7 +33,7 @@ class GoalListViewModel @Inject constructor(
                 delay(500)
             }
 
-            repository.getGoals().collect {
+            repository.getNotes().collect {
                 if (it.isSuccess) {
                     if (it.getOrNull().isNullOrEmpty()) _uiState.value = UIState.Empty()
                     else _uiState.value = UIState.Success(it.getOrNull())
@@ -45,18 +44,18 @@ class GoalListViewModel @Inject constructor(
         }
     }
 
-    fun deleteGoal(
-        goal: Goal,
-        onDeleted: (Goal) -> Unit
+    fun deleteNote(
+        note: Note,
+        onDeleted: (Note) -> Unit
     ) {
         viewModelScope.launch {
-            repository.deleteGoal(goal)
-            onDeleted(goal)
+            repository.deleteNote(note)
+            onDeleted(note)
         }
     }
 
-    fun insertGoal(goal: Goal) {
-        viewModelScope.launch { repository.insertGoal(goal) }
+    fun insertNote(note: Note) {
+        viewModelScope.launch { repository.insertNote(note) }
     }
 
 }

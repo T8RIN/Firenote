@@ -1,4 +1,4 @@
-package ru.tech.firenote.ui.composable.single
+package ru.tech.firenote.ui.composable.single.toast
 
 import android.widget.Toast
 import androidx.annotation.StringRes

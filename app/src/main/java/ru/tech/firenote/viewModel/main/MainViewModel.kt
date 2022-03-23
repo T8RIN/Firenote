@@ -1,4 +1,4 @@
-package ru.tech.firenote.viewModel
+package ru.tech.firenote.viewModel.main
 
 import android.net.Uri
 import androidx.activity.compose.ManagedActivityResultLauncher
@@ -63,6 +63,24 @@ class MainViewModel @Inject constructor(
         globalGoal.value = null
 
         repository.auth.signOut()
+    }
+
+    fun dispatchSearch() {
+        searchMode.value = !searchMode.value
+        updateSearch()
+    }
+
+    fun updateSearch(newValue: String = "") {
+        searchString.value = newValue
+    }
+
+    fun clearGlobalGoal() {
+        globalGoal.value = null
+
+    }
+
+    fun clearGlobalNote() {
+        globalNote.value = null
     }
 
 }

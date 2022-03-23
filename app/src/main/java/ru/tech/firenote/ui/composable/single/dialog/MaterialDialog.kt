@@ -1,4 +1,4 @@
-package ru.tech.firenote.ui.composable.single
+package ru.tech.firenote.ui.composable.single.dialog
 
 import androidx.activity.compose.BackHandler
 import androidx.annotation.StringRes
@@ -13,50 +13,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-
-@Composable
-fun MaterialDialog(
-    showDialog: MutableState<Boolean> = mutableStateOf(false),
-    icon: ImageVector,
-    title: String,
-    message: String,
-    confirmText: String,
-    confirmAction: () -> Unit = {},
-    dismissText: String,
-    dismissAction: () -> Unit = {},
-    onDismiss: () -> Unit = {},
-    backHandler: @Composable () -> Unit = { BackHandler { showDialog.value = true } }
-) {
-    if (showDialog.value) {
-        AlertDialog(
-            icon = { Icon(icon, null) },
-            title = { Text(title) },
-            text = { Text(message, textAlign = TextAlign.Center) },
-            confirmButton = {
-                TextButton(onClick = {
-                    confirmAction()
-                    showDialog.value = false
-                }) {
-                    Text(confirmText)
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = {
-                    dismissAction()
-                    showDialog.value = false
-                }) {
-                    Text(dismissText)
-                }
-            },
-            onDismissRequest = { showDialog.value = false }
-        )
-    } else {
-        LaunchedEffect(Unit) { onDismiss() }
-    }
-
-    backHandler()
-
-}
 
 @Composable
 fun MaterialDialog(
@@ -95,9 +51,7 @@ fun MaterialDialog(
             },
             onDismissRequest = { showDialog.value = false }
         )
-    } else {
-        LaunchedEffect(Unit) { onDismiss() }
-    }
+    } else LaunchedEffect(Unit) { onDismiss() }
 
     backHandler()
 }

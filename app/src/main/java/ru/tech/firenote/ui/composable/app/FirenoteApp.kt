@@ -21,11 +21,11 @@ import ru.tech.firenote.ui.composable.provider.LocalSnackbarHost
 import ru.tech.firenote.ui.composable.provider.LocalWindowSize
 import ru.tech.firenote.ui.composable.screen.auth.AuthScreen
 import ru.tech.firenote.ui.composable.screen.creation.CreationContainer
-import ru.tech.firenote.ui.composable.single.FirenoteScaffold
-import ru.tech.firenote.ui.composable.single.MaterialDialog
+import ru.tech.firenote.ui.composable.single.dialog.MaterialDialog
+import ru.tech.firenote.ui.composable.single.scaffold.FirenoteScaffold
 import ru.tech.firenote.ui.composable.utils.WindowSize
 import ru.tech.firenote.ui.theme.FirenoteTheme
-import ru.tech.firenote.viewModel.MainViewModel
+import ru.tech.firenote.viewModel.main.MainViewModel
 
 @SuppressLint("SourceLockedOrientationActivity")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,14 +35,14 @@ fun FirenoteApp(
     windowSize: WindowSize,
     splitScreen: Boolean,
     navController: NavHostController,
-    mainViewModel: MainViewModel = viewModel()
+    viewModel: MainViewModel = viewModel()
 ) {
 
     val isScaffoldVisible by derivedStateOf {
-        !mainViewModel.showNoteCreation.currentState
-                || !mainViewModel.showNoteCreation.targetState
-                || !mainViewModel.showGoalCreation.currentState
-                || !mainViewModel.showGoalCreation.targetState
+        !viewModel.showNoteCreation.currentState
+                || !viewModel.showNoteCreation.targetState
+                || !viewModel.showGoalCreation.currentState
+                || !viewModel.showGoalCreation.targetState
     }
 
     FirenoteTheme {
@@ -55,9 +55,9 @@ fun FirenoteApp(
             dismissText = R.string.close,
             dismissAction = { context.finishAffinity() }
         )
-        if (mainViewModel.searchMode.value) BackHandler {
-            mainViewModel.searchMode.value = false
-            mainViewModel.searchString.value = ""
+        if (viewModel.searchMode.value) BackHandler {
+            viewModel.searchMode.value = false
+            viewModel.updateSearch()
         }
 
 
@@ -66,8 +66,8 @@ fun FirenoteApp(
             LocalSnackbarHost provides snackbarHostState,
             LocalWindowSize provides windowSize
         ) {
-            if (mainViewModel.isAuth.value) {
-                AuthScreen(mainViewModel.isAuth)
+            if (viewModel.isAuth.value) {
+                AuthScreen(viewModel.isAuth)
                 context.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             } else {
                 context.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
@@ -75,22 +75,22 @@ fun FirenoteApp(
                     Row {
                         FirenoteScaffold(
                             modifier = Modifier.weight(1f),
-                            mainViewModel = mainViewModel,
+                            viewModel = viewModel,
                             navController = navController,
                             context = context
                         )
                         Surface(modifier = Modifier.weight(1.5f)) {
-                            CreationContainer(mainViewModel, splitScreen)
+                            CreationContainer(viewModel, splitScreen)
                         }
                     }
                 } else {
                     FirenoteScaffold(
                         modifier = Modifier.alpha(if (isScaffoldVisible) 1f else 0f),
-                        mainViewModel = mainViewModel,
+                        viewModel = viewModel,
                         navController = navController,
                         context = context
                     )
-                    CreationContainer(mainViewModel, splitScreen)
+                    CreationContainer(viewModel, splitScreen)
                 }
             }
         }

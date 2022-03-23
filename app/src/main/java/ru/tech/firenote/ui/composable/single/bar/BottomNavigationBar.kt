@@ -29,7 +29,7 @@ fun BottomNavigationBar(
                 NavigationBarItem(
                     icon = {
                         Icon(
-                            if (selectedItem.value == index) screen.selectedIcon else screen.icon,
+                            if (selectedItem.value == index) screen.selectedIcon else screen.baseIcon,
                             null
                         )
                     },

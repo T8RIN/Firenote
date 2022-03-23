@@ -17,46 +17,6 @@ val GoalGreen = Color(0xFF92CC77)
 val GoalCarrot = Color(0xFFBBA05A)
 val GoalRed = Color(0xFFD57171)
 
-val noteColors =
-    listOf(
-        NoteYellow,
-        NoteGreen,
-        NoteMint,
-        NoteBlue,
-        NoteIndigo,
-        NoteViolet,
-        NoteOrange,
-        NoteRed,
-        NotePink
-    )
-
-val goalColors =
-    listOf(
-        GoalGreen,
-        GoalCarrot,
-        GoalRed
-    )
-
-val Int.priority
-    get() = when (this) {
-        NoteYellow.toArgb() -> 0
-        NoteGreen.toArgb() -> 1
-        NoteMint.toArgb() -> 2
-        NoteBlue.toArgb() -> 3
-        NoteIndigo.toArgb() -> 4
-        NoteViolet.toArgb() -> 5
-        NoteOrange.toArgb() -> 6
-        NoteRed.toArgb() -> 7
-        else -> 8
-    }
-
-val Int.priorityGoal
-    get() = when (this) {
-        GoalGreen.toArgb() -> 0
-        GoalCarrot.toArgb() -> 1
-        else -> 2
-    }
-
 val md_theme_light_primary = Color(0xFF984065)
 val md_theme_light_onPrimary = Color(0xFFffffff)
 val md_theme_light_primaryContainer = Color(0xFFffd8e5)
@@ -110,3 +70,44 @@ val md_theme_dark_outline = Color(0xFF9d8c90)
 val md_theme_dark_inverseOnSurface = Color(0xFF1f1a1b)
 val md_theme_dark_inverseSurface = Color(0xFFebdfe1)
 val md_theme_dark_inversePrimary = Color(0xFF984065)
+
+
+val noteColors =
+    listOf(
+        NoteYellow,
+        NoteGreen,
+        NoteMint,
+        NoteBlue,
+        NoteIndigo,
+        NoteViolet,
+        NoteOrange,
+        NoteRed,
+        NotePink
+    )
+
+val goalColors =
+    listOf(
+        GoalGreen,
+        GoalCarrot,
+        GoalRed
+    )
+
+val Int.priority
+    get() = when (this) {
+        NoteYellow.toArgb() -> 0
+        NoteGreen.toArgb() -> 1
+        NoteMint.toArgb() -> 2
+        NoteBlue.toArgb() -> 3
+        NoteIndigo.toArgb() -> 4
+        NoteViolet.toArgb() -> 5
+        NoteOrange.toArgb() -> 6
+        NoteRed.toArgb() -> 7
+        else -> 8
+    }
+
+val Int.priorityGoal
+    get() = when (this) {
+        GoalGreen.toArgb() -> 0
+        GoalCarrot.toArgb() -> 1
+        else -> 2
+    }

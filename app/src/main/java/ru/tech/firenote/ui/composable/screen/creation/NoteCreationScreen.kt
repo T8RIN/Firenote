@@ -30,12 +30,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 import ru.tech.firenote.R
 import ru.tech.firenote.model.Note
-import ru.tech.firenote.ui.composable.single.MaterialDialog
 import ru.tech.firenote.ui.composable.single.bar.EditableAppBar
+import ru.tech.firenote.ui.composable.single.dialog.MaterialDialog
 import ru.tech.firenote.ui.composable.single.text.EditText
 import ru.tech.firenote.ui.theme.noteColors
 import ru.tech.firenote.utils.GlobalUtils.blend
-import ru.tech.firenote.viewModel.NoteCreationViewModel
+import ru.tech.firenote.viewModel.creation.NoteCreationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

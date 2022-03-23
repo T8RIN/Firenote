@@ -7,17 +7,17 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import ru.tech.firenote.ui.composable.screen.base.GoalListScreen
-import ru.tech.firenote.ui.composable.screen.base.NoteListScreen
-import ru.tech.firenote.ui.composable.screen.base.ProfileScreen
+import ru.tech.firenote.ui.composable.screen.navigation.GoalListScreen
+import ru.tech.firenote.ui.composable.screen.navigation.NoteListScreen
+import ru.tech.firenote.ui.composable.screen.navigation.ProfileScreen
 import ru.tech.firenote.ui.route.Screen
-import ru.tech.firenote.viewModel.MainViewModel
+import ru.tech.firenote.viewModel.main.MainViewModel
 
 @Composable
 fun Navigation(
     navController: NavHostController,
     contentPadding: PaddingValues,
-    mainViewModel: MainViewModel,
+    viewModel: MainViewModel,
 ) {
     NavHost(
         navController = navController,
@@ -26,29 +26,29 @@ fun Navigation(
     ) {
         composable(Screen.NoteListScreen.route) {
             NoteListScreen(
-                mainViewModel.showNoteCreation,
-                mainViewModel.globalNote,
-                mainViewModel.filterType,
-                mainViewModel.isDescendingFilter,
-                mainViewModel.searchString
+                viewModel.showNoteCreation,
+                viewModel.globalNote,
+                viewModel.filterType,
+                viewModel.isDescendingFilter,
+                viewModel.searchString
             )
         }
         composable(Screen.GoalsScreen.route) {
             GoalListScreen(
-                mainViewModel.showGoalCreation,
-                mainViewModel.globalGoal,
-                mainViewModel.filterType,
-                mainViewModel.isDescendingFilter,
-                mainViewModel.searchString
+                viewModel.showGoalCreation,
+                viewModel.globalGoal,
+                viewModel.filterType,
+                viewModel.isDescendingFilter,
+                viewModel.searchString
             )
         }
         composable(Screen.ProfileScreen.route) {
             ProfileScreen(
                 navController,
-                mainViewModel.selectedItem,
-                mainViewModel.resultLauncher,
-                mainViewModel.profileTitle,
-                mainViewModel.showUsernameDialog
+                viewModel.selectedItem,
+                viewModel.resultLauncher,
+                viewModel.profileTitle,
+                viewModel.showUsernameDialog
             )
         }
     }

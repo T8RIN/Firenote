@@ -1,4 +1,4 @@
-package ru.tech.firenote.ui.composable.screen.base
+package ru.tech.firenote.ui.composable.screen.navigation
 
 import android.net.Uri
 import android.widget.Toast.LENGTH_LONG
@@ -51,15 +51,15 @@ import com.google.accompanist.flowlayout.FlowRow
 import ru.tech.firenote.R
 import ru.tech.firenote.ui.composable.provider.LocalWindowSize
 import ru.tech.firenote.ui.composable.screen.auth.isValid
-import ru.tech.firenote.ui.composable.single.MaterialDialog
-import ru.tech.firenote.ui.composable.single.text.MaterialTextField
+import ru.tech.firenote.ui.composable.single.dialog.MaterialDialog
 import ru.tech.firenote.ui.composable.single.lazyitem.ProfileNoteItem
-import ru.tech.firenote.ui.composable.single.Toast
+import ru.tech.firenote.ui.composable.single.text.MaterialTextField
+import ru.tech.firenote.ui.composable.single.toast.Toast
 import ru.tech.firenote.ui.composable.utils.WindowSize
 import ru.tech.firenote.ui.route.Screen
 import ru.tech.firenote.ui.state.UIState
 import ru.tech.firenote.ui.theme.noteColors
-import ru.tech.firenote.viewModel.ProfileViewModel
+import ru.tech.firenote.viewModel.navigation.ProfileViewModel
 
 @Suppress("UNCHECKED_CAST")
 @Composable

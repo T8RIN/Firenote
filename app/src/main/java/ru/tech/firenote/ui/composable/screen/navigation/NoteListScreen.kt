@@ -1,4 +1,4 @@
-package ru.tech.firenote.ui.composable.screen.base
+package ru.tech.firenote.ui.composable.screen.navigation
 
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -14,9 +14,7 @@ import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.twotone.Cloud
 import androidx.compose.material.icons.twotone.FindInPage
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarResult
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,12 +25,13 @@ import ru.tech.firenote.R
 import ru.tech.firenote.model.Note
 import ru.tech.firenote.ui.composable.provider.LocalSnackbarHost
 import ru.tech.firenote.ui.composable.provider.showSnackbar
-import ru.tech.firenote.ui.composable.single.MaterialDialog
+import ru.tech.firenote.ui.composable.single.dialog.MaterialDialog
 import ru.tech.firenote.ui.composable.single.lazyitem.NoteItem
-import ru.tech.firenote.ui.composable.single.Toast
+import ru.tech.firenote.ui.composable.single.placeholder.Placeholder
+import ru.tech.firenote.ui.composable.single.toast.Toast
 import ru.tech.firenote.ui.state.UIState
 import ru.tech.firenote.ui.theme.priority
-import ru.tech.firenote.viewModel.NoteListViewModel
+import ru.tech.firenote.viewModel.navigation.NoteListViewModel
 
 @Suppress("UNCHECKED_CAST")
 @OptIn(ExperimentalFoundationApi::class)
@@ -89,15 +88,7 @@ fun NoteListScreen(
                         ) ?: false
                 }
                 if (data.isEmpty()) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Icon(Icons.TwoTone.FindInPage, null, modifier = Modifier.fillMaxSize(0.3f))
-                        Text(stringResource(R.string.nothingFound))
-                    }
+                    Placeholder(icon = Icons.TwoTone.FindInPage, textRes = R.string.nothingFound)
                 }
             }
 
@@ -124,15 +115,7 @@ fun NoteListScreen(
         }
         is UIState.Empty -> {
             state.message?.let { Toast(it) }
-            Column(
-                modifier = Modifier
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Icon(Icons.TwoTone.Cloud, null, modifier = Modifier.fillMaxSize(0.3f))
-                Text(stringResource(R.string.noNotes))
-            }
+            Placeholder(icon = Icons.TwoTone.Cloud, textRes = R.string.noNotes)
         }
     }
 

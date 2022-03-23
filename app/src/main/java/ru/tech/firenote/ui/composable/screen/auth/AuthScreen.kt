@@ -19,7 +19,7 @@ import ru.tech.firenote.R
 import ru.tech.firenote.ui.composable.provider.LocalWindowSize
 import ru.tech.firenote.ui.composable.utils.WindowSize
 import ru.tech.firenote.ui.route.Screen
-import ru.tech.firenote.viewModel.AuthViewModel
+import ru.tech.firenote.viewModel.auth.AuthViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
