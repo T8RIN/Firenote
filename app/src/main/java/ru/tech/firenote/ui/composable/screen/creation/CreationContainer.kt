@@ -13,6 +13,9 @@ import androidx.compose.material.icons.twotone.FactCheck
 import androidx.compose.material.icons.twotone.StickyNote2
 import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -23,18 +26,23 @@ import ru.tech.firenote.viewModel.main.MainViewModel
 @Composable
 fun CreationContainer(viewModel: MainViewModel, splitScreen: Boolean) {
     Box(Modifier.fillMaxSize()) {
+
         if (!viewModel.showNoteCreation.currentState) {
             viewModel.clearGlobalNote()
             if (splitScreen && viewModel.selectedItem.value == 0) {
                 Placeholder(icon = Icons.TwoTone.StickyNote2, textRes = R.string.selectNote)
             }
         }
+
         if (!viewModel.showGoalCreation.currentState) {
             viewModel.clearGlobalGoal()
             if (splitScreen && viewModel.selectedItem.value in 1..2) {
                 Placeholder(icon = Icons.TwoTone.FactCheck, textRes = R.string.selectGoal)
             }
         }
+
+        val resetGoal = rememberSaveable { mutableStateOf(false) }
+        val resetNote = rememberSaveable { mutableStateOf(false) }
 
         AnimatedVisibility(
             visibleState = viewModel.showNoteCreation,
@@ -45,8 +53,14 @@ fun CreationContainer(viewModel: MainViewModel, splitScreen: Boolean) {
 
             NoteCreationScreen(
                 state = viewModel.showNoteCreation,
-                globalNote = viewModel.globalNote
+                globalNote = viewModel.globalNote,
+                reset = resetNote
             )
+
+            LaunchedEffect(Unit) {
+                viewModel.showGoalCreation.targetState = false
+                resetGoal.value = true
+            }
         }
 
         AnimatedVisibility(
@@ -58,8 +72,14 @@ fun CreationContainer(viewModel: MainViewModel, splitScreen: Boolean) {
 
             GoalCreationScreen(
                 state = viewModel.showGoalCreation,
-                globalGoal = viewModel.globalGoal
+                globalGoal = viewModel.globalGoal,
+                reset = resetGoal
             )
+
+            LaunchedEffect(Unit) {
+                viewModel.showNoteCreation.targetState = false
+                resetNote.value = true
+            }
         }
 
         if (splitScreen) {

@@ -51,6 +51,7 @@ import ru.tech.firenote.viewModel.creation.GoalCreationViewModel
 fun GoalCreationScreen(
     state: MutableTransitionState<Boolean>,
     globalGoal: MutableState<Goal?>,
+    reset: MutableState<Boolean>,
     viewModel: GoalCreationViewModel = viewModel()
 ) {
     val tempLabel = rememberSaveable { mutableStateOf("") }
@@ -119,11 +120,7 @@ fun GoalCreationScreen(
             ExtendedFloatingActionButton(
                 modifier = Modifier.navigationBarsPadding(),
                 text = {
-                    Text(
-                        stringResource(
-                            if (editionMode) R.string.save else R.string.edit
-                        )
-                    )
+                    Text(stringResource(if (editionMode) R.string.save else R.string.edit))
                 },
                 icon = {
                     Icon(
@@ -132,11 +129,8 @@ fun GoalCreationScreen(
                     )
                 },
                 onClick = {
-                    if (editionMode) {
-                        saveGoal(viewModel, context, state, globalGoal.value)
-                    } else {
-                        editionMode = true
-                    }
+                    if (editionMode) saveGoal(viewModel, context, state, globalGoal.value)
+                    else editionMode = true
                 })
         }
     ) { contentPadding ->
@@ -367,6 +361,12 @@ fun GoalCreationScreen(
             }
         }
     }
+
+    if (reset.value) {
+        viewModel.resetValues()
+        reset.value = false
+    }
+
 }
 
 private fun saveGoal(

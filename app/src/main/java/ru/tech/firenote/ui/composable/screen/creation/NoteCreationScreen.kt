@@ -42,6 +42,7 @@ import ru.tech.firenote.viewModel.creation.NoteCreationViewModel
 fun NoteCreationScreen(
     state: MutableTransitionState<Boolean>,
     globalNote: MutableState<Note?>,
+    reset: MutableState<Boolean>,
     viewModel: NoteCreationViewModel = viewModel()
 ) {
     val tempLabel = rememberSaveable { mutableStateOf("") }
@@ -260,6 +261,12 @@ fun NoteCreationScreen(
             }
         }
     }
+
+    if (reset.value) {
+        viewModel.resetValues()
+        reset.value = false
+    }
+
 }
 
 private fun saveNote(

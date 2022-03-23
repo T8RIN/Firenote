@@ -76,7 +76,6 @@ class MainViewModel @Inject constructor(
 
     fun clearGlobalGoal() {
         globalGoal.value = null
-
     }
 
     fun clearGlobalNote() {

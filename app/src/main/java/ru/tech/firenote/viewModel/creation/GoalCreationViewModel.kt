@@ -10,7 +10,6 @@ import ru.tech.firenote.model.Goal
 import ru.tech.firenote.model.GoalData
 import ru.tech.firenote.repository.NoteRepository
 import ru.tech.firenote.ui.theme.GoalGreen
-import ru.tech.firenote.ui.theme.NoteYellow
 import ru.tech.firenote.utils.GlobalUtils.blend
 import javax.inject.Inject
 
@@ -70,7 +69,7 @@ class GoalCreationViewModel @Inject constructor(
         this.goal = goal
         goalLabel.value = goal?.title ?: ""
         goalContent.value = goal?.content ?: listOf(GoalData(done = false))
-        goalColor.value = goal?.color ?: NoteYellow.toArgb()
+        goalColor.value = goal?.color ?: GoalGreen.toArgb()
         appBarColor.value = goal?.appBarColor ?: goalColor.value.blend()
     }
 
