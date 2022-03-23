@@ -39,10 +39,7 @@ fun FirenoteApp(
 ) {
 
     val isScaffoldVisible by derivedStateOf {
-        !viewModel.showNoteCreation.currentState
-                || !viewModel.showNoteCreation.targetState
-                || !viewModel.showGoalCreation.currentState
-                || !viewModel.showGoalCreation.targetState
+        (!viewModel.showNoteCreation.currentState or !viewModel.showNoteCreation.targetState) and (!viewModel.showGoalCreation.currentState or !viewModel.showGoalCreation.targetState)
     }
 
     FirenoteTheme {
