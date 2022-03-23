@@ -68,13 +68,13 @@ fun NoteListScreen(
             val repoList = state.data as List<Note>
             var data = if (isDescendingFilter.value) {
                 when (filterType.value) {
-                    1 -> repoList.sortedByDescending { (it.color ?: 0).priority }
+                    1 -> repoList.sortedBy { (it.color ?: 0).priority }
                     2 -> repoList.sortedBy { it.timestamp }
                     else -> repoList.sortedBy { it.title }
                 }
             } else {
                 when (filterType.value) {
-                    1 -> repoList.sortedBy { (it.color ?: 0).priority }
+                    1 -> repoList.sortedByDescending { (it.color ?: 0).priority }
                     2 -> repoList.sortedByDescending { it.timestamp }
                     else -> repoList.sortedByDescending { it.title }
                 }
