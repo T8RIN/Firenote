@@ -74,4 +74,5 @@
     <string name="searchHere">Ищите тут</string>
     <string name="nothingFound">Ничего не найдено по вашему запросу</string>
     <string name="usernameChanged">"Никнейм изменен на "</string>
+    <string name="imagePicked">Успешно выбрано изображение</string>
 </resources>

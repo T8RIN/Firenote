@@ -68,8 +68,10 @@ fun ProfileScreen(
     showUsernameDialog: MutableState<Boolean>,
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
-    val context = LocalContext.current
+    val toastHost = LocalToastHost.current
     val configuration = LocalConfiguration.current
+
+    val imageTxt = stringResource(R.string.imagePicked)
 
     var boxSize: Double =
         if (configuration.screenWidthDp <= configuration.screenHeightDp) configuration.screenWidthDp.toDouble() else configuration.screenHeightDp.toDouble()
@@ -81,6 +83,7 @@ fun ProfileScreen(
         ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         viewModel.updateProfile(uri)
+        toastHost.sendToast(Icons.Outlined.Image, imageTxt)
     }
 
     val showResetDialog = remember { mutableStateOf(false) }
@@ -89,7 +92,7 @@ fun ProfileScreen(
     when (val state = viewModel.username.collectAsState().value) {
         is UIState.Empty -> {
             state.message?.let {
-                LocalToastHost.current.sendToast(Icons.Outlined.Error, it)
+                toastHost.sendToast(Icons.Outlined.Error, it)
             }
         }
         is UIState.Success<*> -> {
@@ -133,7 +136,7 @@ fun ProfileScreen(
                     }
                     is UIState.Empty -> {
                         state.message?.let {
-                            LocalToastHost.current.sendToast(Icons.Outlined.Error, it)
+                            toastHost.sendToast(Icons.Outlined.Error, it)
                         }
                         Icon(Icons.Default.AccountCircle, null, Modifier.fillMaxSize())
                         alpha.value = 0f
@@ -216,7 +219,7 @@ fun ProfileScreen(
                 }
                 is UIState.Empty -> {
                     state.message?.let {
-                        LocalToastHost.current.sendToast(Icons.Outlined.Error, it)
+                        toastHost.sendToast(Icons.Outlined.Error, it)
                     }
                 }
                 is UIState.Success<*> -> {
@@ -235,7 +238,6 @@ fun ProfileScreen(
         }
     }
 
-    val toastHost = LocalToastHost.current
     val txt = stringResource(R.string.checkYourEmail)
 
     MaterialDialog(
@@ -315,7 +317,7 @@ fun ProfileScreen(
                     }
                     is UIState.Empty -> {
                         state.message?.let {
-                            LocalToastHost.current.sendToast(Icons.Outlined.Error, it)
+                            toastHost.sendToast(Icons.Outlined.Error, it)
                         }
                         Column(
                             Modifier
@@ -397,7 +399,7 @@ fun ProfileScreen(
                         }
                     }
                     is UIState.Success<*> -> {
-                        LocalToastHost.current.sendToast(
+                        toastHost.sendToast(
                             Icons.Outlined.DoneOutline,
                             stringResource(R.string.emailChanged)
                         )

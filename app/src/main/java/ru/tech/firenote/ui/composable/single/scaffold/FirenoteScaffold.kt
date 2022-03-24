@@ -20,6 +20,7 @@ import ru.tech.firenote.ui.composable.provider.LocalToastHost
 import ru.tech.firenote.ui.composable.single.bar.*
 import ru.tech.firenote.ui.composable.single.toast.sendToast
 import ru.tech.firenote.ui.route.Screen
+import ru.tech.firenote.utils.GlobalUtils.isOnline
 import ru.tech.firenote.viewModel.main.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -100,6 +101,9 @@ fun FirenoteScaffold(
             )
         },
         floatingActionButton = {
+            val toastHost = LocalToastHost.current
+            val txt = stringResource(R.string.noInternet)
+
             ExtendedFloatingActionButton(onClick = {
                 when (viewModel.selectedItem.value) {
                     0 -> {
@@ -110,7 +114,10 @@ fun FirenoteScaffold(
                         viewModel.showGoalCreation.targetState = true
                         viewModel.clearGlobalGoal()
                     }
-                    2 -> viewModel.resultLauncher.value?.launch("image/*")
+                    2 -> {
+                        if (context.isOnline()) viewModel.resultLauncher.value?.launch("image/*")
+                        else toastHost.sendToast(Icons.Outlined.SignalWifiOff, txt)
+                    }
                 }
             }, icon = {
                 Icon(
