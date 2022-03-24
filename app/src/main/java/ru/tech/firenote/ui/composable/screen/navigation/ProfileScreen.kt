@@ -83,7 +83,9 @@ fun ProfileScreen(
         ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         viewModel.updateProfile(uri)
-        toastHost.sendToast(Icons.Outlined.Image, imageTxt)
+        uri?.let {
+            toastHost.sendToast(Icons.Outlined.Image, imageTxt)
+        }
     }
 
     val showResetDialog = remember { mutableStateOf(false) }
