@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import ru.tech.firenote.repository.NoteRepository
 import ru.tech.firenote.ui.state.UIState
 import ru.tech.firenote.ui.theme.noteColors
-import ru.tech.firenote.ui.theme.priority
+import ru.tech.firenote.ui.theme.position
 import javax.inject.Inject
 
 @HiltViewModel
@@ -48,7 +48,7 @@ class ProfileViewModel @Inject constructor(
                     if (list.isNullOrEmpty()) _noteCountState.value = UIState.Success(tempList)
                     else {
                         for (note in list) {
-                            tempList[(note.color ?: 0).priority]++
+                            tempList[(note.color ?: 0).position]++
                         }
                         _noteCountState.value = UIState.Success(tempList)
                     }

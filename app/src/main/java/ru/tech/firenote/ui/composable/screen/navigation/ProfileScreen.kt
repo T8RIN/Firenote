@@ -225,13 +225,22 @@ fun ProfileScreen(
                 }
                 is UIState.Success<*> -> {
                     FlowRow {
-                        repeat(noteColors.size) {
-                            ProfileNoteItem(
-                                noteColors[it] to ((state.data as? List<Int>)?.get(it) ?: 0),
-                                Modifier
-                                    .padding(4.dp)
-                                    .fillMaxSize(0.25f)
-                            )
+                        repeat(noteColors.size + 1) {
+                            if (it == 9) {
+                                Spacer(
+                                    Modifier
+                                        .fillMaxWidth(0.75f)
+                                        .height(20.dp))
+                            } else {
+                                val index = if (it < 9) it else it - 1
+                                ProfileNoteItem(
+                                    noteColors[index] to ((state.data as? List<Int>)?.get(index)
+                                        ?: 0),
+                                    Modifier
+                                        .padding(4.dp)
+                                        .fillMaxSize(0.25f)
+                                )
+                            }
                         }
                     }
                 }

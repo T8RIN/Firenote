@@ -12,6 +12,9 @@ val NoteMint = Color(0xFF3ECC89)
 val NoteViolet = Color(0xFFF0A2FF)
 val NoteIndigo = Color(0xFFA7ABE9)
 val NoteGreen = Color(0xFF8DDF69)
+val NoteWhite = Color(0xFFFFE2EB)
+val NoteBrown = Color(0xFFBD7857)
+val NoteGray = Color(0xFFA5969B)
 
 val GoalGreen = Color(0xFF92CC77)
 val GoalCarrot = Color(0xFFBBA05A)
@@ -82,7 +85,10 @@ val noteColors =
         NoteViolet,
         NoteOrange,
         NoteRed,
-        NotePink
+        NotePink,
+        NoteWhite,
+        NoteGray,
+        NoteBrown
     )
 
 val goalColors =
@@ -94,6 +100,25 @@ val goalColors =
 
 val Int.priority
     get() = when (this) {
+        NoteWhite.toArgb() -> -3
+        NoteGray.toArgb() -> -2
+        NoteBrown.toArgb() -> -1
+        NoteYellow.toArgb() -> 0
+        NoteGreen.toArgb() -> 1
+        NoteMint.toArgb() -> 2
+        NoteBlue.toArgb() -> 3
+        NoteIndigo.toArgb() -> 4
+        NoteViolet.toArgb() -> 5
+        NoteOrange.toArgb() -> 6
+        NoteRed.toArgb() -> 7
+        else -> 8
+    }
+
+val Int.position
+    get() = when (this) {
+        NoteWhite.toArgb() -> 9
+        NoteGray.toArgb() -> 10
+        NoteBrown.toArgb() -> 11
         NoteYellow.toArgb() -> 0
         NoteGreen.toArgb() -> 1
         NoteMint.toArgb() -> 2

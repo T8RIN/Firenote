@@ -154,10 +154,20 @@ fun NoteCreationScreen(
                         items(noteColors.size) { index ->
                             val color = noteColors[index]
                             val colorInt = color.toArgb()
+
+                            val endPadding = if (index == 8) 25.dp else 5.dp
+                            val width = if (index == 8) 80.dp else 60.dp
+
                             Box(
                                 modifier = Modifier
-                                    .size(60.dp)
-                                    .padding(5.dp)
+                                    .height(60.dp)
+                                    .width(width)
+                                    .padding(
+                                        start = 5.dp,
+                                        top = 5.dp,
+                                        end = endPadding,
+                                        bottom = 5.dp
+                                    )
                                     .shadow(15.dp, CircleShape)
                                     .clip(CircleShape)
                                     .background(color)
