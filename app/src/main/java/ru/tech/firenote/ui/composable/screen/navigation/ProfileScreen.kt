@@ -76,8 +76,7 @@ fun ProfileScreen(
     var boxSize: Double =
         if (configuration.screenWidthDp <= configuration.screenHeightDp) configuration.screenWidthDp.toDouble() else configuration.screenHeightDp.toDouble()
 
-    boxSize *= if (LocalWindowSize.current == WindowSize.Compact) 0.4
-    else 0.16
+    boxSize *= if (LocalWindowSize.current == WindowSize.Compact) 0.4 else 0.16
 
     resultLauncher.value = rememberLauncherForActivityResult(
         ActivityResultContracts.GetContent()
