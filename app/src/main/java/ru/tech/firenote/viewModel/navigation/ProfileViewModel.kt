@@ -1,6 +1,8 @@
 package ru.tech.firenote.viewModel.navigation
 
 import android.net.Uri
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.ViewModel
@@ -9,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import ru.tech.firenote.model.Type
 import ru.tech.firenote.repository.NoteRepository
 import ru.tech.firenote.ui.state.UIState
 import ru.tech.firenote.ui.theme.noteColors
@@ -34,8 +37,8 @@ class ProfileViewModel @Inject constructor(
     private val _username = MutableStateFlow<UIState>(UIState.Success(email.split("@")[0]))
     var username: StateFlow<UIState> = _username
 
-    private val _typeState = MutableStateFlow<UIState>(UIState.Empty())
-    val typeState: StateFlow<UIState> = _typeState
+    private val _typeState = mutableStateOf<List<Type>>(listOf())
+    val typeState: State<List<Type>> = _typeState
 
     init {
         loadUsername()
@@ -70,9 +73,9 @@ class ProfileViewModel @Inject constructor(
             repository.getTypes().collect {
                 if (it.isSuccess) {
                     val list = it.getOrNull()
-                    _typeState.value = UIState.Success(list)
+                    _typeState.value = list ?: listOf()
                 } else {
-                    _typeState.value = UIState.Empty(it.exceptionOrNull()?.localizedMessage)
+                    _typeState.value = listOf()
                 }
             }
         }

@@ -46,7 +46,6 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.accompanist.flowlayout.FlowRow
 import ru.tech.firenote.R
-import ru.tech.firenote.model.Type
 import ru.tech.firenote.ui.composable.provider.LocalToastHost
 import ru.tech.firenote.ui.composable.provider.LocalWindowSize
 import ru.tech.firenote.ui.composable.screen.auth.isValid
@@ -208,6 +207,7 @@ fun ProfileScreen(
                 }
             }
             Spacer(Modifier.size(5.dp))
+
             when (val state = viewModel.noteCountState.collectAsState().value) {
                 is UIState.Loading -> {
                     Column(
@@ -226,8 +226,6 @@ fun ProfileScreen(
                     }
                 }
                 is UIState.Success<*> -> {
-                    val typeState = viewModel.typeState.collectAsState().value
-
                     FlowRow {
                         repeat(noteColors.size + 1) {
                             if (it == 9) {
@@ -238,18 +236,9 @@ fun ProfileScreen(
                                 )
                             } else {
                                 val index = if (it < 9) it else it - 1
-                                var type = ""
-
-                                if (typeState is UIState.Success<*>) {
-                                    val data = typeState.data as List<Type>
-                                    type =
-                                        data.firstOrNull { item -> item.color == noteColors[index].toArgb() }?.type
-                                            ?: ""
-                                } else if (typeState is UIState.Empty) {
-                                    typeState.message?.let { msg ->
-                                        toastHost.sendToast(Icons.Outlined.Error, msg)
-                                    }
-                                }
+                                val type =
+                                    viewModel.typeState.value.firstOrNull { item -> item.color == noteColors[index].toArgb() }?.type
+                                        ?: ""
 
                                 ProfileNoteItem(
                                     pair = noteColors[index] to ((state.data as? List<Int>)?.get(
