@@ -1,8 +1,6 @@
 package ru.tech.firenote.ui.composable.screen.navigation
 
 import android.net.Uri
-import android.widget.Toast.LENGTH_LONG
-import android.widget.Toast.makeText
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,9 +17,7 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material.icons.outlined.Password
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.material.icons.twotone.Email
 import androidx.compose.material.icons.twotone.Password
 import androidx.compose.material3.*
@@ -49,12 +45,13 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.accompanist.flowlayout.FlowRow
 import ru.tech.firenote.R
+import ru.tech.firenote.ui.composable.provider.LocalToastHost
 import ru.tech.firenote.ui.composable.provider.LocalWindowSize
 import ru.tech.firenote.ui.composable.screen.auth.isValid
 import ru.tech.firenote.ui.composable.single.dialog.MaterialDialog
 import ru.tech.firenote.ui.composable.single.lazyitem.ProfileNoteItem
 import ru.tech.firenote.ui.composable.single.text.MaterialTextField
-import ru.tech.firenote.ui.composable.single.toast.Toast
+import ru.tech.firenote.ui.composable.single.toast.sendToast
 import ru.tech.firenote.ui.composable.utils.WindowSize
 import ru.tech.firenote.ui.route.Screen
 import ru.tech.firenote.ui.state.UIState
@@ -91,7 +88,9 @@ fun ProfileScreen(
 
     when (val state = viewModel.username.collectAsState().value) {
         is UIState.Empty -> {
-            state.message?.let { Toast(it) }
+            state.message?.let {
+                LocalToastHost.current.sendToast(Icons.Outlined.Error, it)
+            }
         }
         is UIState.Success<*> -> {
             profileTitle.value = state.data as String
@@ -133,7 +132,9 @@ fun ProfileScreen(
                         )
                     }
                     is UIState.Empty -> {
-                        state.message?.let { Toast(it) }
+                        state.message?.let {
+                            LocalToastHost.current.sendToast(Icons.Outlined.Error, it)
+                        }
                         Icon(Icons.Default.AccountCircle, null, Modifier.fillMaxSize())
                         alpha.value = 0f
                     }
@@ -214,7 +215,9 @@ fun ProfileScreen(
                     }
                 }
                 is UIState.Empty -> {
-                    state.message?.let { Toast(it) }
+                    state.message?.let {
+                        LocalToastHost.current.sendToast(Icons.Outlined.Error, it)
+                    }
                 }
                 is UIState.Success<*> -> {
                     FlowRow {
@@ -232,6 +235,8 @@ fun ProfileScreen(
         }
     }
 
+    val toastHost = LocalToastHost.current
+    val txt = stringResource(R.string.checkYourEmail)
 
     MaterialDialog(
         icon = Icons.Outlined.Password,
@@ -239,7 +244,7 @@ fun ProfileScreen(
         message = R.string.resetMessage,
         confirmText = R.string.reset,
         confirmAction = {
-            makeText(context, R.string.checkYourEmail, LENGTH_LONG).show()
+            toastHost.sendToast(Icons.Outlined.AlternateEmail, txt)
             viewModel.sendResetPasswordLink()
             viewModel.signOut()
             selectedItem.value = 0
@@ -309,7 +314,9 @@ fun ProfileScreen(
                         }
                     }
                     is UIState.Empty -> {
-                        state.message?.let { Toast(it) }
+                        state.message?.let {
+                            LocalToastHost.current.sendToast(Icons.Outlined.Error, it)
+                        }
                         Column(
                             Modifier
                                 .wrapContentHeight()
@@ -390,7 +397,10 @@ fun ProfileScreen(
                         }
                     }
                     is UIState.Success<*> -> {
-                        Toast(R.string.emailChanged)
+                        LocalToastHost.current.sendToast(
+                            Icons.Outlined.DoneOutline,
+                            stringResource(R.string.emailChanged)
+                        )
                         Column(
                             modifier = Modifier
                                 .fillMaxSize(),
@@ -417,12 +427,14 @@ fun ProfileScreen(
         val focusManager = LocalFocusManager.current
         var username by remember { mutableStateOf(profileTitle.value) }
 
+        val text = stringResource(R.string.usernameChanged)
 
         AlertDialog(
             icon = { Icon(Icons.Outlined.Edit, null) },
             title = { Text(stringResource(R.string.changeUsername)) },
             confirmButton = {
                 TextButton(onClick = {
+                    toastHost.sendToast(Icons.Outlined.DoneOutline, text + username)
                     showUsernameDialog.value = false
                     viewModel.updateUsername(username)
                 }) {

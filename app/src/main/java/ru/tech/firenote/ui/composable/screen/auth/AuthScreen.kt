@@ -30,7 +30,11 @@ fun AuthScreen(visible: MutableState<Boolean>, viewModel: AuthViewModel = viewMo
         viewModel.resetState()
     }
     visible.value = viewModel.visibleState.targetState
-    AnimatedVisibility(visibleState = viewModel.visibleState, enter = fadeIn(), exit = fadeOut()) {
+    AnimatedVisibility(
+        visibleState = viewModel.visibleState,
+        enter = fadeIn(),
+        exit = fadeOut()
+    ) {
         Surface(
             modifier = Modifier
                 .fillMaxSize()
@@ -54,8 +58,7 @@ fun AuthScreen(visible: MutableState<Boolean>, viewModel: AuthViewModel = viewMo
                         .weight(
                             when (LocalWindowSize.current) {
                                 WindowSize.Compact -> 2f
-                                WindowSize.Medium -> 1f
-                                else -> 0.5f
+                                else -> 1f
                             }
                         )
                         .padding(
@@ -69,14 +72,15 @@ fun AuthScreen(visible: MutableState<Boolean>, viewModel: AuthViewModel = viewMo
                     containerColor = MaterialTheme.colorScheme.secondaryContainer,
                     elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
                 ) {
-                    when (viewModel.currentScreen.value) {
-                        Screen.LoginScreen.route -> LoginScreen(viewModel)
-                        Screen.RegistrationScreen.route -> RegistrationScreen(viewModel)
-                        Screen.ForgotPasswordScreen.route -> ForgotPasswordScreen(viewModel)
+                    Box {
+                        when (viewModel.currentScreen.value) {
+                            Screen.LoginScreen.route -> LoginScreen(viewModel)
+                            Screen.RegistrationScreen.route -> RegistrationScreen(viewModel)
+                            Screen.ForgotPasswordScreen.route -> ForgotPasswordScreen(viewModel)
+                        }
                     }
                 }
             }
         }
     }
-
 }

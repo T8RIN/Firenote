@@ -1,7 +1,5 @@
 package ru.tech.firenote.ui.composable.screen.creation
 
-import android.content.Context
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.MutableTransitionState
@@ -16,6 +14,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.Error
 import androidx.compose.material.icons.outlined.Save
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Close
@@ -28,7 +27,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -40,8 +38,11 @@ import kotlinx.coroutines.launch
 import ru.tech.firenote.R
 import ru.tech.firenote.model.Goal
 import ru.tech.firenote.model.GoalData
+import ru.tech.firenote.ui.composable.provider.LocalToastHost
 import ru.tech.firenote.ui.composable.single.bar.EditableAppBar
 import ru.tech.firenote.ui.composable.single.dialog.MaterialDialog
+import ru.tech.firenote.ui.composable.single.toast.FancyToastValues
+import ru.tech.firenote.ui.composable.single.toast.sendToast
 import ru.tech.firenote.ui.theme.goalColors
 import ru.tech.firenote.utils.GlobalUtils.blend
 import ru.tech.firenote.viewModel.creation.GoalCreationViewModel
@@ -67,7 +68,9 @@ fun GoalCreationScreen(
                 && viewModel.goalLabel.value.isNotEmpty())
     }
 
-    val context = LocalContext.current
+    val txt = stringResource(R.string.fillAll)
+    val toastHost = LocalToastHost.current
+
     val scope = rememberCoroutineScope()
     val goalBackgroundAnimatable = remember {
         Animatable(
@@ -129,7 +132,7 @@ fun GoalCreationScreen(
                     )
                 },
                 onClick = {
-                    if (editionMode) saveGoal(viewModel, context, state, globalGoal.value)
+                    if (editionMode) saveGoal(viewModel, toastHost, txt, state, globalGoal.value)
                     else editionMode = true
                 })
         }
@@ -319,7 +322,7 @@ fun GoalCreationScreen(
         message = R.string.goalSavingDialogMessage,
         confirmText = R.string.save,
         dismissText = R.string.discardChanges,
-        confirmAction = { saveGoal(viewModel, context, state, globalGoal.value) },
+        confirmAction = { saveGoal(viewModel, toastHost, txt, state, globalGoal.value) },
         dismissAction = {
             viewModel.resetValues()
             state.targetState = false
@@ -371,7 +374,8 @@ fun GoalCreationScreen(
 
 private fun saveGoal(
     viewModel: GoalCreationViewModel,
-    context: Context,
+    toastHost: FancyToastValues,
+    message: String,
     state: MutableTransitionState<Boolean>,
     goal: Goal?
 ) {
@@ -382,7 +386,7 @@ private fun saveGoal(
             viewModel.saveGoal()
         }
         state.targetState = false
-    } else Toast.makeText(context, R.string.fillAll, Toast.LENGTH_SHORT).show()
+    } else toastHost.sendToast(Icons.Outlined.Error, message)
 }
 
 @Composable

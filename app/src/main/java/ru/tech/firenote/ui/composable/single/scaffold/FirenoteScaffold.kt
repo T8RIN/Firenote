@@ -2,10 +2,7 @@ package ru.tech.firenote.ui.composable.single.scaffold
 
 import android.content.Context
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AddTask
-import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.Error
-import androidx.compose.material.icons.outlined.Image
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Search
@@ -19,7 +16,9 @@ import androidx.navigation.NavHostController
 import ru.tech.firenote.R
 import ru.tech.firenote.ui.composable.navigation.Navigation
 import ru.tech.firenote.ui.composable.provider.LocalSnackbarHost
+import ru.tech.firenote.ui.composable.provider.LocalToastHost
 import ru.tech.firenote.ui.composable.single.bar.*
+import ru.tech.firenote.ui.composable.single.toast.sendToast
 import ru.tech.firenote.ui.route.Screen
 import ru.tech.firenote.viewModel.main.MainViewModel
 
@@ -73,6 +72,9 @@ fun FirenoteScaffold(
                 },
                 actions = {
                     if (!viewModel.searchMode.value) {
+                        val toastHost = LocalToastHost.current
+                        val txt = stringResource(R.string.seeYouAgain)
+
                         when (viewModel.selectedItem.value) {
                             0 -> NoteActions(viewModel)
                             1 -> GoalActions(viewModel)
@@ -81,11 +83,8 @@ fun FirenoteScaffold(
                                     navController.popBackStack()
                                     launchSingleTop = true
                                 }
-                                android.widget.Toast.makeText(
-                                    context,
-                                    R.string.seeYouAgain,
-                                    android.widget.Toast.LENGTH_SHORT
-                                ).show()
+
+                                toastHost.sendToast(Icons.Outlined.TagFaces, txt)
 
                                 viewModel.signOut()
                             }

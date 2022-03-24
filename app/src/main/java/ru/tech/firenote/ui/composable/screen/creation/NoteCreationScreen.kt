@@ -1,7 +1,5 @@
 package ru.tech.firenote.ui.composable.screen.creation
 
-import android.content.Context
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.MutableTransitionState
@@ -13,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.Error
 import androidx.compose.material.icons.outlined.Save
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.*
@@ -23,16 +22,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 import ru.tech.firenote.R
 import ru.tech.firenote.model.Note
+import ru.tech.firenote.ui.composable.provider.LocalToastHost
 import ru.tech.firenote.ui.composable.single.bar.EditableAppBar
 import ru.tech.firenote.ui.composable.single.dialog.MaterialDialog
 import ru.tech.firenote.ui.composable.single.text.EditText
+import ru.tech.firenote.ui.composable.single.toast.FancyToastValues
+import ru.tech.firenote.ui.composable.single.toast.sendToast
 import ru.tech.firenote.ui.theme.noteColors
 import ru.tech.firenote.utils.GlobalUtils.blend
 import ru.tech.firenote.viewModel.creation.NoteCreationViewModel
@@ -57,7 +58,9 @@ fun NoteCreationScreen(
                 && viewModel.noteLabel.value.isNotEmpty())
     }
 
-    val context = LocalContext.current
+    val txt = stringResource(R.string.fillAll)
+    val toastHost = LocalToastHost.current
+
     val scope = rememberCoroutineScope()
     val noteBackgroundAnimatable = remember {
         Animatable(
@@ -124,7 +127,7 @@ fun NoteCreationScreen(
                 },
                 onClick = {
                     if (editionMode) {
-                        saveNote(viewModel, context, state, globalNote.value)
+                        saveNote(viewModel, toastHost, txt, state, globalNote.value)
                     } else {
                         editionMode = true
                     }
@@ -219,7 +222,7 @@ fun NoteCreationScreen(
         message = R.string.noteSavingDialogMessage,
         confirmText = R.string.save,
         dismissText = R.string.discardChanges,
-        confirmAction = { saveNote(viewModel, context, state, globalNote.value) },
+        confirmAction = { saveNote(viewModel, toastHost, txt, state, globalNote.value) },
         dismissAction = {
             viewModel.resetValues()
             state.targetState = false
@@ -271,7 +274,8 @@ fun NoteCreationScreen(
 
 private fun saveNote(
     viewModel: NoteCreationViewModel,
-    context: Context,
+    toastHost: FancyToastValues,
+    message: String,
     state: MutableTransitionState<Boolean>,
     note: Note?
 ) {
@@ -282,5 +286,5 @@ private fun saveNote(
             viewModel.saveNote()
         }
         state.targetState = false
-    } else Toast.makeText(context, R.string.fillAll, Toast.LENGTH_SHORT).show()
+    } else toastHost.sendToast(Icons.Outlined.Error, message)
 }

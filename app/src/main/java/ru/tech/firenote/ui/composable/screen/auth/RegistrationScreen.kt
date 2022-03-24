@@ -9,6 +9,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.outlined.AlternateEmail
+import androidx.compose.material.icons.outlined.Error
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -24,8 +26,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.tech.firenote.R
+import ru.tech.firenote.ui.composable.provider.LocalToastHost
 import ru.tech.firenote.ui.composable.single.text.MaterialTextField
-import ru.tech.firenote.ui.composable.single.toast.Toast
+import ru.tech.firenote.ui.composable.single.toast.sendToast
 import ru.tech.firenote.ui.route.Screen
 import ru.tech.firenote.ui.state.UIState
 import ru.tech.firenote.viewModel.auth.AuthViewModel
@@ -91,12 +94,15 @@ fun RegistrationScreen(viewModel: AuthViewModel) {
                     }
                 is UIState.Success<*> -> {
                     viewModel.goTo(Screen.LoginScreen)
-                    Toast(R.string.emailToVerify)
+                    LocalToastHost.current.sendToast(
+                        Icons.Outlined.AlternateEmail,
+                        stringResource(R.string.emailToVerify)
+                    )
                     viewModel.resetState()
                 }
                 is UIState.Empty -> {
                     state.message?.let {
-                        Toast(it)
+                        LocalToastHost.current.sendToast(Icons.Outlined.Error, it)
                         viewModel.resetState()
                     }
                     Column(

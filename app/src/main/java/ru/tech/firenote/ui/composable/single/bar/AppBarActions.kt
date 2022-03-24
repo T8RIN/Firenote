@@ -1,6 +1,5 @@
 package ru.tech.firenote.ui.composable.single.bar
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
@@ -20,7 +19,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.tech.firenote.R
+import ru.tech.firenote.ui.composable.provider.LocalToastHost
 import ru.tech.firenote.ui.composable.single.dialog.MaterialDialog
+import ru.tech.firenote.ui.composable.single.toast.sendToast
 import ru.tech.firenote.utils.GlobalUtils.isOnline
 import ru.tech.firenote.viewModel.main.MainViewModel
 
@@ -184,10 +185,12 @@ fun GoalActions(viewModel: MainViewModel) {
 fun ProfileActions(onClick: () -> Unit) {
     val showDialog = rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
+    val toastHost = LocalToastHost.current
+    val txt = stringResource(R.string.noInternet)
 
     IconButton(onClick = {
         if (context.isOnline()) showDialog.value = true
-        else Toast.makeText(context, R.string.noInternet, Toast.LENGTH_LONG).show()
+        else toastHost.sendToast(Icons.Outlined.SignalWifiOff, txt)
     }) {
         Icon(Icons.Outlined.Logout, null)
     }

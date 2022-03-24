@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.Error
 import androidx.compose.material.icons.twotone.Cloud
 import androidx.compose.material.icons.twotone.FindInPage
 import androidx.compose.material3.CircularProgressIndicator
@@ -23,11 +24,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import ru.tech.firenote.R
 import ru.tech.firenote.model.Goal
 import ru.tech.firenote.ui.composable.provider.LocalSnackbarHost
+import ru.tech.firenote.ui.composable.provider.LocalToastHost
 import ru.tech.firenote.ui.composable.provider.showSnackbar
 import ru.tech.firenote.ui.composable.single.dialog.MaterialDialog
 import ru.tech.firenote.ui.composable.single.lazyitem.GoalItem
 import ru.tech.firenote.ui.composable.single.placeholder.Placeholder
-import ru.tech.firenote.ui.composable.single.toast.Toast
+import ru.tech.firenote.ui.composable.single.toast.sendToast
 import ru.tech.firenote.ui.state.UIState
 import ru.tech.firenote.ui.theme.priorityGoal
 import ru.tech.firenote.viewModel.navigation.GoalListViewModel
@@ -132,7 +134,9 @@ fun GoalListScreen(
             }
         }
         is UIState.Empty -> {
-            state.message?.let { Toast(it) }
+            state.message?.let {
+                LocalToastHost.current.sendToast(Icons.Outlined.Error, it)
+            }
             Placeholder(icon = Icons.TwoTone.Cloud, textRes = R.string.noGoals)
         }
     }

@@ -1,6 +1,5 @@
 package ru.tech.firenote.ui.composable.screen.auth
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -8,11 +7,11 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.outlined.AlternateEmail
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -22,7 +21,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.tech.firenote.R
+import ru.tech.firenote.ui.composable.provider.LocalToastHost
 import ru.tech.firenote.ui.composable.single.text.MaterialTextField
+import ru.tech.firenote.ui.composable.single.toast.sendToast
 import ru.tech.firenote.ui.route.Screen
 import ru.tech.firenote.viewModel.auth.AuthViewModel
 
@@ -37,7 +38,7 @@ fun ForgotPasswordScreen(viewModel: AuthViewModel) {
         !email.isValid() && email.isNotEmpty()
     }
 
-    val context = LocalContext.current
+    val toastHost = LocalToastHost.current
     val focusManager = LocalFocusManager.current
 
     LazyColumn(
@@ -87,15 +88,13 @@ fun ForgotPasswordScreen(viewModel: AuthViewModel) {
                 )
             }
 
+            val txt = stringResource(R.string.checkYourEmail)
+
             Button(
                 onClick = {
                     viewModel.goTo(Screen.LoginScreen)
                     viewModel.sendResetPasswordLink(email)
-                    Toast.makeText(
-                        context,
-                        R.string.checkYourEmail,
-                        Toast.LENGTH_LONG
-                    ).show()
+                    toastHost.sendToast(Icons.Outlined.AlternateEmail, txt)
                 },
                 enabled = isFormValid,
                 modifier = Modifier

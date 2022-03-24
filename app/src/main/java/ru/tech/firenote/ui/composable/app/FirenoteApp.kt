@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
@@ -18,11 +19,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import ru.tech.firenote.R
 import ru.tech.firenote.ui.composable.provider.LocalSnackbarHost
+import ru.tech.firenote.ui.composable.provider.LocalToastHost
 import ru.tech.firenote.ui.composable.provider.LocalWindowSize
 import ru.tech.firenote.ui.composable.screen.auth.AuthScreen
 import ru.tech.firenote.ui.composable.screen.creation.CreationContainer
 import ru.tech.firenote.ui.composable.single.dialog.MaterialDialog
 import ru.tech.firenote.ui.composable.single.scaffold.FirenoteScaffold
+import ru.tech.firenote.ui.composable.single.toast.FancyToast
+import ru.tech.firenote.ui.composable.single.toast.FancyToastValues
 import ru.tech.firenote.ui.composable.utils.WindowSize
 import ru.tech.firenote.ui.theme.FirenoteTheme
 import ru.tech.firenote.viewModel.main.MainViewModel
@@ -58,11 +62,16 @@ fun FirenoteApp(
             viewModel.updateSearch()
         }
 
+        val icon = remember { mutableStateOf(Icons.Default.Error) }
+        val text = remember { mutableStateOf("") }
+        val changed = remember { mutableStateOf(false) }
 
         val snackbarHostState = remember { SnackbarHostState() }
+
         CompositionLocalProvider(
             LocalSnackbarHost provides snackbarHostState,
-            LocalWindowSize provides windowSize
+            LocalWindowSize provides windowSize,
+            LocalToastHost provides FancyToastValues(icon, text, changed)
         ) {
             if (viewModel.isAuth.value) {
                 AuthScreen(viewModel.isAuth)
@@ -92,6 +101,9 @@ fun FirenoteApp(
                 }
             }
         }
+
+        FancyToast(icon = icon.value, message = text.value, changed = changed)
+
     }
 
 }

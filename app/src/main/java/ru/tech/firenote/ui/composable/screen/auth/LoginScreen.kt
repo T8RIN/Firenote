@@ -10,6 +10,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.outlined.DoneOutline
+import androidx.compose.material.icons.outlined.Error
+import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -26,8 +29,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.tech.firenote.R
+import ru.tech.firenote.ui.composable.provider.LocalToastHost
 import ru.tech.firenote.ui.composable.single.text.MaterialTextField
-import ru.tech.firenote.ui.composable.single.toast.Toast
+import ru.tech.firenote.ui.composable.single.toast.sendToast
 import ru.tech.firenote.ui.route.Screen
 import ru.tech.firenote.ui.state.UIState
 import ru.tech.firenote.viewModel.auth.AuthViewModel
@@ -83,7 +87,12 @@ fun LoginScreen(viewModel: AuthViewModel) {
                         CircularProgressIndicator()
                     }
                 is UIState.Success<*> -> {
-                    Toast(R.string.niceToSeeYou)
+
+                    LocalToastHost.current.sendToast(
+                        Icons.Outlined.DoneOutline,
+                        stringResource(R.string.niceToSeeYou)
+                    )
+
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
@@ -96,11 +105,14 @@ fun LoginScreen(viewModel: AuthViewModel) {
                 }
                 is UIState.Empty -> {
                     if (state.message == "verification") {
-                        Toast(R.string.notVerified)
+                        LocalToastHost.current.sendToast(
+                            Icons.Outlined.HelpOutline,
+                            stringResource(R.string.notVerified)
+                        )
                         viewModel.resetState()
                     } else {
                         state.message?.let {
-                            Toast(it)
+                            LocalToastHost.current.sendToast(Icons.Outlined.Error, it)
                             viewModel.resetState()
                         }
                     }
