@@ -3,6 +3,7 @@ package ru.tech.firenote.ui.composable.single.toast
 import android.widget.Toast
 import androidx.compose.animation.*
 import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -39,13 +40,10 @@ fun FancyToast(
     val sizeMax = max(conf.screenWidthDp, conf.screenHeightDp).dp
 
     Box(
-        Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
         AnimatedVisibility(
             modifier = Modifier
-                .wrapContentHeight()
-                .wrapContentWidth()
                 .align(Alignment.BottomCenter)
                 .padding(bottom = sizeMax * 0.15f),
             visibleState = showToast,
@@ -53,12 +51,11 @@ fun FancyToast(
             exit = fadeOut() + scaleOut()
         ) {
             Card(
-                elevation = CardDefaults.cardElevation(10.dp),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.tertiaryContainer),
                 contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
                 modifier = Modifier
-                    .alpha(0.95f)
-                    .wrapContentHeight()
-                    .wrapContentWidth()
+                    .alpha(0.98f)
+                    .heightIn(48.dp)
                     .widthIn(0.dp, (sizeMin * 0.7f)),
                 shape = RoundedCornerShape(24.dp)
             ) {

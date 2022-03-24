@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -45,6 +46,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.accompanist.flowlayout.FlowRow
 import ru.tech.firenote.R
+import ru.tech.firenote.model.Type
 import ru.tech.firenote.ui.composable.provider.LocalToastHost
 import ru.tech.firenote.ui.composable.provider.LocalWindowSize
 import ru.tech.firenote.ui.composable.screen.auth.isValid
@@ -224,21 +226,42 @@ fun ProfileScreen(
                     }
                 }
                 is UIState.Success<*> -> {
+                    val typeState = viewModel.typeState.collectAsState().value
+
                     FlowRow {
                         repeat(noteColors.size + 1) {
                             if (it == 9) {
                                 Spacer(
                                     Modifier
                                         .fillMaxWidth(0.75f)
-                                        .height(20.dp))
+                                        .height(20.dp)
+                                )
                             } else {
                                 val index = if (it < 9) it else it - 1
+                                var type = ""
+
+                                if (typeState is UIState.Success<*>) {
+                                    val data = typeState.data as List<Type>
+                                    type =
+                                        data.firstOrNull { item -> item.color == noteColors[index].toArgb() }?.type
+                                            ?: ""
+                                } else if (typeState is UIState.Empty) {
+                                    typeState.message?.let { msg ->
+                                        toastHost.sendToast(Icons.Outlined.Error, msg)
+                                    }
+                                }
+
                                 ProfileNoteItem(
-                                    noteColors[index] to ((state.data as? List<Int>)?.get(index)
-                                        ?: 0),
-                                    Modifier
+                                    pair = noteColors[index] to ((state.data as? List<Int>)?.get(
+                                        index
+                                    ) ?: 0),
+                                    typeText = type,
+                                    modifier = Modifier
                                         .padding(4.dp)
-                                        .fillMaxSize(0.25f)
+                                        .fillMaxSize(0.25f),
+                                    onValueChange = { newValue ->
+                                        viewModel.updateType(noteColors[index], newValue)
+                                    }
                                 )
                             }
                         }

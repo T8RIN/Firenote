@@ -5,6 +5,7 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.Flow
 import ru.tech.firenote.model.Goal
 import ru.tech.firenote.model.Note
+import ru.tech.firenote.model.Type
 
 interface NoteRepository {
 
@@ -29,4 +30,8 @@ interface NoteRepository {
     suspend fun insertGoal(goal: Goal)
 
     suspend fun deleteGoal(goal: Goal)
+
+    suspend fun updateType(color: Int, type: String)
+
+    suspend fun getTypes(): Flow<Result<List<Type>>>
 }

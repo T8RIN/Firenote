@@ -13,10 +13,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import ru.tech.firenote.model.Goal
-import ru.tech.firenote.model.ImageUri
-import ru.tech.firenote.model.Note
-import ru.tech.firenote.model.Username
+import ru.tech.firenote.model.*
 import ru.tech.firenote.repository.NoteRepository
 import javax.inject.Inject
 
@@ -34,6 +31,7 @@ class NoteRepositoryImpl @Inject constructor(
     private val imageChild = "image/"
     private val usernameChild = "username/"
     private val goalsChild = "goals/"
+    private val typesChild = "types/"
 
     override suspend fun getNotes(): Flow<Result<List<Note>>> {
         return callbackFlow {
@@ -157,6 +155,32 @@ class NoteRepositoryImpl @Inject constructor(
 
     override suspend fun deleteGoal(goal: Goal) {
         goal.id?.let { database.child(path).child(goalsChild + it).removeValue() }
+    }
+
+    override suspend fun updateType(color: Int, type: String) {
+        database.child(path).child(typesChild + color).setValue(Type(color, type))
+    }
+
+    override suspend fun getTypes(): Flow<Result<List<Type>>> {
+        return callbackFlow {
+            val postListener = object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    this@callbackFlow.trySendBlocking(Result.failure(error.toException()))
+                }
+
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val items = dataSnapshot.children.map { ds ->
+                        ds.getValue(Type::class.java)
+                    }
+                    this@callbackFlow.trySendBlocking(Result.success(items.filterNotNull()))
+                }
+            }
+            database.child(path).child(typesChild).addValueEventListener(postListener)
+
+            awaitClose {
+                database.child(path).child(typesChild).removeEventListener(postListener)
+            }
+        }
     }
 
 }

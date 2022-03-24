@@ -15,8 +15,8 @@ android {
         applicationId = "ru.tech.firenote"
         minSdk = 21
         targetSdk = 32
-        versionCode = 6
-        versionName = "1.1.1"
+        versionCode = 7
+        versionName = "1.1.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 

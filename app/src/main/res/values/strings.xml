@@ -75,4 +75,5 @@
     <string name="nothingFound">Nothing found, try to change your search query</string>
     <string name="usernameChanged">"Username changed to "</string>
     <string name="imagePicked">Image picked succesfully</string>
+    <string name="noteType">Note type</string>
 </resources>

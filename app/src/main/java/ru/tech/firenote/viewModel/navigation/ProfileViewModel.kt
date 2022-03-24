@@ -1,6 +1,8 @@
 package ru.tech.firenote.viewModel.navigation
 
 import android.net.Uri
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,10 +34,14 @@ class ProfileViewModel @Inject constructor(
     private val _username = MutableStateFlow<UIState>(UIState.Success(email.split("@")[0]))
     var username: StateFlow<UIState> = _username
 
+    private val _typeState = MutableStateFlow<UIState>(UIState.Empty())
+    val typeState: StateFlow<UIState> = _typeState
+
     init {
         loadUsername()
         loadProfileImage()
         getNotes()
+        getTypes()
     }
 
     private fun getNotes() {
@@ -54,6 +60,19 @@ class ProfileViewModel @Inject constructor(
                     }
                 } else {
                     _noteCountState.value = UIState.Empty(it.exceptionOrNull()?.localizedMessage)
+                }
+            }
+        }
+    }
+
+    private fun getTypes() {
+        viewModelScope.launch {
+            repository.getTypes().collect {
+                if (it.isSuccess) {
+                    val list = it.getOrNull()
+                    _typeState.value = UIState.Success(list)
+                } else {
+                    _typeState.value = UIState.Empty(it.exceptionOrNull()?.localizedMessage)
                 }
             }
         }
@@ -129,5 +148,11 @@ class ProfileViewModel @Inject constructor(
                     _updateState.value = UIState.Empty(task.exception?.localizedMessage)
                 }
             }
+    }
+
+    fun updateType(color: Color, type: String) {
+        viewModelScope.launch {
+            repository.updateType(color.toArgb(), type)
+        }
     }
 }
