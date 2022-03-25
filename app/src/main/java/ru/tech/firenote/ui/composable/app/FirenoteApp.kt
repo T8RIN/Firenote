@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.ExitToApp
@@ -18,6 +20,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import ru.tech.firenote.R
+import ru.tech.firenote.ui.composable.provider.LocalLazyListStateProvider
 import ru.tech.firenote.ui.composable.provider.LocalSnackbarHost
 import ru.tech.firenote.ui.composable.provider.LocalToastHost
 import ru.tech.firenote.ui.composable.provider.LocalWindowSize
@@ -32,7 +35,8 @@ import ru.tech.firenote.ui.theme.FirenoteTheme
 import ru.tech.firenote.viewModel.main.MainViewModel
 
 @SuppressLint("SourceLockedOrientationActivity")
-@OptIn(ExperimentalMaterial3Api::class)
+@ExperimentalMaterial3Api
+@ExperimentalAnimationApi
 @Composable
 fun FirenoteApp(
     context: ComponentActivity,
@@ -68,10 +72,13 @@ fun FirenoteApp(
 
         val snackbarHostState = remember { SnackbarHostState() }
 
+        val lazyListState = rememberLazyListState()
+
         CompositionLocalProvider(
             LocalSnackbarHost provides snackbarHostState,
             LocalWindowSize provides windowSize,
-            LocalToastHost provides FancyToastValues(icon, text, changed)
+            LocalToastHost provides FancyToastValues(icon, text, changed),
+            LocalLazyListStateProvider provides lazyListState
         ) {
             if (viewModel.isAuth.value) {
                 AuthScreen(viewModel.isAuth)

@@ -27,7 +27,7 @@ import ru.tech.firenote.ui.composable.single.toast.sendToast
 import ru.tech.firenote.ui.route.Screen
 import ru.tech.firenote.viewModel.auth.AuthViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
+@ExperimentalMaterial3Api
 @Composable
 fun ForgotPasswordScreen(viewModel: AuthViewModel) {
     var email by remember { mutableStateOf("") }

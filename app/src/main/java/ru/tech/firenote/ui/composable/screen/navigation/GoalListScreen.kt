@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.tech.firenote.R
 import ru.tech.firenote.model.Goal
+import ru.tech.firenote.ui.composable.provider.LocalLazyListStateProvider
 import ru.tech.firenote.ui.composable.provider.LocalSnackbarHost
 import ru.tech.firenote.ui.composable.provider.LocalToastHost
 import ru.tech.firenote.ui.composable.provider.showSnackbar
@@ -113,6 +114,7 @@ fun GoalListScreen(
             }
 
             LazyColumn(
+                state = LocalLazyListStateProvider.current,
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 contentPadding = paddingValues
             ) {

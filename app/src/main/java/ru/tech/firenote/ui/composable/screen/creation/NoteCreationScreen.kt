@@ -38,7 +38,7 @@ import ru.tech.firenote.ui.theme.noteColors
 import ru.tech.firenote.utils.GlobalUtils.blend
 import ru.tech.firenote.viewModel.creation.NoteCreationViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
+@ExperimentalMaterial3Api
 @Composable
 fun NoteCreationScreen(
     state: MutableTransitionState<Boolean>,
@@ -206,7 +206,6 @@ fun NoteCreationScreen(
                 EditText(
                     textFieldState = viewModel.noteContent,
                     topPadding = 20.dp,
-                    endPaddingIcon = 20.dp,
                     hintText = stringResource(R.string.noteText),
                     errorColor = viewModel.noteColor.value.blend(0.7f),
                     singleLine = false,

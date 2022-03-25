@@ -44,7 +44,7 @@ class MainViewModel @Inject constructor(
 
     val showUsernameDialog = mutableStateOf(false)
 
-    @OptIn(ExperimentalMaterial3Api::class)
+    @ExperimentalMaterial3Api
     val scrollBehavior = mutableStateOf(TopAppBarDefaults.pinnedScrollBehavior())
 
     val filterType = mutableStateOf(2)

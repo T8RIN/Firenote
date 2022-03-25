@@ -4,9 +4,12 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.launch
+import ru.tech.firenote.ui.composable.provider.LocalLazyListStateProvider
 import ru.tech.firenote.ui.route.Screen
 
 @Composable
@@ -25,6 +28,9 @@ fun BottomNavigationBar(
 
                 selectedItem.value =
                     items.indexOfFirst { it.route == navController.currentDestination?.route }
+
+                val scrollState = LocalLazyListStateProvider.current
+                val scope = rememberCoroutineScope()
 
                 NavigationBarItem(
                     icon = {
@@ -46,6 +52,7 @@ fun BottomNavigationBar(
                             }
                             searchMode.value = false
                             searchString.value = ""
+                            scope.launch { scrollState.scrollToItem(0) }
                         }
                     }
                 )

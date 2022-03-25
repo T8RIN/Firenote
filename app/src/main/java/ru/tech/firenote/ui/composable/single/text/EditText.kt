@@ -7,9 +7,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ErrorOutline
-import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -36,7 +33,6 @@ fun EditText(
     modifier: Modifier = Modifier,
     hintText: String = "",
     textFieldState: MutableState<String> = mutableStateOf(""),
-    endPaddingIcon: Dp = 10.dp,
     cursorColor: Color = Color.Black,
     singleLine: Boolean = true,
     color: Color = MaterialTheme.colorScheme.onBackground,
@@ -96,12 +92,6 @@ fun EditText(
                         )
                     )
                 )
-                if (errorEnabled) {
-                    Icon(
-                        Icons.Filled.ErrorOutline, null, tint = localColor, modifier = Modifier
-                            .padding(end = endPaddingIcon)
-                    )
-                }
             }
         }
     }

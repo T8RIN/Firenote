@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.tech.firenote.R
 import ru.tech.firenote.model.Note
+import ru.tech.firenote.ui.composable.provider.LocalLazyListStateProvider
 import ru.tech.firenote.ui.composable.provider.LocalSnackbarHost
 import ru.tech.firenote.ui.composable.provider.LocalToastHost
 import ru.tech.firenote.ui.composable.provider.showSnackbar
@@ -36,7 +37,7 @@ import ru.tech.firenote.ui.theme.priority
 import ru.tech.firenote.viewModel.navigation.NoteListViewModel
 
 @Suppress("UNCHECKED_CAST")
-@OptIn(ExperimentalFoundationApi::class)
+@ExperimentalFoundationApi
 @Composable
 fun NoteListScreen(
     showNoteCreation: MutableTransitionState<Boolean>,
@@ -95,6 +96,7 @@ fun NoteListScreen(
             }
 
             LazyColumn(
+                state = LocalLazyListStateProvider.current,
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 contentPadding = notePaddingValues
             ) {

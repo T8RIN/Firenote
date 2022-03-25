@@ -47,7 +47,7 @@ import ru.tech.firenote.ui.theme.goalColors
 import ru.tech.firenote.utils.GlobalUtils.blend
 import ru.tech.firenote.viewModel.creation.GoalCreationViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
+@ExperimentalMaterial3Api
 @Composable
 fun GoalCreationScreen(
     state: MutableTransitionState<Boolean>,

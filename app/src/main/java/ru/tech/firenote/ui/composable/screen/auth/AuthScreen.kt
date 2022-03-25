@@ -21,7 +21,7 @@ import ru.tech.firenote.ui.composable.utils.WindowSize
 import ru.tech.firenote.ui.route.Screen
 import ru.tech.firenote.viewModel.auth.AuthViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
+@ExperimentalMaterial3Api
 @Composable
 fun AuthScreen(visible: MutableState<Boolean>, viewModel: AuthViewModel = viewModel()) {
 

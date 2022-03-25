@@ -22,7 +22,8 @@ import kotlinx.coroutines.delay
 import kotlin.math.max
 import kotlin.math.min
 
-@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class)
+@ExperimentalAnimationApi
+@ExperimentalMaterial3Api
 @Composable
 fun FancyToast(
     icon: ImageVector,

@@ -34,7 +34,7 @@ import ru.tech.firenote.ui.state.UIState
 import ru.tech.firenote.viewModel.auth.AuthViewModel
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+@ExperimentalMaterial3Api
 @Composable
 fun RegistrationScreen(viewModel: AuthViewModel) {
     var email by remember {
