@@ -1,6 +1,7 @@
 package ru.tech.firenote.ui.composable.single.scaffold
 
 import android.content.Context
+import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material.icons.rounded.ArrowBack
@@ -48,10 +49,21 @@ fun FirenoteScaffold(
                             }
                         }
                         2 -> {
-                            IconButton(onClick = {
-                                viewModel.showUsernameDialog.value = true
-                            }) {
-                                Icon(Icons.Outlined.Edit, null)
+                            val toastHost = LocalToastHost.current
+                            val txt = stringResource(R.string.noInternet)
+                            Row {
+                                IconButton(onClick = {
+                                    if (context.isOnline()) viewModel.resultLauncher.value?.launch("image/*")
+                                    else toastHost.sendToast(Icons.Outlined.SignalWifiOff, txt)
+                                }) {
+                                    Icon(Icons.Outlined.AddPhotoAlternate, null)
+                                }
+
+                                IconButton(onClick = {
+                                    viewModel.showUsernameDialog.value = true
+                                }) {
+                                    Icon(Icons.Outlined.Edit, null)
+                                }
                             }
                         }
                     }
@@ -101,43 +113,40 @@ fun FirenoteScaffold(
             )
         },
         floatingActionButton = {
-            val toastHost = LocalToastHost.current
-            val txt = stringResource(R.string.noInternet)
-
-            ExtendedFloatingActionButton(onClick = {
-                when (viewModel.selectedItem.value) {
-                    0 -> {
-                        viewModel.showNoteCreation.targetState = true
-                        viewModel.clearGlobalNote()
-                    }
-                    1 -> {
-                        viewModel.showGoalCreation.targetState = true
-                        viewModel.clearGlobalGoal()
-                    }
-                    2 -> {
-                        if (context.isOnline()) viewModel.resultLauncher.value?.launch("image/*")
-                        else toastHost.sendToast(Icons.Outlined.SignalWifiOff, txt)
-                    }
-                }
-            }, icon = {
-                Icon(
-                    when (viewModel.selectedItem.value) {
-                        0 -> Icons.Outlined.Edit
-                        1 -> Icons.Outlined.AddTask
-                        2 -> Icons.Outlined.Image
-                        else -> Icons.Outlined.Error
-                    }, null
-                )
-            }, text = {
-                Text(
-                    when (viewModel.selectedItem.value) {
-                        0 -> stringResource(R.string.addNote)
-                        1 -> stringResource(R.string.makeGoal)
-                        2 -> stringResource(R.string.pickImage)
-                        else -> ""
+            if (viewModel.selectedItem.value in 0..1) {
+                ExtendedFloatingActionButton(
+                    onClick = {
+                        when (viewModel.selectedItem.value) {
+                            0 -> {
+                                viewModel.showNoteCreation.targetState = true
+                                viewModel.clearGlobalNote()
+                            }
+                            1 -> {
+                                viewModel.showGoalCreation.targetState = true
+                                viewModel.clearGlobalGoal()
+                            }
+                        }
+                    },
+                    icon = {
+                        Icon(
+                            when (viewModel.selectedItem.value) {
+                                0 -> Icons.Outlined.Edit
+                                1 -> Icons.Outlined.AddTask
+                                else -> Icons.Outlined.Error
+                            }, null
+                        )
+                    },
+                    text = {
+                        Text(
+                            when (viewModel.selectedItem.value) {
+                                0 -> stringResource(R.string.addNote)
+                                1 -> stringResource(R.string.makeGoal)
+                                else -> ""
+                            }
+                        )
                     }
                 )
-            })
+            }
         },
         bottomBar = {
             BottomNavigationBar(

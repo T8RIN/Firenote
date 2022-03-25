@@ -7,9 +7,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
@@ -22,6 +23,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -81,16 +83,15 @@ fun ProfileNoteItem(
                 .align(Alignment.TopStart)
                 .padding(start = 10.dp, top = 10.dp, end = cutCornerSize)
         )
-        var txt by remember { mutableStateOf(typeText) }
         BasicTextField(
-            value = txt,
-            onValueChange = {
-                txt = it
-                onValueChange(it)
-            },
+            value = typeText,
+            onValueChange = { onValueChange(it) },
             textStyle = TextStyle(
                 textAlign = TextAlign.Center,
                 fontSize = 11.sp
+            ),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done
             ),
             keyboardActions = KeyboardActions(
                 onDone = { localFocusManager.clearFocus() }
@@ -101,7 +102,7 @@ fun ProfileNoteItem(
             maxLines = 3
         )
 
-        if (txt.isEmpty()) {
+        if (typeText.isEmpty()) {
             Text(
                 text = stringResource(R.string.noteType),
                 modifier = Modifier

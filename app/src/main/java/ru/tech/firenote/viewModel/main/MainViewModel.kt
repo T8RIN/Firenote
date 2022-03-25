@@ -71,7 +71,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun updateSearch(newValue: String = "") {
-        searchString.value = newValue
+        searchString.value = newValue.lowercase().trim()
     }
 
     fun clearGlobalGoal() {

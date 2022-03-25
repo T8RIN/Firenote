@@ -84,9 +84,9 @@ fun NoteListScreen(
 
             if (searchString.value.isNotEmpty()) {
                 data = repoList.filter {
-                    it.content?.lowercase()?.contains(searchString.value.lowercase())
+                    it.content?.lowercase()?.contains(searchString.value)
                         ?.or(
-                            it.title?.lowercase()?.contains(searchString.value.lowercase()) ?: false
+                            it.title?.lowercase()?.contains(searchString.value) ?: false
                         ) ?: false
                 }
                 if (data.isEmpty()) {
@@ -132,8 +132,10 @@ fun NoteListScreen(
         dismissText = R.string.delete,
         dismissAction = {
             viewModel.deleteNote(note) { note ->
-                var messageNew = message.replace("*", note.title.toString()).take(30)
-                if (note.title.toString().length > 30) messageNew += "..."
+                var temp = note.title.toString().take(30)
+                if (note.title.toString().length > 30) temp += "..."
+                val messageNew = message.replace("*", temp)
+
                 showSnackbar(
                     scope,
                     host,

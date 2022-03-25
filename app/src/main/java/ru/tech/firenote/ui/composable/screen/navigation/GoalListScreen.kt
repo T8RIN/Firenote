@@ -97,11 +97,11 @@ fun GoalListScreen(
             if (searchString.value.isNotEmpty()) {
                 data = repoList.filter {
                     val statement1 =
-                        it.title?.lowercase()?.contains(searchString.value.lowercase()) ?: false
+                        it.title?.lowercase()?.contains(searchString.value) ?: false
                     var statement2 = false
                     it.content?.forEach { data ->
                         if (data.content?.lowercase()
-                                ?.contains(searchString.value.lowercase()) == true
+                                ?.contains(searchString.value) == true
                         ) statement2 = true
                     }
 
@@ -150,8 +150,10 @@ fun GoalListScreen(
         dismissText = R.string.delete,
         dismissAction = {
             viewModel.deleteGoal(goal) { goal1 ->
-                var messageNew = message.replace("*", goal1.title.toString()).take(30)
-                if (goal1.title.toString().length > 30) messageNew += "..."
+                var temp = goal1.title.toString().take(30)
+                if (goal1.title.toString().length > 30) temp += "..."
+                val messageNew = message.replace("*", temp)
+
                 showSnackbar(
                     scope,
                     host,
