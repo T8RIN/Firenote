@@ -10,10 +10,11 @@ import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.TextSnippet
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -204,88 +205,4 @@ fun ProfileActions(onClick: () -> Unit) {
         dismissAction = onClick,
         backHandler = {}
     )
-}
-
-@Composable
-fun FileAttachActions(onItemSelected: (Attachments) -> Unit) {
-
-    var showFilter by remember { mutableStateOf(false) }
-
-    IconButton(onClick = {
-        showFilter = true
-    }) {
-        Icon(Icons.Outlined.AttachFile, null, tint = Color.Black)
-    }
-
-    DropdownMenu(
-        expanded = showFilter,
-        onDismissRequest = { showFilter = false }
-    ) {
-        DropdownMenuItem(
-            onClick = {
-                showFilter = false
-                onItemSelected(Attachments.IMAGE)
-            },
-            text = { Text(stringResource(R.string.image)) },
-            leadingIcon = { Icon(Icons.Outlined.Image, null) }
-        )
-        DropdownMenuItem(
-            onClick = {
-                showFilter = false
-                onItemSelected(Attachments.DOCUMENT)
-            },
-            text = { Text(stringResource(R.string.document)) },
-            leadingIcon = { Icon(Icons.Outlined.TextSnippet, null) }
-        )
-        DropdownMenuItem(
-            onClick = {
-                showFilter = false
-                onItemSelected(Attachments.AUDIO)
-            },
-            text = { Text(stringResource(R.string.Audio)) },
-            leadingIcon = { Icon(Icons.Outlined.MusicNote, null) }
-        )
-        DropdownMenuItem(
-            onClick = {
-                showFilter = false
-                onItemSelected(Attachments.FILE)
-            },
-            text = { Text(stringResource(R.string.File)) },
-            leadingIcon = { Icon(Icons.Outlined.InsertDriveFile, null) }
-        )
-    }
-
-//    val contentLauncher = rememberLauncherForActivityResult(
-//        ActivityResultContracts.GetContent()
-//    ) { uri: Uri? ->
-//        uri?.let { viewModel.addAttachment(uri) }
-//    }
-//
-//    val documentLauncher = rememberLauncherForActivityResult(
-//        ActivityResultContracts.OpenDocument()
-//    ) { uri: Uri? ->
-//        uri?.let { viewModel.addAttachment(uri) }
-//    }
-//
-//    FileAttachActions(onItemSelected = {
-//        when (it) {
-//            Attachments.IMAGE -> contentLauncher.launch("image/*")
-//            Attachments.DOCUMENT -> documentLauncher.launch(arrayOf(
-//                "docx", "doc", "ppt", "pptx", "xls", "xlsx", "pdf"
-//            ).toMimeType())
-//            Attachments.AUDIO -> contentLauncher.launch("audio/*")
-//            else -> contentLauncher.launch("*/*")
-//        }
-//    })
-
-
-    // fun Array<String>.toMimeType() : Array<String> {
-    //        return this.map {
-    //            MimeTypeMap.getSingleton().getMimeTypeFromExtension(it) ?: ""
-    //        }.toTypedArray()
-    //    }
-}
-
-enum class Attachments {
-    IMAGE, DOCUMENT, AUDIO, FILE
 }
