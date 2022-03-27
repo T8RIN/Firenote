@@ -16,8 +16,9 @@ val NoteWhite = Color(0xFFFFE2EB)
 val NoteBrown = Color(0xFFBD7857)
 val NoteGray = Color(0xFFA5969B)
 
-val GoalGreen = Color(0xFF92CC77)
-val GoalCarrot = Color(0xFFBBA05A)
+val GoalGreen = Color(0xFF86C768)
+val GoalYellow = Color(0xFFD8D76A)
+val GoalCarrot = Color(0xFFD89D53)
 val GoalRed = Color(0xFFD57171)
 
 val md_theme_light_primary = Color(0xFF984065)
@@ -94,6 +95,7 @@ val noteColors =
 val goalColors =
     listOf(
         GoalGreen,
+        GoalYellow,
         GoalCarrot,
         GoalRed
     )
@@ -133,6 +135,7 @@ val Int.position
 val Int.priorityGoal
     get() = when (this) {
         GoalGreen.toArgb() -> 0
-        GoalCarrot.toArgb() -> 1
-        else -> 2
+        GoalYellow.toArgb() -> 1
+        GoalCarrot.toArgb() -> 2
+        else -> 3
     }

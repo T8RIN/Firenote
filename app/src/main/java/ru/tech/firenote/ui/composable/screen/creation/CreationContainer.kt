@@ -2,6 +2,7 @@ package ru.tech.firenote.ui.composable.screen.creation
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
@@ -12,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.FactCheck
 import androidx.compose.material.icons.twotone.StickyNote2
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -23,6 +25,8 @@ import ru.tech.firenote.R
 import ru.tech.firenote.ui.composable.single.placeholder.Placeholder
 import ru.tech.firenote.viewModel.main.MainViewModel
 
+@ExperimentalMaterial3Api
+@ExperimentalAnimationApi
 @Composable
 fun CreationContainer(viewModel: MainViewModel, splitScreen: Boolean) {
     Box(Modifier.fillMaxSize()) {

@@ -1,5 +1,6 @@
 package ru.tech.firenote.ui.composable.navigation
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -13,6 +14,7 @@ import ru.tech.firenote.ui.composable.screen.navigation.ProfileScreen
 import ru.tech.firenote.ui.route.Screen
 import ru.tech.firenote.viewModel.main.MainViewModel
 
+@ExperimentalFoundationApi
 @Composable
 fun Navigation(
     navController: NavHostController,

@@ -2,8 +2,10 @@ package ru.tech.firenote.ui.composable.single.scaffold
 
 import android.content.Context
 import androidx.compose.animation.*
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material.icons.rounded.ArrowBack
@@ -17,6 +19,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import ru.tech.firenote.R
 import ru.tech.firenote.ui.composable.navigation.Navigation
@@ -30,6 +33,7 @@ import ru.tech.firenote.ui.route.Screen
 import ru.tech.firenote.utils.GlobalUtils.isOnline
 import ru.tech.firenote.viewModel.main.MainViewModel
 
+@ExperimentalFoundationApi
 @ExperimentalAnimationApi
 @ExperimentalMaterial3Api
 @Composable
@@ -113,7 +117,9 @@ fun FirenoteScaffold(
                         exit = fadeOut() + scaleOut()
                     ) {
                         Text(
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 15.dp),
                             text = if (viewModel.selectedItem.value == 2) viewModel.profileTitle.value
                             else stringResource(viewModel.title.value),
                             maxLines = 1,

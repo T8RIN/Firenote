@@ -1,7 +1,7 @@
 package ru.tech.firenote.ui.composable.screen.creation
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.Animatable
+import androidx.compose.animation.*
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
@@ -38,6 +38,7 @@ import ru.tech.firenote.ui.theme.noteColors
 import ru.tech.firenote.utils.GlobalUtils.blend
 import ru.tech.firenote.viewModel.creation.NoteCreationViewModel
 
+@ExperimentalAnimationApi
 @ExperimentalMaterial3Api
 @Composable
 fun NoteCreationScreen(
@@ -145,7 +146,11 @@ fun NoteCreationScreen(
             )
         ) {
             item {
-                if (editionMode) {
+                AnimatedVisibility(
+                    editionMode,
+                    enter = fadeIn() + slideInHorizontally(),
+                    exit = fadeOut() + slideOutHorizontally()
+                ) {
                     LazyRow(
                         modifier = Modifier.fillMaxSize(),
                         horizontalArrangement = Arrangement.SpaceEvenly,
@@ -203,6 +208,7 @@ fun NoteCreationScreen(
                         }
                     }
                 }
+
                 EditText(
                     textFieldState = viewModel.noteContent,
                     topPadding = 20.dp,

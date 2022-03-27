@@ -74,6 +74,10 @@
     <string name="searchHere">Search here</string>
     <string name="nothingFound">Nothing found, try to change your search query</string>
     <string name="usernameChanged">"Username changed to "</string>
-    <string name="imagePicked">Image picked succesfully</string>
+    <string name="imagePicked">Image picked successfully</string>
     <string name="noteType">Note type</string>
+    <string name="image">Image</string>
+    <string name="document">Document</string>
+    <string name="Audio">Audio</string>
+    <string name="File">File</string>
 </resources>

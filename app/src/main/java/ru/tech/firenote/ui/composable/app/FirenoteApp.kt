@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
@@ -34,6 +35,7 @@ import ru.tech.firenote.ui.composable.utils.WindowSize
 import ru.tech.firenote.ui.theme.FirenoteTheme
 import ru.tech.firenote.viewModel.main.MainViewModel
 
+@ExperimentalFoundationApi
 @SuppressLint("SourceLockedOrientationActivity")
 @ExperimentalMaterial3Api
 @ExperimentalAnimationApi
