@@ -48,6 +48,10 @@ Go to the [Releases](https://github.com/t8rin/Firenote/releases) to download the
 
 - [Material-Components](https://github.com/material-components/material-components-android) - Material You components with dynamic colors.
 
+## Find this repository useful? :heart:
+Support it by joining __[stargazers](https://github.com/t8rin/Firenote/stargazers)__ for this repository. :star: <br>
+And __[follow](https://github.com/t8rin)__ me for my next creations! 🤩
+
 # License
 ```xml
 Designed and developed by 2022 T8RIN
